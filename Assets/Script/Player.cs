@@ -47,10 +47,13 @@ public class Player : Entity {
         if (axisX > 0)
         {
             move.x = walkSpeed;
+			GetComponent<SpriteRenderer> ().flipX = false ^ (!face);
         }
         else if (axisX < 0)
         {
             move.x = -walkSpeed;
+			//flip also depends on front/back face
+			GetComponent<SpriteRenderer> ().flipX = true ^ (!face);
         }
         else
         {

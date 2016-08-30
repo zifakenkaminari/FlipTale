@@ -8,12 +8,12 @@ public class Entity : MonoBehaviour {
     public bool isFlipping;
     public float flipTime;
     public float flipPeriod;
-    protected Rigidbody rigidbody;
+    protected Rigidbody2D rigidbody;
 
     public Vector3 saveVelocity;
 
 	protected void Start () {
-        rigidbody = GetComponent<Rigidbody>();
+        rigidbody = GetComponent<Rigidbody2D>();
         face = true;
         isFlipping = false;
         flipTime = -10000f;
