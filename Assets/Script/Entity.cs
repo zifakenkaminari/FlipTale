@@ -12,14 +12,14 @@ public class Entity : MonoBehaviour {
 
     public Vector3 saveVelocity;
 
-	void Start () {
+	protected void Start () {
         rigidbody = GetComponent<Rigidbody>();
         face = true;
         isFlipping = false;
         flipTime = -10000f;
 	}
 	
-	void FixedUpdate () {
+	protected void FixedUpdate () {
         if (isFlipping)
         {
             flipping();
@@ -75,7 +75,6 @@ public class Entity : MonoBehaviour {
 
     protected virtual void main() { 
         //TODO: add main
-    };
-
+    }
 }
 
