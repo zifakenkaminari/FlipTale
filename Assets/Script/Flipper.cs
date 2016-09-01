@@ -6,7 +6,7 @@ using System;
 public class Flipper : MonoBehaviour {
 
     public GameObject[] flipables;
-    //public List<GameObject> flipables;
+    public GameObject background;
 
     public bool face;           //not flipped at first
     public bool isFlipping;
@@ -20,7 +20,7 @@ public class Flipper : MonoBehaviour {
         face = true;
         isFlipping = false;
         flipTime = -10000f;
-        flipId = 0;
+        background.GetComponent<Background>().flipPeriod = flipPeriod;
 	}
 
     void FixedUpdate() {
@@ -31,7 +31,6 @@ public class Flipper : MonoBehaviour {
                 if (Time.time - flipTime > flipPeriod*flipId/flipables.Length)
                 {
                     StartCoroutine(flipables[flipId].GetComponent<Entity>().flip());
-                    //flipables[flipId].GetComponent<Entity>().flip();
                     flipId++;
                 }
             }
@@ -44,10 +43,8 @@ public class Flipper : MonoBehaviour {
                     flipable.GetComponent<Entity>().unlockMotion();
                 }
             }
-
         }
     }
-
 
     public void flip()
     {
@@ -62,6 +59,7 @@ public class Flipper : MonoBehaviour {
         foreach (GameObject flipable in flipables) {
             flipable.GetComponent<Entity>().lockMotion();
         }
+        background.GetComponent<Background>().flip();
     }
 	
 }
