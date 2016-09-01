@@ -4,10 +4,14 @@ using System.Collections;
 public class Item : Entity {
     new public string name;
     public bool pickable;
+    public Vector2 onFloorOffset;
     int state;
+
+    Vector2 velocity;
 
     new protected void Start()
     {
+        velocity = Vector2.zero;
         base.Start();
     }
 
@@ -17,7 +21,6 @@ public class Item : Entity {
 
     new protected void FixedUpdate()
     {
-
         base.FixedUpdate();
     }
 
@@ -37,14 +40,19 @@ public class Item : Entity {
 
     protected void idle()
     {
-        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, new Vector2(0, -1));
+        RaycastHit2D[] hits = Physics2D.RaycastAll((Vector2)transform.position - onFloorOffset, new Vector2(0, -1), velocity.magnitude*Time.deltaTime);
         foreach (RaycastHit2D hit in hits)
         {
             if (hit.collider.gameObject.CompareTag("Floor"))
             {
-                transform.position = Vector2.Lerp(transform.position, hit.point + new Vector2(0, 0.5f), 0.2f);
+                transform.position = hit.point + onFloorOffset;
+                velocity = Vector2.zero;
+                return;
             }
         }
+
+        transform.Translate(velocity * Time.fixedDeltaTime);
+        velocity += Physics2D.gravity*Time.fixedDeltaTime;
     }
     protected virtual void held()
     {
