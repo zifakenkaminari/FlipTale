@@ -8,7 +8,7 @@ public class Entity : MonoBehaviour {
     public bool isFlipping;
     public float flipTime;
     public float flipPeriod;
-    protected Rigidbody2D rigidbody;
+    new protected Rigidbody2D rigidbody;
 
     public Vector3 saveVelocity;
 

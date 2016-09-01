@@ -2,11 +2,11 @@
 using System.Collections;
 
 public class Item : Entity {
-    public string name;
+    new public string name;
     public bool pickable;
     int state;
 
-    protected void Start()
+    new protected void Start()
     {
         base.Start();
     }
@@ -15,7 +15,7 @@ public class Item : Entity {
         return pickable;
     }
 
-    protected void FixedUpdate()
+    new protected void FixedUpdate()
     {
 
         base.FixedUpdate();
