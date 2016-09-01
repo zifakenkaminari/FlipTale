@@ -32,13 +32,20 @@ public class Player : Entity {
                 itemOnHand = null;
 
             }
-            else if (itemNearby)
+            else if (itemNearby && itemNearby.isPickable())
             {
                 itemOnHand = itemNearby;
                 itemOnHand.pick(gameObject);
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            if (itemOnHand)
+            {
+                itemOnHand.use(gameObject);
+            }
+        }
     }
 
     protected override void main()
@@ -93,7 +100,7 @@ public class Player : Entity {
     void OnTriggerEnter2D(Collider2D collider)
     {
         Item item = collider.gameObject.GetComponent<Item>();
-        if (item && item.isPickable())
+        if (item)
         {
             itemNearby = item;
         }

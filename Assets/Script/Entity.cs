@@ -7,14 +7,15 @@ public class Entity : MonoBehaviour {
     public bool face;           //not flipped at first
     public bool isFlipping;
     public bool isFreezed;
-    public float flipTime;
+    float flipTime;
     public float flipPeriod;
     public Rigidbody2D rb;
 
     public Vector3 saveVelocity;
 
-	protected void Start () {
+	protected virtual void Start () {
         rb = GetComponent<Rigidbody2D>();
+        GetComponent<SpriteRenderer>().sprite = frontSprite;
         face = true;
         isFlipping = false;
         isFreezed = false;
@@ -22,24 +23,13 @@ public class Entity : MonoBehaviour {
 	}
 	
 	protected void FixedUpdate () {
-        if (isFlipping)
-        {
-            //flipping();
-        }
         if (!isFreezed) { 
             main();
         }
 	}
-    /*
-    public void flip() {
-       if (isFlipping) return;
-       isFlipping = true;
-       flipTime = Time.time;
-    }
-    */
+
     public IEnumerator flip()
     {
-        Debug.Log("flip!");
         flipTime = Time.time;
         Vector3 scale;
         while (Time.time - flipTime < flipPeriod)
@@ -77,8 +67,8 @@ public class Entity : MonoBehaviour {
             scale.x = 1;
         }
         face = !face;
-        //isFlipping = false;
-        //return;
+        transform.localScale = scale;
+        yield return null;
     }
 
     protected void flipping()

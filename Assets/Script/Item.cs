@@ -45,8 +45,10 @@ public class Item : Entity {
         {
             if (hit.collider.gameObject.CompareTag("Floor"))
             {
+
                 transform.position = hit.point + onFloorOffset;
                 velocity = Vector2.zero;
+                pickable = true;
                 return;
             }
         }
@@ -67,7 +69,9 @@ public class Item : Entity {
     public virtual void pick(GameObject player)
     {
         //TODO: picked by player
+        velocity = Vector2.zero;
         transform.SetParent(player.transform);
+        transform.localPosition = Vector3.zero;
         GetComponent<SpriteRenderer>().enabled = false;
         state = 1;
     }
@@ -75,6 +79,8 @@ public class Item : Entity {
     public virtual void drop(GameObject player)
     {
         //TODO: droped by player
+
+        pickable = false;
         transform.parent = null;
         GetComponent<SpriteRenderer>().enabled = true;
         state = 0;
