@@ -7,8 +7,8 @@ public class Player : Entity {
     float axisX;
     float axisY;
     bool onFloor;
-    public GameObject itemOnHand;
-    public GameObject itemNearby;
+    public Item itemOnHand;
+    public Item itemNearby;
     public GameObject nowStage;
 
     // Use this for initialization
@@ -28,14 +28,14 @@ public class Player : Entity {
         {
             if (itemOnHand)
             {
-                itemOnHand.GetComponent<Item>().drop(gameObject);
+                itemOnHand.drop(gameObject);
                 itemOnHand = null;
 
             }
             else if (itemNearby)
             {
                 itemOnHand = itemNearby;
-                itemOnHand.GetComponent<Item>().pick(gameObject);
+                itemOnHand.pick(gameObject);
             }
         }
 
@@ -43,7 +43,7 @@ public class Player : Entity {
 
     protected override void main()
     {
-        Vector3 move = rigidbody.velocity;
+        Vector2 move = GetComponent<Rigidbody2D>().velocity;
         if (axisX > 0)
         {
             move.x = walkSpeed;
@@ -64,7 +64,7 @@ public class Player : Entity {
         {
             move.y = jumpSpeed;
         }
-        rigidbody.velocity = move;
+        GetComponent<Rigidbody2D>().velocity = move;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -92,15 +92,15 @@ public class Player : Entity {
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        GameObject item = collider.gameObject;
-        if (item.GetComponent<Item>() && item.GetComponent<Item>().isPickable())
+        Item item = collider.gameObject.GetComponent<Item>();
+        if (item && item.isPickable())
         {
             itemNearby = item;
         }
     }
     void OnTriggerExit2D(Collider2D collider)
     {
-        GameObject item = collider.gameObject;
+        Item item = collider.gameObject.GetComponent<Item>();
         if (item == itemNearby)
         {
             itemNearby = null;
