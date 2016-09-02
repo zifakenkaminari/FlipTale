@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour {
 
-    public Entity[] entities;
-
+	public string loadScene;
+	public string menuScene;
 
 	// Use this for initialization
 	void Start () {
@@ -15,4 +16,21 @@ public class Manager : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	public void StartGame () {
+		print ("StartGame");
+		SceneManager.LoadScene (loadScene);
+	}
+
+
+	public void ExitGame () {
+		print ("ExitGame");
+		Application.Quit();
+	}
+
+	public void BackMenu() {
+		print ("BackMenu");
+		SceneManager.LoadScene (menuScene);
+	}
+		
 }
