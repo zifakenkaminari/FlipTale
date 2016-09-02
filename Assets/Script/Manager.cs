@@ -6,6 +6,7 @@ public class Manager : MonoBehaviour {
 
 	public string loadScene;
 	public string menuScene;
+	public GameObject[] stages;
 
 	// Use this for initialization
 	void Start () {
@@ -33,4 +34,9 @@ public class Manager : MonoBehaviour {
 		SceneManager.LoadScene (menuScene);
 	}
 		
+	public void flip() {
+		foreach (GameObject stage in stages) {
+			stage.GetComponentInChildren<Flipper> ().flip ();
+		}
+	}
 }

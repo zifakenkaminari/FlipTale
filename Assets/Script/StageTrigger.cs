@@ -13,7 +13,6 @@ public class StageTrigger : MonoBehaviour {
 
 	//change stage
 	void OnTriggerEnter2D(Collider2D collider) {
-		Debug.Log ("enter trigger");
 		Player player = collider.GetComponent<Player> ();
 		if (player) {
 			if (player.nowStage == stage0)

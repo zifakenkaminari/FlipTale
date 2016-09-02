@@ -24,25 +24,25 @@ public class Flipper : MonoBehaviour {
 	}
 
     void FixedUpdate() {
-        if (isFlipping)
+		if (isFlipping)
         {
-            if (flipId < flipables.Length)
-            {
-                if (Time.time - flipTime > flipPeriod*flipId/flipables.Length)
-                {
-                    StartCoroutine(flipables[flipId].GetComponent<Entity>().flip());
-                    flipId++;
-                }
-            }
-            else if (Time.time -flipTime > flipables[flipId - 1].GetComponent<Entity>().flipPeriod + flipPeriod)
-            {
-                face = !face;
-                isFlipping = false;
-                foreach (GameObject flipable in flipables)
-                {
-                    flipable.GetComponent<Entity>().unlockMotion();
-                }
-            }
+			if (flipId < flipables.Length) {
+				if (Time.time - flipTime > flipPeriod * flipId / flipables.Length) {
+					StartCoroutine (flipables [flipId].GetComponent<Entity> ().flip ());
+					flipId++;
+				}
+			} 
+			else if (flipables.Length > 0 && Time.time - flipTime > flipables [flipId - 1].GetComponent<Entity> ().flipPeriod + flipPeriod) {
+				face = !face;
+				isFlipping = false;
+				foreach (GameObject flipable in flipables) {
+					flipable.GetComponent<Entity> ().unlockMotion ();
+				}
+			} 
+			else if (Time.time - flipTime > flipPeriod) {
+				face = !face;
+				isFlipping = false;
+			}
         }
     }
 
