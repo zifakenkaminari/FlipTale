@@ -6,7 +6,7 @@ public class TreeCut : Entity
     public float fallPeriod;
     public bool isCut;
 
-    void Start(){
+    new void Start(){
         isCut = false;
         base.Start();
     }
