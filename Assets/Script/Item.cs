@@ -81,7 +81,7 @@ public class Item : Entity {
         //TODO: droped by player
 
         pickable = false;
-        transform.parent = null;
+		transform.parent = player.transform.parent;
         GetComponent<SpriteRenderer>().enabled = true;
         state = 0;
     }

@@ -24,25 +24,27 @@ public class Flipper : MonoBehaviour {
 	}
 
     void FixedUpdate() {
-        if (isFlipping)
+		if (isFlipping)
         {
-            if (flipId < flipables.Length)
-            {
-                if (Time.time - flipTime > flipPeriod*flipId/flipables.Length)
-                {
-                    StartCoroutine(flipables[flipId].GetComponent<Entity>().flip());
-                    flipId++;
-                }
-            }
-            else if (Time.time -flipTime > flipables[flipId - 1].GetComponent<Entity>().flipPeriod + flipPeriod)
-            {
-                face = !face;
-                isFlipping = false;
-                foreach (GameObject flipable in flipables)
-                {
-                    flipable.GetComponent<Entity>().unlockMotion();
-                }
-            }
+			if (flipId < flipables.Length) {
+				if (Time.time - flipTime > flipPeriod * flipId / flipables.Length) {
+					StartCoroutine (flipables [flipId].GetComponent<Entity> ().flip ());
+					flipId++;
+				}
+			}
+			else if (flipables.Length > 0) {
+				if (Time.time - flipTime > flipables [flipId - 1].GetComponent<Entity> ().flipPeriod + flipPeriod) {
+					face = !face;
+					isFlipping = false;
+					foreach (GameObject flipable in flipables) {
+						flipable.GetComponent<Entity> ().unlockMotion ();
+					}
+				} 
+			}
+			else if (Time.time - flipTime > flipPeriod) {
+				face = !face;
+				isFlipping = false;
+			}
         }
     }
 
@@ -52,6 +54,19 @@ public class Flipper : MonoBehaviour {
         isFlipping = true;
         flipTime = Time.time;
         flipId = 0;
+		int flipableSize = 0, idx = 0;
+		for (int i = 0; i < transform.childCount; i++) {
+			if (transform.GetChild (i).GetComponent<Entity> ()) {
+				flipableSize++;
+			}
+		}
+		flipables = new GameObject[flipableSize];
+		for (int i = 0; i < transform.childCount; i++) {
+			if (transform.GetChild (i).GetComponent<Entity> ()) {
+				flipables[idx] = transform.GetChild(i).gameObject;
+				idx++;
+			}
+		}
         Array.Sort(flipables, delegate(GameObject a, GameObject b)
         {
             return a.transform.position.x.CompareTo(b.transform.position.x);
