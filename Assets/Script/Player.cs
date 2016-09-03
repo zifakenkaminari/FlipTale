@@ -44,10 +44,12 @@ public class Player : Entity {
         }
     }
 
-    public void flipItemOnHand() {
+    public override IEnumerator flip ()
+    {
         if (itemOnHand) {
             itemOnHand.quickFlip ();
         }
+        return base.flip ();
     }
 
     protected override void main()

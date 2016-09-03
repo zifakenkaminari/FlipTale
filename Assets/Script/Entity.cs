@@ -38,7 +38,7 @@ public class Entity : MonoBehaviour {
         }
     }
 
-    public IEnumerator flip()
+    public virtual IEnumerator flip()
     {
         flipTime = Time.time;
         Vector3 scale;

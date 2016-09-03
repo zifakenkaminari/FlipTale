@@ -28,9 +28,6 @@ public class Flipper : MonoBehaviour {
         {
             if (flipId < flipables.Length) {
                 if (Time.time - flipTime > flipPeriod * flipId / flipables.Length) {
-                    if (flipables [flipId].GetComponent<Player> ()) {
-                        flipables [flipId].GetComponent<Player> ().flipItemOnHand();
-                    }
                     StartCoroutine (flipables [flipId].GetComponent<Entity> ().flip ());
                     flipId++;
                 }
