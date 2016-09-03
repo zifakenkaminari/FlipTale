@@ -22,29 +22,31 @@ public class Player : Entity {
 
     void Update()
     {
-        axisX = Input.GetAxis("Horizontal");
-        axisY = Input.GetAxis("Vertical");
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            if (itemOnHand)
-            {
-                itemOnHand.drop(gameObject);
-                itemOnHand = null;
+        if (!isFreezed) {
+            axisX = Input.GetAxis ("Horizontal");
+            axisY = Input.GetAxis ("Vertical");
+            if (Input.GetKeyDown (KeyCode.X)) {
+                if (itemOnHand) {
+                    itemOnHand.drop (gameObject);
+                    itemOnHand = null;
 
+                } else if (itemNearby && itemNearby.isPickable ()) {
+                    itemOnHand = itemNearby;
+                    itemOnHand.pick (gameObject);
+                }
             }
-            else if (itemNearby && itemNearby.isPickable())
-            {
-                itemOnHand = itemNearby;
-                itemOnHand.pick(gameObject);
+
+            if (Input.GetKeyDown (KeyCode.C)) {
+                if (itemOnHand) {
+                    itemOnHand.use (gameObject);
+                }
             }
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            if (itemOnHand)
-            {
-                itemOnHand.use(gameObject);
-            }
+    public void flipItemOnHand() {
+        if (itemOnHand) {
+            itemOnHand.quickFlip ();
         }
     }
 
@@ -54,13 +56,13 @@ public class Player : Entity {
         if (axisX > 0)
         {
             move.x = walkSpeed;
-			GetComponent<SpriteRenderer> ().flipX = false ^ (!face);
+            GetComponent<SpriteRenderer> ().flipX = false ^ (!face);
         }
         else if (axisX < 0)
         {
             move.x = -walkSpeed;
-			//flip also depends on front/back face
-			GetComponent<SpriteRenderer> ().flipX = true ^ (!face);
+            //flip also depends on front/back face
+            GetComponent<SpriteRenderer> ().flipX = true ^ (!face);
         }
         else
         {

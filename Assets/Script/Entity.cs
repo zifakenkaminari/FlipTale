@@ -13,20 +13,30 @@ public class Entity : MonoBehaviour {
 
     public Vector3 saveVelocity;
 
-	protected virtual void Start () {
+    protected virtual void Start () {
         rb = GetComponent<Rigidbody2D>();
         GetComponent<SpriteRenderer>().sprite = frontSprite;
         face = true;
         isFlipping = false;
         isFreezed = false;
         flipTime = -10000f;
-	}
-	
-	protected void FixedUpdate () {
+    }
+
+    protected void FixedUpdate () {
         if (!isFreezed) { 
             main();
         }
-	}
+    }
+
+    public void quickFlip() {
+        face = !face;
+        if (face) {
+            GetComponent<SpriteRenderer> ().sprite = frontSprite;
+        }
+        else {
+            GetComponent<SpriteRenderer> ().sprite = backSprite;
+        }
+    }
 
     public IEnumerator flip()
     {
