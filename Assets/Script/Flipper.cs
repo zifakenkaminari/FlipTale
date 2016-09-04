@@ -67,10 +67,9 @@ public class Flipper : MonoBehaviour {
                 idx++;
             }
         }
-        Array.Sort(flipables, delegate(GameObject a, GameObject b)
-                {
-                return a.transform.position.x.CompareTo(b.transform.position.x);
-                });
+        Array.Sort(flipables, delegate(GameObject a, GameObject b){
+            return a.transform.position.x.CompareTo(b.transform.position.x);
+        });
         foreach (GameObject flipable in flipables) {
             flipable.GetComponent<Entity>().lockMotion();
         }

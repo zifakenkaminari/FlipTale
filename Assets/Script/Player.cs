@@ -44,7 +44,13 @@ public class Player : Entity {
 
             if (Input.GetKeyDown (KeyCode.C)) {
                 if (itemOnHand) {
-                    itemOnHand.use (gameObject);
+                    bool disappear = itemOnHand.use (gameObject);
+                    if (disappear)
+                    {
+                        itemOnHand = null;
+                        front.GetComponent<SpriteRenderer>().sprite = frontNormal;
+                        back.GetComponent<SpriteRenderer>().sprite = backNormal;
+                    }
                 }
             }
         }
@@ -69,8 +75,8 @@ public class Player : Entity {
         }
         else if (axisX < 0)
         {
-            move.x = -walkSpeed;
             //flip also depends on front/back face
+            move.x = -walkSpeed;
             front.GetComponent<SpriteRenderer> ().flipX = true ^ (!face);
             back.GetComponent<SpriteRenderer> ().flipX = true ^ (!face);
         }
@@ -109,7 +115,7 @@ public class Player : Entity {
         }
     }
 
-    void OnTriggerEnter2D(Collider2D collider)
+    void OnTriggerStay2D(Collider2D collider)
     {
         Item item = collider.gameObject.GetComponent<Item>();
         if (item)

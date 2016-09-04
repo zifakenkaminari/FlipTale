@@ -10,14 +10,13 @@ public class FlagAxe : Item {
 		pickable = true;
 	}
 
-    public override void use(GameObject player)
+    public override bool use(GameObject player)
     {
-        Debug.Log("Try cut");
 		if(treeCut&&!face) {
-            Debug.Log("Cut");
 			StartCoroutine(treeCut.GetComponent<TreeCut>().cut());
 			treeCut = null;
 		}
+        return false;
 	}
 
 	void OnTriggerEnter2D(Collider2D collider) {

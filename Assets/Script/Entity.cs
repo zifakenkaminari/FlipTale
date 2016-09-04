@@ -11,16 +11,28 @@ public class Entity : MonoBehaviour {
     float flipTime;
     public float flipPeriod;
     protected Rigidbody2D rb;
-
-    public Vector3 saveVelocity;
+    protected Vector3 saveVelocity;
 
     protected virtual void Start () {
         rb = GetComponent<Rigidbody2D>();
-        setTransparent (ref back, 0);
-        face = true;
         isFlipping = false;
         isFreezed = false;
         flipTime = -10000f;
+        if (transform.parent && transform.parent.gameObject.GetComponent<Entity>())
+        {
+            face = transform.parent.gameObject.GetComponent<Entity>().face;
+        }
+        else {
+            face = true;
+        }
+        if (face)
+        {
+            setTransparent(ref back, 0);
+        }
+        else
+        {
+            setTransparent(ref front, 0);
+        }
     }
 
     protected void FixedUpdate () {
