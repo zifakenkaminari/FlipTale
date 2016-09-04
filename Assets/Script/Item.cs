@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Item : Entity {
     new public string name;
+    public Sprite frontOnHand;
+    public Sprite backOnHand;
     public bool pickable;
     public Vector2 onFloorOffset;
     int state;
