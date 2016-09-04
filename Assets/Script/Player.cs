@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class Player : Entity {
+    public Sprite frontNormal;
+    public Sprite backNormal;
     public float walkSpeed;
     public float jumpSpeed;
     float axisX;
@@ -29,10 +31,14 @@ public class Player : Entity {
                 if (itemOnHand) {
                     itemOnHand.drop (gameObject);
                     itemOnHand = null;
+                    front.GetComponent<SpriteRenderer> ().sprite = frontNormal;
+                    back.GetComponent<SpriteRenderer> ().sprite = backNormal;
 
                 } else if (itemNearby && itemNearby.isPickable ()) {
                     itemOnHand = itemNearby;
                     itemOnHand.pick (gameObject);
+                    front.GetComponent<SpriteRenderer> ().sprite = itemOnHand.frontOnHand;
+                    back.GetComponent<SpriteRenderer> ().sprite = itemOnHand.backOnHand;
                 }
             }
 
@@ -58,13 +64,15 @@ public class Player : Entity {
         if (axisX > 0)
         {
             move.x = walkSpeed;
-            GetComponent<SpriteRenderer> ().flipX = false ^ (!face);
+            front.GetComponent<SpriteRenderer> ().flipX = false ^ (!face);
+            back.GetComponent<SpriteRenderer> ().flipX = false ^ (!face);
         }
         else if (axisX < 0)
         {
             move.x = -walkSpeed;
             //flip also depends on front/back face
-            GetComponent<SpriteRenderer> ().flipX = true ^ (!face);
+            front.GetComponent<SpriteRenderer> ().flipX = true ^ (!face);
+            back.GetComponent<SpriteRenderer> ().flipX = true ^ (!face);
         }
         else
         {

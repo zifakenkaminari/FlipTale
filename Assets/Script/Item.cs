@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Item : Entity {
     new public string name;
+    public Sprite frontOnHand;
+    public Sprite backOnHand;
     public bool pickable;
     public Vector2 onFloorOffset;
     int state;
@@ -72,24 +74,27 @@ public class Item : Entity {
         velocity = Vector2.zero;
         transform.SetParent(player.transform);
         transform.localPosition = Vector3.zero;
-        GetComponent<SpriteRenderer>().enabled = false;
+        setTransparent (ref front, 0);
+        setTransparent (ref back, 0);
         state = 1;
     }
 
     public virtual void drop(GameObject player)
     {
         //TODO: droped by player
-
         pickable = false;
         transform.parent = player.transform.parent;
-        GetComponent<SpriteRenderer>().enabled = true;
+        if (face)
+            setTransparent (ref front, 1);
+        else
+            setTransparent (ref back, 1);
         state = 0;
     }
 
     public virtual void use(GameObject player)
     {
         //TODO: used by player
-        GetComponent<SpriteRenderer>().enabled = true;
+        //GetComponent<SpriteRenderer>().enabled = true;
         pickable = false;
         state = 2;
     }
