@@ -22,9 +22,10 @@ public class SeedStone : Item
     }
 
     public IEnumerator disappear() {
-        float dropTime = Time.time;
-        while(Time.time - dropTime < destroyPeriod){
-            float rate = (Time.time - dropTime) / destroyPeriod;
+        float timeNow = 0;
+        while(timeNow < destroyPeriod){
+            while (isFreezed) yield return null;
+            float rate = timeNow / destroyPeriod;
         	Color color = front.GetComponent<Renderer> ().material.color;
 			color.a = 1 - rate;
 			front.GetComponent<Renderer> ().material.color = color;
@@ -32,6 +33,7 @@ public class SeedStone : Item
 			color = back.GetComponent<Renderer> ().material.color;
 			color.a = 1 - rate;
 			back.GetComponent<Renderer> ().material.color = color;
+            timeNow += Time.deltaTime;
             yield return null;
         }
         Destroy(gameObject);
@@ -41,7 +43,7 @@ public class SeedStone : Item
     {
         if (pot && face)
         {
-            GameObject newFlower = Instantiate(flowerTorch);
+            GameObject newFlower = (GameObject)Instantiate(flowerTorch, player.transform.parent);
             Vector3 pos = pot.transform.position;
             pos.y = pot.transform.position.y + onPotOffsetY;
             newFlower.transform.position = pos;

@@ -16,10 +16,12 @@ public class CaveExit : Entity {
         isOpen = true;
         Vector2 pos = transform.position;
         float y = transform.position.y;
-        float beginTime = Time.time;
-        while(Time.time-beginTime<openPeriod){
-            pos.y = y + shift*(Time.time - beginTime) / openPeriod;
+        float timeNow = 0;
+        while(timeNow<openPeriod){
+            while (isFreezed) yield return null;
+            pos.y = y + shift*timeNow / openPeriod;
             transform.position = pos;
+            timeNow += Time.deltaTime;
             yield return null;
         }
         pos.y = y + shift;

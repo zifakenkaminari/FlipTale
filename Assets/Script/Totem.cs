@@ -33,14 +33,16 @@ public class Totem : Entity {
     }
 
     protected IEnumerator rotate() {
-        float beginTime = Time.time;
+        float timeNow = 0;
         Quaternion rotation = transform.rotation;
         Vector3 euler = rotation.eulerAngles;
         float angle = euler.z;
-        while(Time.time-beginTime<rotatePeriod){
-            euler.z = angle + 90 * (Time.time - beginTime) / rotatePeriod;
+        while(timeNow<rotatePeriod){
+            while (isFreezed) yield return null; 
+            euler.z = angle + 90 * timeNow / rotatePeriod;
             rotation.eulerAngles = euler;
             transform.rotation = rotation;
+            timeNow += Time.deltaTime;
             yield return null;
         }
         euler.z = angle + 90;
