@@ -22,7 +22,7 @@ public class Item : Entity {
         }
     }
 
-    public bool isPickable() {
+    public virtual bool isPickable() {
         return pickable;
     }
 
