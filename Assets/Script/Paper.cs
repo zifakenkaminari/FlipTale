@@ -6,10 +6,13 @@ public class Paper : Item {
     public Sprite paperCrumpled;
     public Sprite paperPlane;
     public float destroyPeriod;
+    protected GameObject mapDesign;
+    protected int paperState; //0: normal, 1: crumpled, 2: plane
 
     protected new void Start()
     {
         base.Start();
+        paperState = 0; // normal
     }
 
     public override void drop(GameObject player)
@@ -37,11 +40,36 @@ public class Paper : Item {
 
     public override bool use(GameObject player)
     {
-        if (state != 2) {
-            front.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
-            back.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
+        if (paperState == 0) {          //normal
+            if (mapDesign == null || mapDesign.GetComponent<Entity> ().face) {
+                paperState = 1;         //become crumpled
+                front.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
+                back.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
+            }
+            else {
+                paperState = 2;         //become plane
+                front.GetComponent<SpriteRenderer> ().sprite = paperPlane;
+                back.GetComponent<SpriteRenderer> ().sprite = paperPlane;
+            }
+            base.use (player);
+        }
+        else if(paperState == 2) {          //plane
         }
         return false;
     }
-        
+ 
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.name == "MapDesign")
+        {
+            mapDesign = collider.gameObject;
+        }
+    }
+    void OnTriggerExit2D(Collider2D collider)
+    {
+        if (mapDesign && collider.gameObject == mapDesign)
+        {
+            mapDesign = null;
+        }
+    }
 }

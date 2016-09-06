@@ -36,10 +36,8 @@ public class Player : Entity {
                     back.GetComponent<SpriteRenderer> ().sprite = backNormal;
 
                 } else if (itemNearby && itemNearby.isPickable ()) {
-                    itemOnHand = itemNearby;
-                    itemOnHand.pick (gameObject);
-                    front.GetComponent<SpriteRenderer> ().sprite = itemOnHand.frontOnHand;
-                    back.GetComponent<SpriteRenderer> ().sprite = itemOnHand.backOnHand;
+                    //itemOnHand = itemNearby;
+                    itemNearby.pick (gameObject);
                 }
             }
 
