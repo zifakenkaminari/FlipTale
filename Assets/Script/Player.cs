@@ -19,7 +19,8 @@ public class Player : Entity {
         base.Start();
         itemOnHand = null;
         itemNearby = null;
-        //nowStage = GameObject.Find("Stage1");
+        //nowStage = GameObject.Find("Stage1_1");
+        nowStage = GameObject.Find("Stage1_4a");
     }
 
     void Update()
@@ -35,10 +36,8 @@ public class Player : Entity {
                     back.GetComponent<SpriteRenderer> ().sprite = backNormal;
 
                 } else if (itemNearby && itemNearby.isPickable ()) {
-                    itemOnHand = itemNearby;
-                    itemOnHand.pick (gameObject);
-                    front.GetComponent<SpriteRenderer> ().sprite = itemOnHand.frontOnHand;
-                    back.GetComponent<SpriteRenderer> ().sprite = itemOnHand.backOnHand;
+                    //itemOnHand = itemNearby;
+                    itemNearby.pick (gameObject);
                 }
             }
 

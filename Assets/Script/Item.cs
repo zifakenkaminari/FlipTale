@@ -81,6 +81,9 @@ public class Item : Entity {
         transform.localPosition = Vector3.zero;
         setTransparent (ref front, 0);
         setTransparent (ref back, 0);
+        player.GetComponent<Player> ().front.GetComponent<SpriteRenderer> ().sprite = frontOnHand;
+        player.GetComponent<Player> ().back.GetComponent<SpriteRenderer> ().sprite = backOnHand;
+        player.GetComponent<Player> ().itemOnHand = this;
         state = 1;
     }
 
