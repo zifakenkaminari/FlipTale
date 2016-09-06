@@ -7,12 +7,10 @@ public class SeedStone : Item
     public GameObject flowerTorch;
     public float destroyPeriod;
     GameObject pot;
-    bool isNearPot;
 
     protected new void Start()
     {
         base.Start();
-        isNearPot = false;
 	}
 
     public override void drop(GameObject player)
@@ -41,7 +39,7 @@ public class SeedStone : Item
 
     public override bool use(GameObject player)
     {
-        if (isNearPot && face)
+        if (pot && face)
         {
             GameObject newFlower = Instantiate(flowerTorch);
             Vector3 pos = pot.transform.position;
@@ -59,14 +57,12 @@ public class SeedStone : Item
         if (collider.gameObject.CompareTag("Pot"))
         {
             pot = collider.gameObject;
-            isNearPot = true;
         }
     }
     void OnTriggerExit2D(Collider2D collider)
     {
         if (pot && collider.gameObject == pot)
         {
-            isNearPot = false;
             pot = null;
         }
     }
