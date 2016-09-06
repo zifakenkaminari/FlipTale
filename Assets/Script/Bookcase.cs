@@ -9,7 +9,6 @@ public class Bookcase : Item {
         if (face) {
             GameObject newPaper = (GameObject)Instantiate (paper);
             newPaper.GetComponent<Item> ().pick (player);
-            player.GetComponent<Player> ().itemOnHand = newPaper.GetComponent<Item> ();
         }
     }
 }
