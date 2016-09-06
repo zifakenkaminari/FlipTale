@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 946809b93821db24491598138ff59e42
+timeCreated: 1473149103
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - front: {instanceID: 0}
+  - back: {instanceID: 0}
+  - frontOnHand: {instanceID: 0}
+  - backOnHand: {instanceID: 0}
+  - paperCrumpled: {instanceID: 0}
+  - paperPlane: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
