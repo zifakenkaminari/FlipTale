@@ -27,7 +27,7 @@ public class Flipper : MonoBehaviour {
         if (isFlipping)
         {
             if (flipId < flipables.Length) {
-                if (Time.time - flipTime > flipPeriod * flipId / flipables.Length) {
+                while (Time.time - flipTime > flipPeriod * flipId / flipables.Length) {
                     StartCoroutine (flipables [flipId].GetComponent<Entity> ().flip ());
                     flipId++;
                 }
@@ -67,10 +67,9 @@ public class Flipper : MonoBehaviour {
                 idx++;
             }
         }
-        Array.Sort(flipables, delegate(GameObject a, GameObject b)
-                {
-                return a.transform.position.x.CompareTo(b.transform.position.x);
-                });
+        Array.Sort(flipables, delegate(GameObject a, GameObject b){
+            return a.transform.position.x.CompareTo(b.transform.position.x);
+        });
         foreach (GameObject flipable in flipables) {
             flipable.GetComponent<Entity>().lockMotion();
         }

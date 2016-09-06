@@ -7,14 +7,19 @@ public class Item : Entity {
     public Sprite backOnHand;
     public bool pickable;
     public Vector2 onFloorOffset;
-    int state;
+    protected int state;
 
     Vector2 velocity;
 
-    new protected void Start()
+    new protected virtual void Start()
     {
-        velocity = Vector2.zero;
         base.Start();
+        velocity = Vector2.zero;
+        if (state == 1)
+        {
+            setTransparent(ref front, 0);
+            setTransparent(ref back, 0);
+        }
     }
 
     public bool isPickable() {
@@ -91,11 +96,12 @@ public class Item : Entity {
         state = 0;
     }
 
-    public virtual void use(GameObject player)
+    public virtual bool use(GameObject player)
     {
         //TODO: used by player
         //GetComponent<SpriteRenderer>().enabled = true;
         pickable = false;
         state = 2;
+        return false;
     }
 }
