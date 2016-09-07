@@ -23,6 +23,7 @@ public class Item : Entity {
     }
 
     public virtual bool isPickable() {
+        if (state == 0 && velocity != Vector2.zero) return false;
         return pickable;
     }
 
@@ -45,7 +46,7 @@ public class Item : Entity {
         }
     }
 
-    protected void idle()
+    protected virtual void idle()
     {
         RaycastHit2D[] hits = Physics2D.RaycastAll((Vector2)transform.position - onFloorOffset, new Vector2(0, -1), velocity.magnitude*Time.deltaTime);
         foreach (RaycastHit2D hit in hits)
@@ -55,7 +56,7 @@ public class Item : Entity {
 
                 transform.position = hit.point + onFloorOffset;
                 velocity = Vector2.zero;
-                pickable = true;
+                //pickable = true;
                 return;
             }
         }
@@ -90,7 +91,7 @@ public class Item : Entity {
     public virtual void drop(GameObject player)
     {
         //TODO: droped by player
-        pickable = false;
+        //pickable = false;
         transform.parent = player.transform.parent;
         if (face)
             setTransparent (ref front, 1);

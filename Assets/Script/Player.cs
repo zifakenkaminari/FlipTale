@@ -13,14 +13,14 @@ public class Player : Entity {
     public Item itemNearby;
     public GameObject nowStage;
 
-    // Use this for initialization
     new void Start()
     {
         base.Start();
         itemOnHand = null;
         itemNearby = null;
         //nowStage = GameObject.Find("Stage1_1");
-        nowStage = GameObject.Find("Stage1_4a");
+        //nowStage = GameObject.Find("Stage1_4a");
+        nowStage = GameObject.Find("Stage1_5b");
     }
 
     void Update()

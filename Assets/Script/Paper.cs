@@ -23,19 +23,25 @@ public class Paper : Item {
     }
 
     public IEnumerator disappear() {
-        float dropTime = Time.time;
-        while(Time.time - dropTime < destroyPeriod){
-            float rate = (Time.time - dropTime) / destroyPeriod;
+        float timeNow = 0;
+        while(timeNow < destroyPeriod){
+            while (isFreezed) yield return null;
             Color color = front.GetComponent<Renderer> ().material.color;
-            color.a = 1 - rate;
+            color.a = 1 - timeNow / destroyPeriod;
             front.GetComponent<Renderer> ().material.color = color;
-
             color = back.GetComponent<Renderer> ().material.color;
-            color.a = 1 - rate;
+            color.a = 1 - timeNow / destroyPeriod;
             back.GetComponent<Renderer> ().material.color = color;
+            timeNow += Time.deltaTime;
             yield return null;
         }
         Destroy(gameObject);
+    }
+
+    public void magic(){
+        paperState = 2;         //become plane
+        front.GetComponent<SpriteRenderer>().sprite = paperPlane;
+        back.GetComponent<SpriteRenderer>().sprite = paperPlane;
     }
 
     public override bool use(GameObject player)
@@ -53,9 +59,42 @@ public class Paper : Item {
             }
             base.use (player);
         }
-        else if(paperState == 2) {          //plane
+        else if (paperState == 2)
+        {          //plane
+            paperState = 3;
+            transform.parent = player.transform.parent;
+            StartCoroutine(fly());
         }
         return false;
+    }
+
+    protected IEnumerator fly()
+    {
+        if (face)
+            setTransparent(ref front, 1);
+        else
+            setTransparent(ref back, 1);
+        float b = 0.6f;
+        Vector3 v = new Vector3(9f, 6f, 0f);
+        Vector3 g = new Vector3(0, -1f, 0f);
+        Quaternion rotation = transform.localRotation;
+        Vector3 eular = rotation.eulerAngles;
+        while (front.GetComponent<SpriteRenderer>().isVisible)
+        {
+            eular.z = Mathf.Atan(v.y/v.x)*180/Mathf.PI-30;
+            rotation.eulerAngles = eular;
+            transform.localRotation = rotation;
+            transform.position += v * Time.deltaTime;
+            v += g * Time.deltaTime;
+            v -= b * new Vector3(0, v.y, 0) * Time.deltaTime;
+            yield return null;
+        }
+        Destroy(gameObject);
+
+    }
+
+    public int getPaperState() {
+        return paperState;
     }
  
     void OnTriggerEnter2D(Collider2D collider)
