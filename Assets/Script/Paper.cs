@@ -70,6 +70,9 @@ public class Paper : Item {
 
     protected IEnumerator fly()
     {
+        Vector3 scale = transform.localScale;
+        scale.x = 1;
+        transform.localScale = scale;
         if (face)
             setTransparent(ref front, 1);
         else
@@ -81,7 +84,8 @@ public class Paper : Item {
         Vector3 eular = rotation.eulerAngles;
         while (front.GetComponent<SpriteRenderer>().isVisible)
         {
-            eular.z = Mathf.Atan(v.y/v.x)*180/Mathf.PI-30;
+            while (isFreezed) yield return null;
+            eular.z = Mathf.Atan(v.y/v.x)*180/Mathf.PI-15;
             rotation.eulerAngles = eular;
             transform.localRotation = rotation;
             transform.position += v * Time.deltaTime;

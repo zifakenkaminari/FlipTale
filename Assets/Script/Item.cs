@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class Item : Entity {
-    new public string name;
     public Sprite frontOnHand;
     public Sprite backOnHand;
     public bool pickable;
@@ -78,6 +77,7 @@ public class Item : Entity {
     {
         //TODO: picked by player
         velocity = Vector2.zero;
+
         transform.SetParent(player.transform);
         transform.localPosition = Vector3.zero;
         setTransparent (ref front, 0);
@@ -93,6 +93,12 @@ public class Item : Entity {
         //TODO: droped by player
         //pickable = false;
         transform.parent = player.transform.parent;
+        if (flipType == 1) {
+            Vector3 scale = transform.localScale;
+            scale.x = 1;
+            transform.localScale = scale;
+        }
+
         if (face)
             setTransparent (ref front, 1);
         else
