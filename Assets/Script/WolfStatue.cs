@@ -7,6 +7,7 @@ public class WolfStatue : Entity {
     protected override void Start() {
         base.Start();
         isRunning = false;
+        rb.isKinematic = true;
     }
 
     protected override void main()
@@ -34,11 +35,13 @@ public class WolfStatue : Entity {
     protected IEnumerator run() {
         if (isRunning) yield break;
         isRunning = true;
-        while (true)
+        rb.isKinematic = false;
+        while (front.GetComponent<SpriteRenderer>().isVisible)
         {
-            rb.velocity += new Vector2(6, 0);
+            rb.velocity += new Vector2(9, 0) * Time.deltaTime;
             yield return null;
         }
+        Destroy(gameObject);
     }
 
 

@@ -23,16 +23,16 @@ public class Paper : Item {
     }
 
     public IEnumerator disappear() {
-        float dropTime = Time.time;
-        while(Time.time - dropTime < destroyPeriod){
-            float rate = (Time.time - dropTime) / destroyPeriod;
+        float timeNow = 0;
+        while(timeNow < destroyPeriod){
+            while (isFreezed) yield return null;
             Color color = front.GetComponent<Renderer> ().material.color;
-            color.a = 1 - rate;
+            color.a = 1 - timeNow / destroyPeriod;
             front.GetComponent<Renderer> ().material.color = color;
-
             color = back.GetComponent<Renderer> ().material.color;
-            color.a = 1 - rate;
+            color.a = 1 - timeNow / destroyPeriod;
             back.GetComponent<Renderer> ().material.color = color;
+            timeNow += Time.deltaTime;
             yield return null;
         }
         Destroy(gameObject);
@@ -79,16 +79,17 @@ public class Paper : Item {
         Vector3 g = new Vector3(0, -1f, 0f);
         Quaternion rotation = transform.localRotation;
         Vector3 eular = rotation.eulerAngles;
-        while(true){
+        while (front.GetComponent<SpriteRenderer>().isVisible)
+        {
             eular.z = Mathf.Atan(v.y/v.x)*180/Mathf.PI-30;
             rotation.eulerAngles = eular;
             transform.localRotation = rotation;
             transform.position += v * Time.deltaTime;
             v += g * Time.deltaTime;
-            //v -= b * v * Time.deltaTime;
             v -= b * new Vector3(0, v.y, 0) * Time.deltaTime;
             yield return null;
         }
+        Destroy(gameObject);
 
     }
 
