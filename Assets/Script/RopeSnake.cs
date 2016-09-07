@@ -29,7 +29,6 @@ public class RopeSnake : Item
     public override IEnumerator flip()
     {
         yield return base.flip();
-        Debug.Log("End coroutine");
         if (!face) {
             if (player)
             {

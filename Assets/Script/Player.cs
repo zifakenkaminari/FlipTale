@@ -19,7 +19,7 @@ public class Player : Entity {
         itemOnHand = null;
         itemNearby = null;
         //nowStage = GameObject.Find("Stage1_1");
-        nowStage = GameObject.Find("Stage1_5");
+        nowStage = GameObject.Find("Stage1_5b");
     }
 
     void Update()
