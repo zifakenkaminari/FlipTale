@@ -4,7 +4,7 @@ using System.Collections;
 public class StoneButton : Entity
 {
     GameObject player;
-    public Totem totem;
+    public Puller puller;
     public CaveExit caveExit;
 
     protected override void Start(){
@@ -22,7 +22,7 @@ public class StoneButton : Entity
 
     public void use(GameObject player)
     {
-        if (totem.state == 1 && !caveExit.isOpen) {
+        if (puller.state == 3 && !caveExit.isOpen) {
             StartCoroutine(caveExit.open());
         }
     }

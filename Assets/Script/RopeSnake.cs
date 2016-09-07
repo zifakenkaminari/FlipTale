@@ -3,13 +3,13 @@ using System.Collections;
 
 public class RopeSnake : Item
 {
-    public GameObject totem;
+    public GameObject puller;
     public GameObject player;
 
     protected new void Start()
     {
         base.Start();
-        totem = null;
+        puller = null;
     }
 
 
@@ -42,9 +42,10 @@ public class RopeSnake : Item
 
     public override bool use(GameObject player)
     {
-        if (totem && face)
+        if (puller && face)
         {
-            totem.GetComponent<Totem>().state = 0;
+            puller.GetComponent<Puller>().state = 0;
+            puller.GetComponent<Puller>().pulled();
             Destroy(gameObject);
             return true;
         }
@@ -53,16 +54,16 @@ public class RopeSnake : Item
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.CompareTag("Totem") && collider.gameObject.GetComponent<Totem>().state==5)
+        if (collider.gameObject.CompareTag("Puller") && collider.gameObject.GetComponent<Puller>().state==5)
         {
-            totem = collider.gameObject;
+            puller = collider.gameObject;
         }
     }
     void OnTriggerExit2D(Collider2D collider)
     {
-        if (collider.gameObject.CompareTag("Totem"))
+        if (collider.gameObject.CompareTag("Puller"))
         {
-            totem = null;
+            puller = null;
         }
     }
 }
