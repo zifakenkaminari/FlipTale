@@ -25,6 +25,17 @@ public class Player : Entity {
         if (!isFreezed) {
             axisX = Input.GetAxis ("Horizontal");
             axisY = Input.GetAxis ("Vertical");
+            if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                Collider2D[] hits = overlapAreaAll ();
+                foreach (Collider2D hit in hits) {
+                    StageEnter stageEnter = hit.gameObject.GetComponent<StageEnter> ();
+                    if (stageEnter && stageEnter.canEnter[(face)?0:1]) {
+                        hit.gameObject.GetComponent<StageEnter> ().enter (gameObject);
+                        axisY = 0;
+                        break;
+                    }
+                }
+            }
             if (Input.GetKeyDown (KeyCode.X)) {
                 if (itemOnHand) 
                 {
