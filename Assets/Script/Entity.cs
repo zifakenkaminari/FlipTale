@@ -11,7 +11,9 @@ public class Entity : MonoBehaviour {
     float flipTime;
     public float flipPeriod;
     protected Rigidbody2D rb;
+
     protected Vector3 saveVelocity;
+    protected bool saveKinematic;
 
     protected virtual void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -123,6 +125,7 @@ public class Entity : MonoBehaviour {
     {
         if (rb)
         {
+            saveKinematic = rb.isKinematic;
             saveVelocity = rb.velocity;
             rb.isKinematic = true;
         }
@@ -132,7 +135,7 @@ public class Entity : MonoBehaviour {
     {
         if (rb)
         {
-            rb.isKinematic = false;
+            rb.isKinematic = saveKinematic;
             rb.velocity = saveVelocity;
         }
         isFreezed = false;

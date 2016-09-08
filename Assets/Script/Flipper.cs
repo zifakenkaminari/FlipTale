@@ -55,18 +55,29 @@ public class Flipper : MonoBehaviour {
         flipTime = Time.time;
         flipId = 0;
         int flipableSize = 0, idx = 0;
+        /*
         for (int i = 0; i < transform.childCount; i++) {
             if (transform.GetChild (i).GetComponent<Entity> ()) {
                 flipableSize++;
             }
         }
+        */
+        Entity[] entities = GetComponentsInChildren<Entity>();
+        flipableSize = entities.Length;
         flipables = new GameObject[flipableSize];
+        for (int i = 0; i < flipableSize;i++)
+        {
+            flipables[i] = entities[i].gameObject;
+        }
+        //flipables = new GameObject[flipableSize];
+        /*
         for (int i = 0; i < transform.childCount; i++) {
             if (transform.GetChild (i).GetComponent<Entity> ()) {
                 flipables[idx] = transform.GetChild(i).gameObject;
                 idx++;
             }
         }
+        */
         Array.Sort(flipables, delegate(GameObject a, GameObject b){
             return a.transform.position.x.CompareTo(b.transform.position.x);
         });

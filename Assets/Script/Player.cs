@@ -81,13 +81,6 @@ public class Player : Entity {
         back.GetComponent<SpriteRenderer>().sprite = item.backOnHand;
     }
 
-    public override IEnumerator flip ()
-    {
-        yield return base.flip ();
-        if (itemOnHand)
-            itemOnHand.quickFlip();
-    }
-
     protected override void main()
     {
         Vector2 move = GetComponent<Rigidbody2D>().velocity;
