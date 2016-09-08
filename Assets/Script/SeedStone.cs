@@ -15,7 +15,6 @@ public class SeedStone : Item
 
     public override void drop(GameObject player)
     {
-        Debug.Log("drop");
         base.drop(player);
         pickable = false;
         StartCoroutine(disappear());

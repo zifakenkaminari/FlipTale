@@ -142,5 +142,20 @@ public class Entity : MonoBehaviour {
         bg.GetComponent<SpriteRenderer> ().color = tmpColor;
         return;
     }
+
+
+    public Vector2 colliderTopLeft()
+    {
+        BoxCollider2D collider = GetComponent<BoxCollider2D>();
+        if (collider == null) return new Vector2(float.NaN, float.NaN);
+        return (Vector2)transform.position + collider.offset - new Vector2(collider.size.x/2, collider.size.y/2);
+    }
+
+    public Vector2 colliderBotRight()
+    {
+        BoxCollider2D collider = GetComponent<BoxCollider2D>();
+        if (collider == null) return new Vector2(float.NaN, float.NaN);
+        return (Vector2)transform.position + collider.offset + new Vector2(collider.size.x / 2, collider.size.y / 2);
+    }
 }
 

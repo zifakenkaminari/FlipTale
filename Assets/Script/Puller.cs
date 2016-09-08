@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Puller : Entity {
-    GameObject player;
+public class Puller : Machine {
     public GameObject totem;
     public Sprite frontPuller;
     public Sprite backPuller;
@@ -17,17 +16,11 @@ public class Puller : Entity {
         state = 5;
 	}
 
-    protected void Update() {
-        if (state == 5) { 
-        }
-        else if (player && Input.GetKeyDown(KeyCode.C)) {
-            use(player);
-        }
-    }
-
-    public void use(GameObject player) { 
+    public override void use(GameObject player) { 
         //turn 90 degree
-        if (!isRotating && face)
+        if (state == 5) 
+            return;
+        else if (!isRotating && face)
         {
             state = (state + 1) % 4;
             isRotating = true;
@@ -36,6 +29,7 @@ public class Puller : Entity {
     }
 
     public void pulled() {
+        state = 0;
         front.GetComponent<SpriteRenderer>().sprite = frontPuller;
         back.GetComponent<SpriteRenderer>().sprite = backPuller;
     }
@@ -60,19 +54,5 @@ public class Puller : Entity {
     }
 
 
-    void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (collider.gameObject.CompareTag("Player"))
-        {
-            player = collider.gameObject;
-        }
-    }
-    void OnTriggerExit2D(Collider2D collider)
-    {
-        if (player && collider.gameObject == player)
-        {
-            player = null;
-        }
-    }
 
 }
