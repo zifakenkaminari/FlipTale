@@ -14,6 +14,11 @@ public class Paper : Item {
         base.Start();
         paperState = 0; // normal
     }
+    public void magic() {
+        paperState = 2;
+        front.GetComponent<SpriteRenderer> ().sprite = paperPlane;
+        back.GetComponent<SpriteRenderer> ().sprite = paperPlane;
+    }
 
     public override void drop(GameObject player)
     {
