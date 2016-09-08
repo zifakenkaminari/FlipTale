@@ -15,7 +15,7 @@ public class Background : MonoBehaviour {
 	void Start () {
 		face = true;
 		isFlipping = false;
-		setTransparent (ref bgBack, 0);
+		//setTransparent (ref bgBack, 0);
 	}
 	
 	// Update is called once per frame
@@ -40,7 +40,7 @@ public class Background : MonoBehaviour {
 			{
 				// -- change background slow to fast --
 				setTransparent(ref bgFront, Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
-				setTransparent(ref bgBack, 1 - Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
+				//setTransparent(ref bgBack, 1 - Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
 
 				// -- uniformly change background --
 				//setTransparent(ref bgFront, 1 - (Time.time - flipTime) / flipPeriod);
@@ -50,7 +50,7 @@ public class Background : MonoBehaviour {
 			{
 				// -- change background slow to fast --
 				setTransparent(ref bgFront, 1 - Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
-				setTransparent(ref bgBack, Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
+				//setTransparent(ref bgBack, Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
 
 				// -- uniformly change background --
 				//setTransparent(ref bgFront, (Time.time - flipTime) / flipPeriod);
