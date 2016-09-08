@@ -33,7 +33,7 @@ public class Player : Entity {
                 else
                 {
                     //find item nearby
-                    Collider2D[] hits = Physics2D.OverlapAreaAll(colliderTopLeft(), colliderBotRight());
+                    Collider2D[] hits = overlapAreaAll();
                     foreach(Collider2D hit in hits){
                         Item item = hit.gameObject.GetComponent<Item>();
                         if (item != null && item.isPickable()) {
@@ -53,9 +53,9 @@ public class Player : Entity {
                         dropItem();
                     }
                 }
-                else { 
+                else {
                     //find machine nearby
-                    Collider2D[] hits = Physics2D.OverlapAreaAll(colliderTopLeft(), colliderBotRight());
+                    Collider2D[] hits = overlapAreaAll();
                     foreach(Collider2D hit in hits){
                         Machine machine = hit.gameObject.GetComponent<Machine>();
                         if (machine != null) {

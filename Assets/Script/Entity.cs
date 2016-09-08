@@ -143,19 +143,13 @@ public class Entity : MonoBehaviour {
         return;
     }
 
-
-    public Vector2 colliderTopLeft()
-    {
+    public Collider2D[] overlapAreaAll() {
         BoxCollider2D collider = GetComponent<BoxCollider2D>();
-        if (collider == null) return new Vector2(float.NaN, float.NaN);
-        return (Vector2)transform.position + collider.offset - new Vector2(collider.size.x/2, collider.size.y/2);
+        if (collider == null) return null;
+        Vector2 topLeft = (Vector2)transform.position + collider.offset - new Vector2(collider.size.x / 2, collider.size.y / 2);
+        Vector2 botRight = (Vector2)transform.position + collider.offset + new Vector2(collider.size.x / 2, collider.size.y / 2);
+        return Physics2D.OverlapAreaAll(topLeft, botRight);
     }
 
-    public Vector2 colliderBotRight()
-    {
-        BoxCollider2D collider = GetComponent<BoxCollider2D>();
-        if (collider == null) return new Vector2(float.NaN, float.NaN);
-        return (Vector2)transform.position + collider.offset + new Vector2(collider.size.x / 2, collider.size.y / 2);
-    }
 }
 

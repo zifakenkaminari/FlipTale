@@ -13,7 +13,7 @@ public class FlowerTorch : Item
     {
         if (!face)
         {
-            Collider2D[] hits = Physics2D.OverlapAreaAll(colliderTopLeft(), colliderBotRight());
+            Collider2D[] hits = overlapAreaAll();
             foreach (Collider2D hit in hits)
             {
                 if (hit.gameObject.GetComponent<Cave>())

@@ -5,8 +5,9 @@ public class FlagAxe : Item {
 
     public override bool use(GameObject player)
     {
-		if(!face) {
-            Collider2D[] hits = Physics2D.OverlapAreaAll(colliderTopLeft(), colliderBotRight());
+        if (!face)
+        {
+            Collider2D[] hits = overlapAreaAll();
             foreach (Collider2D hit in hits)
             {
                 if (hit.gameObject.GetComponent<TreeCut>())
