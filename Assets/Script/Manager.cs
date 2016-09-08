@@ -16,6 +16,11 @@ public class Manager : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         if(Input.GetKeyDown(KeyCode.Z)){
+            foreach (GameObject stage in stages)
+            {
+                if (stage.GetComponentInChildren<Flipper>().isFlipping) 
+                    return;
+            }
             flip();
         }
     }
