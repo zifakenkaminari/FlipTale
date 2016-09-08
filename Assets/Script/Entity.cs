@@ -45,14 +45,12 @@ public class Entity : MonoBehaviour {
         }
     }
 
-    public void quickFlip() {
-        face = !face;
-    }
-
     public virtual IEnumerator flip()
     {
-        flipTime = Time.time;
+        if (isFlipping)
+            yield break;
         isFlipping = true;
+        flipTime = Time.time;
         Vector3 scale;
         if (flipType == 0) {
             while (Time.time - flipTime < flipPeriod) {

@@ -23,68 +23,36 @@ public class Flipper : MonoBehaviour {
         background.GetComponent<Background>().flipPeriod = flipPeriod;
     }
 
-    void FixedUpdate() {
+    public IEnumerator flip() {
         if (isFlipping)
-        {
-            if (flipId < flipables.Length) {
-                while (Time.time - flipTime > flipPeriod * flipId / flipables.Length) {
-                    StartCoroutine (flipables [flipId].GetComponent<Entity> ().flip ());
-                    flipId++;
-                }
-            }
-            else if (flipables.Length > 0) {
-                if (Time.time - flipTime > flipables [flipId - 1].GetComponent<Entity> ().flipPeriod + flipPeriod) {
-                    face = !face;
-                    isFlipping = false;
-                    foreach (GameObject flipable in flipables) {
-                        flipable.GetComponent<Entity> ().unlockMotion ();
-                    }
-                } 
-            }
-            else if (Time.time - flipTime > flipPeriod) {
-                face = !face;
-                isFlipping = false;
-            }
-        }
-    }
-
-    public void flip()
-    {
-        if (isFlipping) return;
+            yield break;
         isFlipping = true;
-        flipTime = Time.time;
-        flipId = 0;
-        int flipableSize = 0, idx = 0;
-        /*
-        for (int i = 0; i < transform.childCount; i++) {
-            if (transform.GetChild (i).GetComponent<Entity> ()) {
-                flipableSize++;
-            }
-        }
-        */
         Entity[] entities = GetComponentsInChildren<Entity>();
-        flipableSize = entities.Length;
+        int flipableSize = entities.Length;
         flipables = new GameObject[flipableSize];
         for (int i = 0; i < flipableSize;i++)
         {
             flipables[i] = entities[i].gameObject;
         }
-        //flipables = new GameObject[flipableSize];
-        /*
-        for (int i = 0; i < transform.childCount; i++) {
-            if (transform.GetChild (i).GetComponent<Entity> ()) {
-                flipables[idx] = transform.GetChild(i).gameObject;
-                idx++;
-            }
-        }
-        */
         Array.Sort(flipables, delegate(GameObject a, GameObject b){
             return a.transform.position.x.CompareTo(b.transform.position.x);
         });
         foreach (GameObject flipable in flipables) {
             flipable.GetComponent<Entity>().lockMotion();
         }
-        background.GetComponent<Background>().flip();
-    }
+        StartCoroutine(background.GetComponent<Background>().flip());
 
+        for (int i = 0; i < flipableSize - 1; i++)
+        {
+            StartCoroutine(flipables[i].GetComponent<Entity>().flip());
+            yield return new WaitForSeconds(flipPeriod / flipableSize);
+        }
+        if (flipableSize > 0)
+            yield return flipables[flipableSize-1].GetComponent<Entity>().flip();
+        foreach (GameObject flipable in flipables) {
+            flipable.GetComponent<Entity>().unlockMotion();
+        }
+        face = !face;
+        isFlipping = false;
+    }
 }

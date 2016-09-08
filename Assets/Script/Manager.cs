@@ -38,7 +38,7 @@ public class Manager : MonoBehaviour {
 
     public void flip() {
         foreach (GameObject stage in stages) {
-            stage.GetComponentInChildren<Flipper> ().flip ();
+            StartCoroutine(stage.GetComponentInChildren<Flipper>().flip());
         }
     }
 }
