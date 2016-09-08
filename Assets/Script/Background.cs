@@ -15,54 +15,31 @@ public class Background : MonoBehaviour {
 	void Start () {
 		face = true;
 		isFlipping = false;
-		//setTransparent (ref bgBack, 0);
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		if (isFlipping)
-		{
-			flipping();
-		}
 
-	}
-		
-	public void flip() {
-		if (isFlipping) return;
-		isFlipping = true;
-		flipTime = Time.time;
-	}
-	protected void flipping()
-	{
-		if (Time.time - flipTime < flipPeriod)
-		{
-			if (face)
-			{
-				// -- change background slow to fast --
-				setTransparent(ref bgFront, Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
-				//setTransparent(ref bgBack, 1 - Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
+    public IEnumerator flip() {
+        if (isFlipping)
+            yield break;
+        isFlipping = true;
+        float timeNow = 0;
+        while (timeNow < flipPeriod)
+        {
+            if (face)
+                setTransparent(ref bgFront, Mathf.Cos(timeNow / flipPeriod * Mathf.PI / 2));
+            else
+                setTransparent(ref bgFront, 1 - Mathf.Cos(timeNow / flipPeriod * Mathf.PI / 2));
+            timeNow += Time.deltaTime;
+            yield return null;
+        }
+        if (face)
+            setTransparent(ref bgFront, 0);
+        else
+            setTransparent(ref bgFront, 1);
+        face = !face;
+        isFlipping = false;
+    }	
 
-				// -- uniformly change background --
-				//setTransparent(ref bgFront, 1 - (Time.time - flipTime) / flipPeriod);
-				//setTransparent(ref bgBack, (Time.time - flipTime) / flipPeriod);
-			}
-			else
-			{
-				// -- change background slow to fast --
-				setTransparent(ref bgFront, 1 - Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
-				//setTransparent(ref bgBack, Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
-
-				// -- uniformly change background --
-				//setTransparent(ref bgFront, (Time.time - flipTime) / flipPeriod);
-				//setTransparent(ref bgBack, 1 - (Time.time - flipTime) / flipPeriod);
-			}
-		}
-		else
-		{
-			face = !face;
-			isFlipping = false;
-		}
-	}
 
 	private void setTransparent(ref GameObject bg, float a) {
 		Color tmpColor = bg.GetComponent<SpriteRenderer> ().color;

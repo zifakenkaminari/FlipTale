@@ -31,6 +31,20 @@ public class Item : Entity {
         base.FixedUpdate();
     }
 
+
+    public override IEnumerator flip()
+    {
+        if (state == 1)
+        {
+            face = !face;
+            yield break;
+        }
+        else
+        {
+            yield return base.flip();
+        }
+    }
+
     protected override void main(){
         switch(state){
             case 0:
@@ -55,7 +69,6 @@ public class Item : Entity {
 
                 transform.position = hit.point + onFloorOffset;
                 velocity = Vector2.zero;
-                //pickable = true;
                 return;
             }
         }

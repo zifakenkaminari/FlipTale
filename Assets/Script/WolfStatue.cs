@@ -7,7 +7,6 @@ public class WolfStatue : Entity {
     protected override void Start() {
         base.Start();
         isRunning = false;
-        rb.isKinematic = true;
     }
 
     protected override void main()
