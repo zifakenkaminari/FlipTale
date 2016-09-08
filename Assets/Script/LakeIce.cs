@@ -17,6 +17,6 @@ public class LakeIce : Entity {
         else {
             GetComponent<BoxCollider2D> ().isTrigger = true;
         }
-        return base.flip ();
+        yield return null;
     }
 }

@@ -3,6 +3,10 @@ using System.Collections;
 
 public class Paper : Item {
 
+    public Sprite frontPaperCrumpled;
+    public Sprite backPaperCrupmpled;
+    public Sprite frontPapaerPlane;
+    public Sprite backPaperPlane;
     public Sprite paperCrumpled;
     public Sprite paperPlane;
     public float destroyPeriod;
@@ -53,6 +57,8 @@ public class Paper : Item {
                 paperState = 1;         
                 front.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
                 back.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
+                frontOnHand = frontPaperCrumpled;
+                backOnHand = backPaperCrupmpled;
             }
             else
             {
@@ -60,7 +66,10 @@ public class Paper : Item {
                 paperState = 2;     
                 front.GetComponent<SpriteRenderer> ().sprite = paperPlane;
                 back.GetComponent<SpriteRenderer> ().sprite = paperPlane;
+                frontOnHand = frontPapaerPlane;
+                backOnHand = backPaperPlane;
             }
+            player.GetComponent<Player>().pickItem(this);
             base.use (player);
         }
         else if (paperState == 2)
