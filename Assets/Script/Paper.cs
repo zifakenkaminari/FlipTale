@@ -82,14 +82,12 @@ public class Paper : Item {
         float b = 0.6f;
         Vector3 v = new Vector3(9f, 6f, 0f);
         Vector3 g = new Vector3(0, -1f, 0f);
-        Quaternion rotation = transform.localRotation;
-        Vector3 eular = rotation.eulerAngles;
+        Vector3 eular = transform.localEulerAngles;
         while (front.GetComponent<SpriteRenderer>().isVisible)
         {
             while (isFreezed) yield return null;
             eular.z = Mathf.Atan(v.y/v.x)*180/Mathf.PI-15;
-            rotation.eulerAngles = eular;
-            transform.localRotation = rotation;
+            transform.localEulerAngles = eular;
             transform.position += v * Time.deltaTime;
             v += g * Time.deltaTime;
             v -= b * new Vector3(0, v.y, 0) * Time.deltaTime;

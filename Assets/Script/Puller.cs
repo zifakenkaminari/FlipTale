@@ -36,20 +36,17 @@ public class Puller : Machine {
 
     protected IEnumerator rotate() {
         float timeNow = 0;
-        Quaternion rotation = totem.transform.rotation;
-        Vector3 euler = rotation.eulerAngles;
+        Vector3 euler = totem.transform.localEulerAngles;
         float angle = euler.z;
         while(timeNow<rotatePeriod){
             while (isFreezed) yield return null; 
             euler.z = angle + 90 * timeNow / rotatePeriod;
-            rotation.eulerAngles = euler;
-            totem.transform.rotation = rotation;
+            totem.transform.localEulerAngles = euler;
             timeNow += Time.deltaTime;
             yield return null;
         }
         euler.z = angle + 90;
-        rotation.eulerAngles = euler;
-        totem.transform.rotation = rotation;
+        totem.transform.localEulerAngles = euler;
         isRotating = false;
     }
 
