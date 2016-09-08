@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BoxLadder : Item {
 
-    protected override void use(GameObject player)
+    public override bool use(GameObject player)
     {
 
         Collider2D[] hits = overlapAreaAll();
