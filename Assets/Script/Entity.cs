@@ -25,6 +25,7 @@ public class Entity : MonoBehaviour {
         else {
             face = true;
         }
+    
         if (face)
         {
             setTransparent(ref back, 0);
@@ -33,6 +34,7 @@ public class Entity : MonoBehaviour {
         {
             setTransparent(ref front, 0);
         }
+        if(flipType==1)setTransparent(ref back, 1);
     }
 
     protected void FixedUpdate () {
@@ -89,7 +91,7 @@ public class Entity : MonoBehaviour {
                 {
                     // -- change background slow to fast --
                     setTransparent(ref front, Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
-                    setTransparent(ref back, 1 - Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
+                    //setTransparent(ref back, 1 - Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
 
                     // -- uniformly change background --
                     //setTransparent(ref bgFront, 1 - (Time.time - flipTime) / flipPeriod);
@@ -99,7 +101,7 @@ public class Entity : MonoBehaviour {
                 {
                     // -- change background slow to fast --
                     setTransparent(ref front, 1 - Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
-                    setTransparent(ref back, Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
+                    //setTransparent(ref back, Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
 
                     // -- uniformly change background --
                     //setTransparent(ref bgFront, (Time.time - flipTime) / flipPeriod);
@@ -142,5 +144,14 @@ public class Entity : MonoBehaviour {
         bg.GetComponent<SpriteRenderer> ().color = tmpColor;
         return;
     }
+
+    public Collider2D[] overlapAreaAll() {
+        BoxCollider2D collider = GetComponent<BoxCollider2D>();
+        if (collider == null) return null;
+        Vector2 topLeft = (Vector2)transform.position + collider.offset - new Vector2(collider.size.x / 2, collider.size.y / 2);
+        Vector2 botRight = (Vector2)transform.position + collider.offset + new Vector2(collider.size.x / 2, collider.size.y / 2);
+        return Physics2D.OverlapAreaAll(topLeft, botRight);
+    }
+
 }
 

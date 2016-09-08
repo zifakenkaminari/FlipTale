@@ -38,30 +38,31 @@ public class Paper : Item {
         Destroy(gameObject);
     }
 
-    public void magic(){
-        paperState = 2;         //become plane
-        front.GetComponent<SpriteRenderer>().sprite = paperPlane;
-        back.GetComponent<SpriteRenderer>().sprite = paperPlane;
-    }
-
     public override bool use(GameObject player)
     {
-        if (paperState == 0) {          //normal
-            if (mapDesign == null || mapDesign.GetComponent<Entity> ().face) {
-                paperState = 1;         //become crumpled
+        if (paperState == 0) {          
+            //normal
+            if (mapDesign == null || mapDesign.GetComponent<Entity>().face)
+            {
+                //become crumpled
+                paperState = 1;         
                 front.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
                 back.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
             }
-            else {
-                paperState = 2;         //become plane
+            else
+            {
+                //become plane
+                paperState = 2;     
                 front.GetComponent<SpriteRenderer> ().sprite = paperPlane;
                 back.GetComponent<SpriteRenderer> ().sprite = paperPlane;
             }
             base.use (player);
         }
         else if (paperState == 2)
-        {          //plane
+        {          
+            //plane
             paperState = 3;
+            player.GetComponent<Player>().dropItem();
             transform.parent = player.transform.parent;
             StartCoroutine(fly());
         }
@@ -70,20 +71,23 @@ public class Paper : Item {
 
     protected IEnumerator fly()
     {
+        Vector3 scale = transform.localScale;
+        scale.x = 1;
+        transform.localScale = scale;
         if (face)
             setTransparent(ref front, 1);
         else
             setTransparent(ref back, 1);
+        //fly physics
         float b = 0.6f;
         Vector3 v = new Vector3(9f, 6f, 0f);
         Vector3 g = new Vector3(0, -1f, 0f);
-        Quaternion rotation = transform.localRotation;
-        Vector3 eular = rotation.eulerAngles;
+        Vector3 eular = transform.localEulerAngles;
         while (front.GetComponent<SpriteRenderer>().isVisible)
         {
-            eular.z = Mathf.Atan(v.y/v.x)*180/Mathf.PI-30;
-            rotation.eulerAngles = eular;
-            transform.localRotation = rotation;
+            while (isFreezed) yield return null;
+            eular.z = Mathf.Atan(v.y/v.x)*180/Mathf.PI-15;
+            transform.localEulerAngles = eular;
             transform.position += v * Time.deltaTime;
             v += g * Time.deltaTime;
             v -= b * new Vector3(0, v.y, 0) * Time.deltaTime;

@@ -3,10 +3,9 @@ using System.Collections;
 
 public class SeedStone : Item
 {
-    public float onPotOffsetY;
     public GameObject flowerTorch;
+    public float onPotOffsetY;
     public float destroyPeriod;
-    GameObject pot;
 
     protected new void Start()
     {
@@ -15,7 +14,6 @@ public class SeedStone : Item
 
     public override void drop(GameObject player)
     {
-        Debug.Log("drop");
         base.drop(player);
         pickable = false;
         StartCoroutine(disappear());
@@ -41,31 +39,24 @@ public class SeedStone : Item
 
     public override bool use(GameObject player)
     {
-        if (pot && face)
+        if (face)
         {
-            GameObject newFlower = (GameObject)Instantiate(flowerTorch, player.transform.parent);
-            Vector3 pos = pot.transform.position;
-            pos.y = pot.transform.position.y + onPotOffsetY;
-            newFlower.transform.position = pos;
-            Destroy(gameObject);
-            return true;
+            Collider2D[] hits = overlapAreaAll();
+            foreach (Collider2D hit in hits)
+            {
+                if (hit.gameObject.CompareTag("Pot"))
+                {
+                    GameObject pot = hit.gameObject;
+                    GameObject newFlower = (GameObject)Instantiate(flowerTorch, player.transform.parent);
+                    Vector3 pos = pot.transform.position;
+                    pos.y = pot.transform.position.y + onPotOffsetY;
+                    newFlower.transform.position = pos;
+                    Destroy(gameObject);
+                    return true;
+                }
+            }
         }
         return false;
     }
 
-
-    void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (collider.gameObject.CompareTag("Pot"))
-        {
-            pot = collider.gameObject;
-        }
-    }
-    void OnTriggerExit2D(Collider2D collider)
-    {
-        if (pot && collider.gameObject == pot)
-        {
-            pot = null;
-        }
-    }
 }

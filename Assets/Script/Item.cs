@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class Item : Entity {
-    new public string name;
     public Sprite frontOnHand;
     public Sprite backOnHand;
     public bool pickable;
@@ -82,28 +81,30 @@ public class Item : Entity {
         transform.localPosition = Vector3.zero;
         setTransparent (ref front, 0);
         setTransparent (ref back, 0);
-        player.GetComponent<Player> ().front.GetComponent<SpriteRenderer> ().sprite = frontOnHand;
-        player.GetComponent<Player> ().back.GetComponent<SpriteRenderer> ().sprite = backOnHand;
-        player.GetComponent<Player> ().itemOnHand = this;
+        player.GetComponent<Player>().pickItem(this);
         state = 1;
     }
 
     public virtual void drop(GameObject player)
     {
         //TODO: droped by player
-        //pickable = false;
         transform.parent = player.transform.parent;
+        if (flipType == 1) {
+            Vector3 scale = transform.localScale;
+            scale.x = 1;
+            transform.localScale = scale;
+        }
         if (face)
             setTransparent (ref front, 1);
         else
             setTransparent (ref back, 1);
+        player.GetComponent<Player>().dropItem();
         state = 0;
     }
 
     public virtual bool use(GameObject player)
     {
         //TODO: used by player
-        //GetComponent<SpriteRenderer>().enabled = true;
         pickable = false;
         state = 2;
         return false;

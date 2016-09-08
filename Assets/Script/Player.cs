@@ -10,16 +10,14 @@ public class Player : Entity {
     float axisY;
     bool onFloor;
     public Item itemOnHand;
-    public Item itemNearby;
     public GameObject nowStage;
 
     new void Start()
     {
         base.Start();
         itemOnHand = null;
-        itemNearby = null;
         //nowStage = GameObject.Find("Stage1_1");
-        nowStage = GameObject.Find("Stage1_5b");
+        nowStage = GameObject.Find("Stage1_4a");
     }
 
     void Update()
@@ -27,39 +25,78 @@ public class Player : Entity {
         if (!isFreezed) {
             axisX = Input.GetAxis ("Horizontal");
             axisY = Input.GetAxis ("Vertical");
+            if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                Collider2D[] hits = overlapAreaAll ();
+                foreach (Collider2D hit in hits) {
+                    StageEnter stageEnter = hit.gameObject.GetComponent<StageEnter> ();
+                    if (stageEnter && stageEnter.canEnter[(face)?0:1]) {
+                        hit.gameObject.GetComponent<StageEnter> ().enter (gameObject);
+                        axisY = 0;
+                        break;
+                    }
+                }
+            }
             if (Input.GetKeyDown (KeyCode.X)) {
-                if (itemOnHand) {
+                if (itemOnHand) 
+                {
                     itemOnHand.drop (gameObject);
-                    itemOnHand = null;
-                    front.GetComponent<SpriteRenderer> ().sprite = frontNormal;
-                    back.GetComponent<SpriteRenderer> ().sprite = backNormal;
-
-                } else if (itemNearby && itemNearby.isPickable ()) {
-                    //itemOnHand = itemNearby;
-                    itemNearby.pick (gameObject);
+                } 
+                else
+                {
+                    //find item nearby
+                    Collider2D[] hits = overlapAreaAll();
+                    foreach(Collider2D hit in hits){
+                        Item item = hit.gameObject.GetComponent<Item>();
+                        if (item != null && item.isPickable()) {
+                            item.pick(gameObject);
+                            break;
+                        }
+                    }
                 }
             }
 
             if (Input.GetKeyDown (KeyCode.C)) {
-                if (itemOnHand) {
-                    bool disappear = itemOnHand.use (gameObject);
+                if (itemOnHand)
+                {
+                    bool disappear = itemOnHand.use(gameObject);
                     if (disappear)
                     {
-                        itemOnHand = null;
-                        front.GetComponent<SpriteRenderer>().sprite = frontNormal;
-                        back.GetComponent<SpriteRenderer>().sprite = backNormal;
+                        dropItem();
+                    }
+                }
+                else {
+                    //find machine nearby
+                    Collider2D[] hits = overlapAreaAll();
+                    foreach(Collider2D hit in hits){
+                        Machine machine = hit.gameObject.GetComponent<Machine>();
+                        if (machine != null) {
+                            machine.use(gameObject);
+                            break;
+                        }
                     }
                 }
             }
         }
     }
 
+    public void dropItem()
+    {
+        itemOnHand = null;
+        front.GetComponent<SpriteRenderer>().sprite = frontNormal;
+        back.GetComponent<SpriteRenderer>().sprite = backNormal;
+    }
+
+    public void pickItem(Item item) {
+        itemOnHand = item;
+        front.GetComponent<SpriteRenderer>().sprite = item.frontOnHand;
+        back.GetComponent<SpriteRenderer>().sprite = item.backOnHand;
+    }
+
     public override IEnumerator flip ()
     {
-        if (itemOnHand) {
-            itemOnHand.quickFlip ();
-        }
-        return base.flip ();
+        yield return base.flip ();
+        if (itemOnHand)
+            itemOnHand.quickFlip();
     }
 
     protected override void main()
@@ -113,20 +150,4 @@ public class Player : Entity {
         }
     }
 
-    void OnTriggerStay2D(Collider2D collider)
-    {
-        Item item = collider.gameObject.GetComponent<Item>();
-        if (item)
-        {
-            itemNearby = item;
-        }
-    }
-    void OnTriggerExit2D(Collider2D collider)
-    {
-        Item item = collider.gameObject.GetComponent<Item>();
-        if (item == itemNearby)
-        {
-            itemNearby = null;
-        }
-    }
 }
