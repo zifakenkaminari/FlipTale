@@ -21,7 +21,7 @@ public class WolfStatue : Entity {
             {
                 if (hit.gameObject.CompareTag("Paper"))
                 {
-                    if (hit.gameObject.GetComponent<Paper>().getPaperState() == 3)
+                    if (hit.gameObject.GetComponent<Paper>().getPaperState() == 3 && face)
                     {
                         StartCoroutine(run());
                     }
