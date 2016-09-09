@@ -3,6 +3,22 @@ using System.Collections;
 
 public class BoxLadder : Item {
 
+    public override bool isPickable()
+    {
+        if (!face)
+            return false;
+        else
+            return base.isPickable();
+    }
+    protected override void held()
+    {
+        if (!face && state == 1)
+        {
+            GameObject player = transform.parent.gameObject;
+            player.GetComponent<Player>().dropItem();
+            drop(player);
+        }
+    }
     public override bool use(GameObject player)
     {
 

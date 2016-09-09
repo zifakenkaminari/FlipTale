@@ -125,6 +125,7 @@ public class Entity : MonoBehaviour {
         {
             saveKinematic = rb.isKinematic;
             saveVelocity = rb.velocity;
+            rb.velocity = Vector3.zero;
             rb.isKinematic = true;
         }
         isFreezed = true;

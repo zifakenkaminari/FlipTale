@@ -37,6 +37,7 @@ public class WolfStatue : Entity {
         rb.isKinematic = false;
         while (front.GetComponent<SpriteRenderer>().isVisible)
         {
+            while (isFreezed) yield return null;
             rb.velocity += new Vector2(9, 0) * Time.deltaTime;
             yield return null;
         }
