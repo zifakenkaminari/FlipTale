@@ -5,18 +5,28 @@ public class LakeIce : Entity {
 
     protected override void Start ()
     {
-        GetComponent<BoxCollider2D> ().isTrigger = true;
+        BoxCollider2D[] colliders = GetComponents<BoxCollider2D> ();
+        foreach (BoxCollider2D collider in colliders) {
+            collider.isTrigger = true;
+        }
         base.Start ();
     }
 
     public override IEnumerator flip ()
     {
         if (face) {
-            GetComponent<BoxCollider2D> ().isTrigger = false;
+            BoxCollider2D[] colliders = GetComponents<BoxCollider2D> ();
+            foreach (BoxCollider2D collider in colliders) {
+                collider.isTrigger = false;
+            }
         }
         else {
-            GetComponent<BoxCollider2D> ().isTrigger = true;
+            BoxCollider2D[] colliders = GetComponents<BoxCollider2D> ();
+            foreach (BoxCollider2D collider in colliders) {
+                collider.isTrigger = true;
+            }
         }
+        face = !face;
         yield return null;
     }
 }
