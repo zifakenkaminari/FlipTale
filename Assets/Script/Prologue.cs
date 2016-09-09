@@ -37,7 +37,7 @@ public class Prologue : MonoBehaviour {
                     if (idx == countChangeBackground) {
                         toChange = true;
                     }
-                }              
+                }                 
             }
             else {
                 SceneManager.LoadScene ("Stage1");
