@@ -78,29 +78,30 @@ public class Paper : Item {
             paperState = 3;
             player.GetComponent<Player>().dropItem();
             transform.parent = player.transform.parent;
-            StartCoroutine(fly());
+            Vector3 scale = transform.localScale;
+            scale.x = (player.GetComponent<Player>().front.GetComponent<SpriteRenderer>().flipX ^ face)?1:-1;
+            transform.localScale = scale;
+            StartCoroutine(fly(player));
         }
         return false;
     }
 
-    protected IEnumerator fly()
+    protected IEnumerator fly(GameObject player)
     {
         Vector3 scale = transform.localScale;
-        scale.x = 1;
-        transform.localScale = scale;
         if (face)
             setTransparent(ref front, 1);
         else
             setTransparent(ref back, 1);
         //fly physics
         float b = 0.6f;
-        Vector3 v = new Vector3(9f, 6f, 0f);
+        Vector3 v = new Vector3(9f * scale.x, 6f, 0f);
         Vector3 g = new Vector3(0, -1f, 0f);
         Vector3 eular = transform.localEulerAngles;
         while (front.GetComponent<SpriteRenderer>().isVisible)
         {
             while (isFreezed) yield return null;
-            eular.z = Mathf.Atan(v.y/v.x)*180/Mathf.PI-15;
+            eular.z = Mathf.Atan(v.y/v.x)*180/Mathf.PI-15*scale.x;
             transform.localEulerAngles = eular;
             transform.position += v * Time.deltaTime;
             v += g * Time.deltaTime;
