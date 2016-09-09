@@ -16,7 +16,7 @@ public class Prologue : MonoBehaviour {
             transform.GetChild (i).gameObject.SetActive(false);
         }
         idx = 0;
-        countChangeBackground = 4;
+        countChangeBackground = 6;
         isChanging = false;
 	}
 	
