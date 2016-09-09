@@ -7,6 +7,13 @@ public class WaterFireGun : Item {
     public Sprite backFull;
     public Sprite frontFullOnHand;
     public Sprite backFullOnHand;
+    protected bool isFull;
+
+    protected override void Start ()
+    {
+        isFull = false;
+        base.Start ();
+    }
 
     public override bool use (GameObject player)
     {
@@ -18,6 +25,12 @@ public class WaterFireGun : Item {
                 frontOnHand = frontFullOnHand;
                 backOnHand = backFullOnHand;
                 player.GetComponent<Player>().pickItem(this);
+                isFull = true;
+            }
+            if (hit.gameObject.name == "HotAirBallon" && !face && isFull) {
+                drop (player);
+                hit.GetComponent<HotAirBallon> ().getItem (gameObject);
+                return true;
             }
         }
         return false;

@@ -13,8 +13,8 @@ public class WolfStatue : Entity {
     {
         if (!isRunning)
         {
-            Vector2 a = (Vector2)transform.position + new Vector2(5, 20);
-            Vector2 b = (Vector2)transform.position + new Vector2(10, -20);
+            Vector2 a = (Vector2)transform.position + new Vector2(5, 7.23f);
+            Vector2 b = (Vector2)transform.position + new Vector2(10, 0);
             Collider2D[] hits = Physics2D.OverlapAreaAll(a, b);
             foreach (Collider2D hit in hits)
             {
