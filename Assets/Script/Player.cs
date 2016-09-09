@@ -113,11 +113,11 @@ public class Player : Entity {
             move.x = 0;
         }
 
-        if (axisY > 0 && onFloor)
+        if (Input.GetKeyDown(KeyCode.UpArrow) && onFloor)
         {
             move.y = jumpSpeed;
         }
-        GetComponent<Rigidbody2D>().velocity = move;
+        rb.velocity = move;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
