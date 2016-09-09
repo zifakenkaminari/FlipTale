@@ -24,6 +24,7 @@ public class Ladder : Machine {
         {
             front.GetComponent<SpriteRenderer>().sprite = frontStep3;
             back.GetComponent<SpriteRenderer>().sprite = backStep3;
+            GetComponent<StageEnter>().canEnter[1] = true;
         }
         else {
             return;
@@ -31,13 +32,5 @@ public class Ladder : Machine {
         state++;
     }
 
-    public override void use(GameObject player)
-    {
-        if (state >= 3)
-        {
-            Debug.Log("Climb");
-        }
-
-    }
 	
 }
