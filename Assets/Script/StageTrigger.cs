@@ -5,7 +5,7 @@ public class StageTrigger : MonoBehaviour {
 
     public GameObject stage0;
     public GameObject stage1;
-    public float autoMovePath;
+    public Vector2 autoMovePath;
 
     // Use this for initialization
     void Start () {
@@ -19,16 +19,14 @@ public class StageTrigger : MonoBehaviour {
             if (player.nowStage == stage0) {
                 player.nowStage = stage1;
                 player.transform.parent = stage1.transform;
-                moveY = stage1.transform.position.y - stage0.transform.position.y;
             }
             else {
                 player.nowStage = stage0;
                 player.transform.parent = stage0.transform;
-                moveY = stage0.transform.position.y - stage1.transform.position.y;
             }
             Vector3 pos = player.transform.position;
-            pos.x += ((player.nowStage.transform.position.x > pos.x)?1:-1) * autoMovePath;
-            pos.y += moveY;
+            pos.x += ((player.nowStage.transform.position.x > pos.x)?1:-1) * autoMovePath.x;
+            pos.y += ((player.nowStage.transform.position.y > pos.y)?1:-1) * autoMovePath.y;
             player.transform.position = pos;
         }
     }
