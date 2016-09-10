@@ -15,7 +15,6 @@ public class StageTrigger : MonoBehaviour {
     public virtual void OnTriggerEnter2D(Collider2D collider) {
         Player player = collider.GetComponent<Player> ();
         if (player) {
-            float moveY;
             if (player.nowStage == stage0) {
                 player.nowStage = stage1;
                 player.transform.parent = stage1.transform;

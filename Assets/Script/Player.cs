@@ -16,8 +16,8 @@ public class Player : Entity {
     {
         base.Start();
         itemOnHand = null;
-        nowStage = GameObject.Find("Stage1_1");
-        //nowStage = GameObject.Find("Stage1_4a");
+        //nowStage = GameObject.Find("Stage1_1");
+        nowStage = GameObject.Find("Stage1_4a");
     }
 
     void Update()

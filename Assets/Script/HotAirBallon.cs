@@ -22,7 +22,7 @@ public class HotAirBallon : Entity {
         getItemCount++;
         if (getItemCount == 3) {
             front.SetActive (true);
-            back.SetActive (false);
+            back.SetActive (true);
             foreach(GameObject eachItem in getItems) {
                 eachItem.SetActive (false);
             }
