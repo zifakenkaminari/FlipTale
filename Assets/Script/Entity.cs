@@ -87,32 +87,20 @@ public class Entity : MonoBehaviour {
         else if (flipType == 1) {
             while (Time.time - flipTime < flipPeriod)
             {
+                float rate = Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2);
                 if (face)
                 {
-                    // -- change background slow to fast --
-                    setTransparent(ref front, Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
-                    //setTransparent(ref back, 1 - Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
-
-                    // -- uniformly change background --
-                    //setTransparent(ref bgFront, 1 - (Time.time - flipTime) / flipPeriod);
-                    //setTransparent(ref bgBack, (Time.time - flipTime) / flipPeriod);
+                    setTransparent(ref front, rate);
                 }
                 else
                 {
-                    // -- change background slow to fast --
-                    setTransparent(ref front, 1 - Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
-                    //setTransparent(ref back, Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2) );
-
-                    // -- uniformly change background --
-                    //setTransparent(ref bgFront, (Time.time - flipTime) / flipPeriod);
-                    //setTransparent(ref bgBack, 1 - (Time.time - flipTime) / flipPeriod);
+                    setTransparent(ref front, 1 - rate);
                 }
                 yield return null;
             }
             face = !face;
         }
         isFlipping = false;
-        yield return null;
     }
 
     protected virtual void main() { 

@@ -61,20 +61,25 @@ public class Item : Entity {
 
     protected virtual void idle()
     {
-        RaycastHit2D[] hits = Physics2D.RaycastAll((Vector2)transform.position - onFloorOffset, new Vector2(0, -1), velocity.magnitude*Time.deltaTime);
+        //RaycastHit2D[] hits = Physics2D.RaycastAll((Vector2)transform.position - onFloorOffset, new Vector2(0, -1), velocity.magnitude * Time.fixedDeltaTime);
+
+        RaycastHit2D[] hits = Physics2D.BoxCastAll((Vector2)transform.position - onFloorOffset, GetComponent<Collider2D>().bounds.size, 0f, -Vector2.up, velocity.magnitude * Time.fixedDeltaTime);
+        
+        
         foreach (RaycastHit2D hit in hits)
         {
             if (hit.collider.gameObject.CompareTag("Floor"))
             {
-
-                transform.position = hit.point + onFloorOffset;
+                transform.position = hit.centroid + onFloorOffset;
+                
+                //transform.position = hit.point + onFloorOffset;
                 velocity = Vector2.zero;
                 return;
             }
         }
-
         transform.Translate(velocity * Time.fixedDeltaTime);
-        velocity += Physics2D.gravity*Time.fixedDeltaTime;
+        velocity += Physics2D.gravity * Time.fixedDeltaTime;
+
     }
     protected virtual void held()
     {
