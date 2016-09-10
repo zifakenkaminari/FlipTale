@@ -3,10 +3,21 @@ using System.Collections;
 
 public class FlowerTorch : Item
 {
+    static bool spawned = false;
+
     protected override void Start()
     {
+        spawned = true;
         base.Start();
         state = 3;
+    }
+    public static bool isSpawned() {
+        return spawned;
+    }
+
+
+    protected void OnDestroy() {
+        spawned = false;
     }
 
     public override bool use(GameObject player)
