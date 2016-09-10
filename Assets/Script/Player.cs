@@ -8,7 +8,7 @@ public class Player : Entity {
     public float jumpSpeed;
     float axisX;
     float axisY;
-    bool onFloor;
+    public bool onFloor;
     public Item itemOnHand;
     public GameObject nowStage;
 
@@ -16,8 +16,8 @@ public class Player : Entity {
     {
         base.Start();
         itemOnHand = null;
-        //nowStage = GameObject.Find("Stage1_1");
-        nowStage = GameObject.Find("Stage1_4a");
+        nowStage = GameObject.Find("Stage1_1");
+        //nowStage = GameObject.Find("Stage1_4a");
     }
 
     void Update()
@@ -25,16 +25,22 @@ public class Player : Entity {
         if (!isFreezed) {
             axisX = Input.GetAxis ("Horizontal");
             axisY = Input.GetAxis ("Vertical");
-            if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                Collider2D[] hits = overlapAreaAll ();
-                foreach (Collider2D hit in hits) {
-                    StageEnter stageEnter = hit.gameObject.GetComponent<StageEnter> ();
-                    if (stageEnter && stageEnter.canEnter[(face)?0:1]) {
-                        hit.gameObject.GetComponent<StageEnter> ().enter (gameObject);
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                Collider2D[] hits = overlapAreaAll();
+                foreach (Collider2D hit in hits)
+                {
+                    StageEnter stageEnter = hit.gameObject.GetComponent<StageEnter>();
+                    if (stageEnter && stageEnter.canEnter[(face) ? 0 : 1])
+                    {
+                        hit.gameObject.GetComponent<StageEnter>().enter(gameObject);
                         axisY = 0;
                         break;
                     }
                 }
+            }
+            else {
+                axisY = 0;
             }
             if (Input.GetKeyDown (KeyCode.X)) {
                 if (itemOnHand) 
@@ -113,7 +119,7 @@ public class Player : Entity {
             move.x = 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.UpArrow) && onFloor)
+        if (axisY>0 && onFloor)
         {
             move.y = jumpSpeed;
         }
