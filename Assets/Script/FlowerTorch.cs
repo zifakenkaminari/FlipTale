@@ -22,15 +22,24 @@ public class FlowerTorch : Item
 
     public override bool use(GameObject player)
     {
-        if (!face)
-        {
-            Collider2D[] hits = overlapAreaAll();
-            foreach (Collider2D hit in hits)
-            {
-                if (hit.gameObject.GetComponent<Cave>())
-                {
-                    hit.gameObject.GetComponent<Cave>().burn();
-                    Destroy(gameObject);
+        Collider2D[] hits = overlapAreaAll ();
+        if (!face) {
+            foreach (Collider2D hit in hits) {
+                if (hit.gameObject.GetComponent<Cave> ()) {
+                    hit.gameObject.GetComponent<Cave> ().burn ();
+                    Destroy (gameObject);
+                    return true;
+                }
+            }
+        }
+        else {
+            foreach (Collider2D hit in hits) {
+                Tomb tomb = hit.gameObject.GetComponent<Tomb> ();
+                if (tomb && !tomb.hasFlower) {
+                    tomb.front.GetComponent<SpriteRenderer> ().sprite = tomb.frontWithFlower;
+                    tomb.back.GetComponent<SpriteRenderer> ().sprite = tomb.backWithFlower;
+                    tomb.hasFlower = true;
+                    Destroy (gameObject);
                     return true;
                 }
             }
