@@ -6,7 +6,6 @@ public class Prologue : MonoBehaviour {
 
     protected int idx;
     protected int countChangeBackground;
-    public GameObject mainCamera;
     public float changePeriod;
     protected float startTime;
     protected bool isChanging;
@@ -48,10 +47,10 @@ public class Prologue : MonoBehaviour {
     void FixedUpdate(){
         if (isChanging) {
             if (Time.time - startTime < changePeriod) {
-                mainCamera.GetComponent<Camera> ().backgroundColor = Color.white * (Time.time - startTime) / changePeriod;
+                Camera.main.backgroundColor = Color.white * (Time.time - startTime) / changePeriod;
             }
             else {
-                mainCamera.GetComponent<Camera> ().backgroundColor = Color.white;
+                Camera.main.backgroundColor = Color.white;
                 isChanging = false;
             }
         }

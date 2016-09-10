@@ -100,7 +100,8 @@ public class Player : Entity {
 
     protected override void main()
     {
-        Vector2 move = GetComponent<Rigidbody2D>().velocity;
+        if (!rb) return;
+        Vector2 move = rb.velocity;
         if (axisX > 0)
         {
             move.x = walkSpeed;

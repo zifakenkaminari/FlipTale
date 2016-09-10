@@ -1,10 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
+
 
 public class CameraController : MonoBehaviour {
     public Player player;
 
-	void FixedUpdate ()
+    public float changePeriod;
+    protected float startTime;
+    protected bool isChanging;
+    protected bool toChange;
+
+    void Start()
+    {
+        isChanging = false;
+    }
+    void FixedUpdate ()
     {
         Vector3 now = transform.position;
         Vector3 pos = player.transform.position;
@@ -21,5 +32,28 @@ public class CameraController : MonoBehaviour {
         now.x = Mathf.Lerp(now.x, pos.x, 0.1f);
         now.y = Mathf.Lerp(now.y, pos.y, 0.1f);
         transform.position = now;
+
+        if (isChanging)
+        {
+            if (Time.time - startTime < changePeriod)
+            {
+                GetComponent<Camera>().backgroundColor = Color.white * (Time.time - startTime) / changePeriod;
+            }
+            else
+            {
+                GetComponent<Camera>().backgroundColor = Color.white;
+                isChanging = false;
+                SceneManager.LoadScene("Ending");
+            }
+        }
     }
+    public void end()
+    {
+        startTime = Time.time;
+        isChanging = true;
+        toChange = false;
+    }
+
+
+
 }
