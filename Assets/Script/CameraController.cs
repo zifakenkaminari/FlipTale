@@ -45,7 +45,7 @@ public class CameraController : MonoBehaviour {
             {
                 setTransparent (ref endingBlank, 1);
                 isChanging = false;
-                SceneManager.LoadScene("Ending");
+                StartCoroutine (fadeOut ());
             }
         }
     }
@@ -54,6 +54,19 @@ public class CameraController : MonoBehaviour {
         startTime = Time.time;
         isChanging = true;
         toChange = false;
+    }
+
+    protected IEnumerator fadeOut(){
+        float p = 2;
+        float timeNow = 0;
+        while(timeNow<p){
+            Camera.main.GetComponent<AudioSource> ().volume = 1-timeNow / p;
+            timeNow += Time.deltaTime;
+            yield return null;
+        }
+
+
+        SceneManager.LoadScene ("Ending");
     }
 
     protected void setTransparent(ref GameObject bg, float a) {

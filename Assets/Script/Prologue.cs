@@ -39,7 +39,7 @@ public class Prologue : MonoBehaviour {
                 }                 
             }
             else {
-                SceneManager.LoadScene ("Stage1");
+                StartCoroutine (fadeOut());
             }
         }
 	}
@@ -54,5 +54,19 @@ public class Prologue : MonoBehaviour {
                 isChanging = false;
             }
         }
+    }
+
+    protected IEnumerator fadeOut(){
+        float p = 2;
+        float timeNow = 0;
+        while(timeNow<p){
+            Camera.main.GetComponent<AudioSource> ().volume = 1-timeNow / p;
+            timeNow += Time.deltaTime;
+            yield return null;
+        }
+
+
+        SceneManager.LoadScene ("Stage1");
+        
     }
 }
