@@ -8,6 +8,8 @@ public class HotAirBallon : Machine {
     protected bool flying;
     public float upForce;
     public float downForce;
+    public Sprite frontFlying;
+    public Sprite backFlying;
 
     protected override void Start ()
     {
@@ -28,7 +30,8 @@ public class HotAirBallon : Machine {
             else {
                 rb.AddForce(new Vector2(0, -downForce * rb.mass));
             }
-            if (back.GetComponent<SpriteRenderer>().isVisible) {
+            if (!back.GetComponent<SpriteRenderer>().isVisible) {
+                flying = false;
                 Camera.main.GetComponent<CameraController>().end();
             }
         }
@@ -55,7 +58,10 @@ public class HotAirBallon : Machine {
             setTransparent(ref player.GetComponent<Player>().front, 0);
             setTransparent(ref player.GetComponent<Player>().back, 0);
             Destroy(player.GetComponent<Rigidbody2D>());
+
             flying = true;
+            front.GetComponent<SpriteRenderer> ().sprite = frontFlying;
+            back.GetComponent<SpriteRenderer> ().sprite = backFlying;
         }
         base.use(player);
     }

@@ -10,10 +10,12 @@ public class CameraController : MonoBehaviour {
     protected float startTime;
     protected bool isChanging;
     protected bool toChange;
+    public GameObject endingBlank;
 
     void Start()
     {
         isChanging = false;
+        setTransparent (ref endingBlank, 0);
     }
     void FixedUpdate ()
     {
@@ -37,11 +39,11 @@ public class CameraController : MonoBehaviour {
         {
             if (Time.time - startTime < changePeriod)
             {
-                GetComponent<Camera>().backgroundColor = Color.white * (Time.time - startTime) / changePeriod;
+                setTransparent (ref endingBlank, (Time.time - startTime) / changePeriod);
             }
             else
             {
-                GetComponent<Camera>().backgroundColor = Color.white;
+                setTransparent (ref endingBlank, 1);
                 isChanging = false;
                 SceneManager.LoadScene("Ending");
             }
@@ -54,6 +56,11 @@ public class CameraController : MonoBehaviour {
         toChange = false;
     }
 
-
+    protected void setTransparent(ref GameObject bg, float a) {
+        Color tmpColor = bg.GetComponent<SpriteRenderer> ().color;
+        tmpColor.a = a;
+        bg.GetComponent<SpriteRenderer> ().color = tmpColor;
+        return;
+    }
 
 }
