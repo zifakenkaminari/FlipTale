@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
@@ -6,11 +7,14 @@ public class Manager : MonoBehaviour {
 
     public string loadScene;
     public string menuScene;
+    public GameObject GM_jump;
+    public bool GM_mode;
     public GameObject[] stages;
+    private GameObject player;
 
     // Use this for initialization
     void Start () {
-
+        player = GameObject.Find ("Player");
     }
 
     // Update is called once per frame
@@ -22,6 +26,16 @@ public class Manager : MonoBehaviour {
                     return;
             }
             flip();
+        }
+        if (Input.GetKeyDown (KeyCode.F8) && GM_mode) {
+            if (!GM_jump)
+                return;
+            if (GM_jump.activeSelf == false) {
+                GM_jump.SetActive (true);
+            } 
+            else {
+                GM_jump.SetActive (false);
+            }
         }
     }
 
@@ -45,5 +59,13 @@ public class Manager : MonoBehaviour {
         foreach (GameObject stage in stages) {
             StartCoroutine(stage.GetComponentInChildren<Flipper>().flip());
         }
+    }
+
+    public void jumpPlayer(){
+        print("Stage1_" + GM_jump.GetComponent<InputField> ().text);
+        GameObject jumpStage = GameObject.Find("Stage1_" + GM_jump.GetComponent<InputField>().text);
+        player.GetComponent<Player> ().nowStage = jumpStage;
+        player.transform.parent = jumpStage.transform;
+        player.transform.position = jumpStage.transform.position;
     }
 }

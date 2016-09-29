@@ -48,6 +48,7 @@ public class HotAirBallon : Machine {
             foreach(GameObject eachItem in getItems) {
                 eachItem.SetActive (false);
             }
+            flipType = 0;
         }
     }
 
