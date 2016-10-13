@@ -18,7 +18,7 @@ public class WolfStatue : Entity {
             Collider2D[] hits = Physics2D.OverlapAreaAll(a, b);
             foreach (Collider2D hit in hits)
             {
-                if (hit.gameObject.CompareTag("Paper"))
+                if (hit.gameObject.GetComponent<Paper>())
                 {
                     if (hit.gameObject.GetComponent<Paper>().getPaperState() == 3 && face)
                     {
@@ -48,14 +48,14 @@ public class WolfStatue : Entity {
 
     void OnTriggerStay2D(Collider2D collider)
     {
-        if (collider.gameObject.CompareTag("TrashBag"))
+        if (collider.gameObject.name == "TrashBag")
         {
             collider.gameObject.GetComponent<TrashBag>().pickable = false;
         }
     }
     void OnTriggerExit2D(Collider2D collider)
     {
-        if (collider.gameObject.CompareTag("TrashBag"))
+        if (collider.gameObject.name == "TrashBag")
         {
             collider.gameObject.GetComponent<TrashBag>().pickable = true;
         }

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Spike : Entity {
     void OnTriggerStay2D(Collider2D collider) {
-        if (!isFreezed && collider.gameObject.CompareTag("Balloon")) {
+        if (!isFreezed && collider.gameObject.GetComponent<Balloon>()) {
             Destroy(collider.gameObject);
         }
     }

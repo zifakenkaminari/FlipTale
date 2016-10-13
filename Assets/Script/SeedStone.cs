@@ -44,7 +44,7 @@ public class SeedStone : Item
             Collider2D[] hits = overlapAreaAll();
             foreach (Collider2D hit in hits)
             {
-                if (hit.gameObject.CompareTag("Pot")&&!FlowerTorch.isSpawned())
+                if (hit.gameObject.name == "Pot" && !FlowerTorch.isSpawned())
                 {
                     GameObject pot = hit.gameObject;
                     GameObject newFlower = (GameObject)Instantiate(flowerTorch, player.transform.parent);
