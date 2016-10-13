@@ -56,6 +56,9 @@ public class HotAirBallon : Machine {
     {
         if(getItemCount == 3 && !face) {
             player.transform.parent = transform;
+            Vector3 tmp = player.transform.position;
+            tmp.x = transform.position.x;
+            player.transform.position = tmp;
             setTransparent(ref player.GetComponent<Player>().front, 0);
             setTransparent(ref player.GetComponent<Player>().back, 0);
             Destroy(player.GetComponent<Rigidbody2D>());
