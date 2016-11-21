@@ -22,7 +22,9 @@ public class Player : Entity {
 
     void Update()
     {
-        if (!isFreezed) {
+        if (!isFreezed)
+        {
+            Vector2 move = rb.velocity;
             axisX = Input.GetAxis ("Horizontal");
             axisY = Input.GetAxis ("Vertical");
             if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -42,6 +44,31 @@ public class Player : Entity {
             else {
                 axisY = 0;
             }
+
+            if (axisX > 0)
+            {
+                move.x = walkSpeed;
+                front.GetComponent<SpriteRenderer>().flipX = false ^ (!face);
+                back.GetComponent<SpriteRenderer>().flipX = false ^ (!face);
+            }
+            else if (axisX < 0)
+            {
+                //flip also depends on front/back face
+                move.x = -walkSpeed;
+                front.GetComponent<SpriteRenderer>().flipX = true ^ (!face);
+                back.GetComponent<SpriteRenderer>().flipX = true ^ (!face);
+            }
+            else
+            {
+                move.x = 0;
+            }
+
+            if (axisY > 0 && onFloor)
+            {
+                move.y = jumpSpeed;
+            }
+            rb.velocity = move;
+
             if (Input.GetKeyDown (KeyCode.X)) {
                 if (itemOnHand) 
                 {
@@ -100,31 +127,7 @@ public class Player : Entity {
 
     protected override void main()
     {
-        if (!rb) return;
-        Vector2 move = rb.velocity;
-        if (axisX > 0)
-        {
-            move.x = walkSpeed;
-            front.GetComponent<SpriteRenderer> ().flipX = false ^ (!face);
-            back.GetComponent<SpriteRenderer> ().flipX = false ^ (!face);
-        }
-        else if (axisX < 0)
-        {
-            //flip also depends on front/back face
-            move.x = -walkSpeed;
-            front.GetComponent<SpriteRenderer> ().flipX = true ^ (!face);
-            back.GetComponent<SpriteRenderer> ().flipX = true ^ (!face);
-        }
-        else
-        {
-            move.x = 0;
-        }
-
-        if (axisY>0 && onFloor)
-        {
-            move.y = jumpSpeed;
-        }
-        rb.velocity = move;
+        
     }
 
     void OnCollisionEnter2D(Collision2D collision)
