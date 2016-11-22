@@ -14,7 +14,7 @@ public class Entity : MonoBehaviour {
 
     protected Vector3 saveVelocity;
     protected bool saveKinematic;
-
+    //zenmendu
     protected virtual void Start () {
         rb = GetComponent<Rigidbody2D>();
         isFlipping = false;

@@ -37,12 +37,8 @@ public class Paper : Item {
         float timeNow = 0;
         while(timeNow < destroyPeriod){
             while (isFreezed) yield return null;
-            Color color = front.GetComponent<Renderer> ().material.color;
-            color.a = 1 - timeNow / destroyPeriod;
-            front.GetComponent<Renderer> ().material.color = color;
-            color = back.GetComponent<Renderer> ().material.color;
-            color.a = 1 - timeNow / destroyPeriod;
-            back.GetComponent<Renderer> ().material.color = color;
+            setTransparent(ref front, 1 - timeNow / destroyPeriod);
+            setTransparent(ref back, 1 - timeNow / destroyPeriod);
             timeNow += Time.deltaTime;
             yield return null;
         }
@@ -103,11 +99,19 @@ public class Paper : Item {
     protected IEnumerator thrown(GameObject player)
     {
         Vector3 scale = transform.localScale;
+        //show image
+
+        /*
         if (face)
             setTransparent(ref front, 1);
         else
             setTransparent(ref back, 1);
-
+        */
+        setTransparent(ref back, 1);
+        if (face)
+            setTransparent(ref front, 1);
+        else
+            setTransparent(ref front, 0);
         //fly physics
         float b = 0.2f;
         Vector3 v = new Vector3(5f * scale.x, 6f, 0f);

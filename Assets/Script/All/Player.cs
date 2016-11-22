@@ -24,6 +24,7 @@ public class Player : Entity {
     {
         if (!isFreezed)
         {
+            if (!rb) return;
             Vector2 move = rb.velocity;
             axisX = Input.GetAxis ("Horizontal");
             axisY = Input.GetAxis ("Vertical");
