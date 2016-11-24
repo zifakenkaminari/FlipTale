@@ -7,9 +7,9 @@ public class CaveExit : Entity {
     float shift = 3;
 
 	protected override void Start () {
+        base.Start();
         isOpen = false;
 	}
-
 
     public IEnumerator open() {
         if (isOpen) yield break;

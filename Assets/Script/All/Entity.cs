@@ -10,33 +10,31 @@ public class Entity : MonoBehaviour {
     public bool isFreezed;
     float flipTime;
     public float flipPeriod;
+
+    float alpha;
+    float flipValue;
+
     protected Rigidbody2D rb;
 
     protected Vector3 saveVelocity;
     protected bool saveKinematic;
-    //zenmendu
+
     protected virtual void Start () {
         rb = GetComponent<Rigidbody2D>();
+        alpha = 1;
+        flipValue = 0;
+
         isFlipping = false;
         isFreezed = false;
         flipTime = -10000f;
+        //if is spawn by parent, set flip side to the same as its parent
         if (transform.parent && transform.parent.gameObject.GetComponent<Entity>())
-        {
             face = transform.parent.gameObject.GetComponent<Entity>().face;
-        }
-        else {
-            face = true;
-        }
-    
-        if (face)
-        {
-            setTransparent(ref back, 0);
-        }
         else
-        {
-            setTransparent(ref front, 0);
-        }
-        if(flipType==1)setTransparent(ref back, 1);
+            face = true;
+        setFlipValue(1);
+        setAlpha(1);
+
     }
 
     protected void FixedUpdate () {
@@ -51,54 +49,25 @@ public class Entity : MonoBehaviour {
             yield break;
         isFlipping = true;
         flipTime = Time.time;
-        Vector3 scale;
-        if (flipType == 0) {
-            while (Time.time - flipTime < flipPeriod) {
-                scale = transform.localScale;
-                if (face) {
-                    scale.x = Mathf.Cos ((Time.time - flipTime) / flipPeriod * Mathf.PI);
-                } else {
-                    scale.x = -Mathf.Cos ((Time.time - flipTime) / flipPeriod * Mathf.PI);
-                }
-                if (Time.time - flipTime > flipPeriod / 2) {
-                
-                    if (!face && back.GetComponent<SpriteRenderer> ().color.a == 1) {
-                        setTransparent (ref front, 1);
-                        setTransparent (ref back, 0);
-                    }
-                    if (face && front.GetComponent<SpriteRenderer> ().color.a == 1) {
-                        setTransparent (ref front, 0);
-                        setTransparent (ref back, 1);
-                    }
 
-                }
-                transform.localScale = scale;
-                yield return null;
-            }
-            scale = transform.localScale;
-            if (face) {
-                scale.x = -1;
-            } else {
-                scale.x = 1;
-            }
-            face = !face;
-            transform.localScale = scale;
-        }
-        else if (flipType == 1) {
+        if(face){
             while (Time.time - flipTime < flipPeriod)
             {
-                float rate = Mathf.Cos((Time.time - flipTime) / flipPeriod * Mathf.PI / 2);
-                if (face)
-                {
-                    setTransparent(ref front, rate);
-                }
-                else
-                {
-                    setTransparent(ref front, 1 - rate);
-                }
+                setFlipValue(1 - (Time.time - flipTime) / flipPeriod);
                 yield return null;
             }
-            face = !face;
+            setFlipValue(0);
+            face = false;
+        }
+        else
+        {
+            while (Time.time - flipTime < flipPeriod)
+            {
+                setFlipValue((Time.time - flipTime) / flipPeriod);
+                yield return null;
+            }
+            setFlipValue(1);
+            face = true;
         }
         isFlipping = false;
     }
@@ -133,6 +102,57 @@ public class Entity : MonoBehaviour {
         tmpColor.a = a;
         bg.GetComponent<SpriteRenderer> ().color = tmpColor;
         return;
+    }
+
+    public void setAlpha(float alpha) {
+        this.alpha = alpha;
+        if (flipType == 0)
+        {
+            if (flipValue > 0.5)
+            {
+                setTransparent(ref front, alpha);
+                setTransparent(ref back, 0);
+            }
+            else
+            {
+                setTransparent(ref front, 0);
+                setTransparent(ref back, alpha);
+            }
+        }
+        else if (flipType == 1)
+        {
+            float frontAlpha = flipValue * alpha;
+            float backAlpha = alpha * (1 - flipValue) / (1 - alpha * flipValue);
+            setTransparent(ref front, frontAlpha);
+            setTransparent(ref back, backAlpha);
+        }
+    }
+
+    protected void setFlipValue(float f)
+    {
+        //flip value: front = 1, back = 0
+        flipValue = f;
+        if (flipType == 0)
+        {
+            Vector3 scale = transform.localScale;
+            scale.x = Mathf.Cos((1-f)*Mathf.PI);
+            transform.localScale = scale;
+            if(f>0.5){
+                setTransparent(ref front, alpha);
+                setTransparent(ref back, 0);
+            }
+            else{
+                setTransparent(ref front, 0);
+                setTransparent(ref back, alpha);
+            }
+        }
+        else if (flipType == 1)
+        {
+            float frontAlpha = f * alpha;
+            float backAlpha = alpha * (1 - f) / (1 - alpha * f);
+            setTransparent(ref front, frontAlpha);
+            setTransparent(ref back, backAlpha);
+        }
     }
 
     public Collider2D[] overlapAreaAll() {

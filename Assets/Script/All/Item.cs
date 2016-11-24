@@ -16,8 +16,7 @@ public class Item : Entity {
         velocity = Vector2.zero;
         if (state == 1)
         {
-            setTransparent(ref front, 0);
-            setTransparent(ref back, 0);
+            setAlpha(0);
         }
     }
 
@@ -36,7 +35,22 @@ public class Item : Entity {
     {
         if (state == 1)
         {
-            face = !face;
+            if (flipType == 0)
+            {
+                Vector3 scale = transform.localScale;
+                scale.x = face ? -1 : 1;
+                transform.localScale = scale;
+            }
+            if (face)
+            {
+                setFlipValue(0);
+                face = false;
+            }
+            else
+            {
+                setFlipValue(1);
+                face = true;
+            }
             yield break;
         }
         else
@@ -61,18 +75,12 @@ public class Item : Entity {
 
     protected virtual void idle()
     {
-        //RaycastHit2D[] hits = Physics2D.RaycastAll((Vector2)transform.position - onFloorOffset, new Vector2(0, -1), velocity.magnitude * Time.fixedDeltaTime);
-
         RaycastHit2D[] hits = Physics2D.BoxCastAll((Vector2)transform.position - onFloorOffset, GetComponent<Collider2D>().bounds.size, 0f, -Vector2.up, velocity.magnitude * Time.fixedDeltaTime);
-        
-        
         foreach (RaycastHit2D hit in hits)
         {
             if (hit.collider.gameObject.CompareTag("Floor"))
             {
                 transform.position = hit.centroid + onFloorOffset;
-                
-                //transform.position = hit.point + onFloorOffset;
                 velocity = Vector2.zero;
                 return;
             }
@@ -97,8 +105,8 @@ public class Item : Entity {
         velocity = Vector2.zero;
         transform.SetParent(player.transform);
         transform.localPosition = Vector3.zero;
-        setTransparent (ref front, 0);
-        setTransparent (ref back, 0);
+
+        setAlpha(0);
         player.GetComponent<Player>().pickItem(this);
         state = 1;
     }
@@ -112,10 +120,7 @@ public class Item : Entity {
             scale.x = 1;
             transform.localScale = scale;
         }
-        if (face)
-            setTransparent (ref front, 1);
-        else
-            setTransparent (ref back, 1);
+        setAlpha(1);
         player.GetComponent<Player>().dropItem();
         state = 0;
     }

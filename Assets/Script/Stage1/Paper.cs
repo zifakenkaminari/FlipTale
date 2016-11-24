@@ -37,8 +37,7 @@ public class Paper : Item {
         float timeNow = 0;
         while(timeNow < destroyPeriod){
             while (isFreezed) yield return null;
-            setTransparent(ref front, 1 - timeNow / destroyPeriod);
-            setTransparent(ref back, 1 - timeNow / destroyPeriod);
+            setAlpha(1 - timeNow / destroyPeriod);
             timeNow += Time.deltaTime;
             yield return null;
         }
@@ -100,18 +99,8 @@ public class Paper : Item {
     {
         Vector3 scale = transform.localScale;
         //show image
+        setAlpha(1);
 
-        /*
-        if (face)
-            setTransparent(ref front, 1);
-        else
-            setTransparent(ref back, 1);
-        */
-        setTransparent(ref back, 1);
-        if (face)
-            setTransparent(ref front, 1);
-        else
-            setTransparent(ref front, 0);
         //fly physics
         float b = 0.2f;
         Vector3 v = new Vector3(5f * scale.x, 6f, 0f);
@@ -132,12 +121,9 @@ public class Paper : Item {
 
     protected IEnumerator fly(GameObject player)
     {
-        Vector3 scale = transform.localScale;
-        if (face)
-            setTransparent(ref front, 1);
-        else
-            setTransparent(ref back, 1);
+        setAlpha(1);
         //fly physics
+        Vector3 scale = transform.localScale;
         float b = 0.6f;
         Vector3 v = new Vector3(9f * scale.x, 6f, 0f);
         Vector3 g = new Vector3(0, -1f, 0f);
