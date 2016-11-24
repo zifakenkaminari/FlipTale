@@ -32,7 +32,7 @@ public class Entity : MonoBehaviour {
             face = transform.parent.gameObject.GetComponent<Entity>().face;
         else
             face = true;
-        setFlipValue(1);
+        setFlipValue(face?1:0);
         setAlpha(1);
 
     }

@@ -7,7 +7,7 @@ public class SeedStone : Item
     public float onPotOffsetY;
     public float destroyPeriod;
 
-    protected new void Start()
+    protected override void Start()
     {
         base.Start();
 	}
@@ -23,14 +23,7 @@ public class SeedStone : Item
         float timeNow = 0;
         while(timeNow < destroyPeriod){
             while (isFreezed) yield return null;
-            float rate = timeNow / destroyPeriod;
-        	Color color = front.GetComponent<Renderer> ().material.color;
-			color.a = 1 - rate;
-			front.GetComponent<Renderer> ().material.color = color;
-
-			color = back.GetComponent<Renderer> ().material.color;
-			color.a = 1 - rate;
-			back.GetComponent<Renderer> ().material.color = color;
+            setAlpha(1-timeNow / destroyPeriod);
             timeNow += Time.deltaTime;
             yield return null;
         }
