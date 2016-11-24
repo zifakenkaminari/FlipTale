@@ -12,21 +12,15 @@ public class StageTrigger : MonoBehaviour {
     }
 
     //change stage
-    public virtual void OnTriggerEnter2D(Collider2D collider) {
+    public void OnTriggerExit2D(Collider2D collider) {
         Player player = collider.GetComponent<Player> ();
         if (player) {
-            if (player.nowStage == stage0) {
-                player.nowStage = stage1;
-                player.transform.parent = stage1.transform;
+            if (player.transform.position.x > this.transform.position.x) {
+                player.nowStage = (stage0.transform.position.x > stage1.transform.position.x) ? stage0 : stage1;
             }
             else {
-                player.nowStage = stage0;
-                player.transform.parent = stage0.transform;
+                player.nowStage = (stage0.transform.position.x < stage1.transform.position.x) ? stage0 : stage1;
             }
-            Vector3 pos = player.transform.position;
-            pos.x += ((player.nowStage.transform.position.x > pos.x)?1:-1) * autoMovePath.x;
-            pos.y += ((player.nowStage.transform.position.y > pos.y)?1:-1) * autoMovePath.y;
-            player.transform.position = pos;
         }
     }
 }

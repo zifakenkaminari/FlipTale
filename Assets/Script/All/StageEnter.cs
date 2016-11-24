@@ -11,7 +11,7 @@ public class StageEnter : MonoBehaviour {
     public void enter(GameObject player) {
         player.GetComponent<Player> ().nowStage = stageEnter;
         player.transform.parent = stageEnter.transform;
-        Vector3 pos = player.transform.position;
+        Vector3 pos = this.transform.position;
         pos.x += moveX;
         pos.y += moveY;
         player.transform.position = pos;
