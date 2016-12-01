@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 [CustomEditor(typeof(StageTrigger))]
 public class StageTriggerEditor : Editor {
 
-    bool isHorizontal, isVertical;
+    protected bool isHorizontal, isVertical;
 
 
     public override void OnInspectorGUI () {
