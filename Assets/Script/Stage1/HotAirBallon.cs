@@ -13,16 +13,22 @@ public class HotAirBallon : Machine {
 
     protected override void Start ()
     {
+        base.Start();
         getItemCount = 0;
         getItems = new GameObject [3];
-        front.SetActive (false);
-        back.SetActive (false);
+        setAlpha(0);
         flying = false;
-        base.Start ();
     }
+
+
 
     protected override void main()
     {
+        if (Input.GetKeyDown(KeyCode.Q)) {
+            setAlpha(1);
+            getItemCount = 3;
+        }
+            
         if(flying) {
             if (!face) {
                 rb.AddForce(new Vector2(0, upForce * rb.mass));
@@ -43,12 +49,10 @@ public class HotAirBallon : Machine {
         getItems [getItemCount] = item;
         getItemCount++;
         if (getItemCount == 3) {
-            front.SetActive (true);
-            back.SetActive (true);
+            setAlpha(1);
             foreach(GameObject eachItem in getItems) {
                 eachItem.SetActive (false);
             }
-            flipType = 0;
         }
     }
 
