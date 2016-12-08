@@ -24,7 +24,7 @@ public class HotAirBallon : Machine {
 
     protected override void main()
     {
-        if (Input.GetKeyDown(KeyCode.Q)) {
+        if (GameObject.Find("Manager").GetComponent<Manager>().GM_mode == true && Input.GetKeyDown(KeyCode.Q)) {
             setAlpha(1);
             getItemCount = 3;
         }
@@ -53,6 +53,7 @@ public class HotAirBallon : Machine {
             foreach(GameObject eachItem in getItems) {
                 eachItem.SetActive (false);
             }
+            flipType = 0;
         }
     }
 
