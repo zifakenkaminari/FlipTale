@@ -17,7 +17,7 @@ public class WaterFireGun : Item {
 
     public override bool use (GameObject player)
     {
-        Collider2D[] hits = overlapAreaAll ();
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 2f);
         foreach (Collider2D hit in hits) {
             if (hit.gameObject.name == "LakeIce" && face) {
                 front.GetComponent<SpriteRenderer> ().sprite = frontFull;

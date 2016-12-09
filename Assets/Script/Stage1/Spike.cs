@@ -15,13 +15,7 @@ public class Spike : Entity {
         {
             while (isFreezed) yield return null;
             float rate = Mathf.Sin(timeNow / destroyPeriod*Mathf.PI/2);
-            Color color = front.GetComponent<Renderer>().material.color;
-            color.a = 1 - rate;
-            front.GetComponent<Renderer>().material.color = color;
-
-            color = back.GetComponent<Renderer>().material.color;
-            color.a = 1 - rate;
-            back.GetComponent<Renderer>().material.color = color;
+            setAlpha(1 - rate);
             timeNow += Time.deltaTime;
             yield return null;
         }

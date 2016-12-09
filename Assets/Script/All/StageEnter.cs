@@ -9,13 +9,12 @@ public class StageEnter : MonoBehaviour {
     [HideInInspector]
     public bool[] canEnter = new bool[2];
 
-    public void enter(GameObject player) {
-        player.GetComponent<Player> ().nowStage = stageEnter;
+    public void enter(GameObject playerObject) {
+        Player player = playerObject.GetComponent<Player>();
+        player.nowStage = stageEnter;
         player.transform.parent = stageEnter.transform;
-
-        Vector3 pos = this.stageEnter.transform.position;
-        pos.x += moveX;
-        pos.y += moveY;
-        player.transform.position = pos;
+        player.transform.position = stageEnter.transform.position + new Vector3(moveX, moveY, 0);
+        if (player.itemOnHand)
+            player.itemOnHand.transform.position = player.transform.position;
     }
 }

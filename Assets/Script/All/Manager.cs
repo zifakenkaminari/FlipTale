@@ -64,8 +64,11 @@ public class Manager : MonoBehaviour {
     public void jumpPlayer(){
         print("Stage1_" + GM_jump.GetComponent<InputField> ().text);
         GameObject jumpStage = GameObject.Find("Stage1_" + GM_jump.GetComponent<InputField>().text);
-        player.GetComponent<Player> ().nowStage = jumpStage;
-        player.transform.parent = jumpStage.transform;
-        player.transform.position = jumpStage.transform.position;
+        if (jumpStage != null)
+        {
+            player.GetComponent<Player>().nowStage = jumpStage;
+            player.transform.parent = jumpStage.transform;
+            player.transform.position = jumpStage.transform.position;
+        }
     }
 }

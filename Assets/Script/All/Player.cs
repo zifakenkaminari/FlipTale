@@ -11,20 +11,26 @@ public class Player : Entity {
     public bool onFloor;
     public Item itemOnHand;
     public GameObject nowStage;
+    protected bool contralable;
 
     new void Start()
     {
         base.Start();
+        contralable = true;
         itemOnHand = null;
         nowStage = GameObject.Find("Stage1_1");
-        //nowStage = GameObject.Find("Stage1_4a");
+    }
+
+    public void setControlable(bool contralable)
+    {
+        this.contralable = contralable;
     }
 
     void Update()
     {
         if (!isFreezed)
         {
-            if (!rb) return;
+            if (!rb || !contralable) return;
             Vector2 move = rb.velocity;
             axisX = Input.GetAxis ("Horizontal");
             axisY = Input.GetAxis ("Vertical");

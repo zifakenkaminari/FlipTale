@@ -12,14 +12,13 @@ public class Paper : Item {
     public float destroyPeriod;
     protected GameObject mapDesign;
     protected int paperState; //0: normal, 1: crumpled, 2: plane
-    protected bool isOnFloor;
 
     protected new void Start()
     {
         base.Start();
-        isOnFloor = false;
         paperState = 0; // normal
     }
+
     public void magic() {
         paperState = 2;
         front.GetComponent<SpriteRenderer> ().sprite = paperPlane;
@@ -30,7 +29,6 @@ public class Paper : Item {
     {
         base.drop(player);
         pickable = false;
-        StartCoroutine(disappear());
     }
 
     public IEnumerator disappear() {
@@ -73,10 +71,10 @@ public class Paper : Item {
         {
             //throw paper crumpled
             paperState = 3;
+            drop(player);
             player.GetComponent<Player>().dropItem();
-            transform.parent = player.transform.parent;
             Vector3 scale = transform.localScale;
-            scale.x = (player.GetComponent<Player>().front.GetComponent<SpriteRenderer>().flipX ^ face) ? 1 : -1;
+            scale.x = (player.GetComponent<Player>().front.GetComponent<SpriteRenderer>().flipX ^ player.GetComponent<Player>().face) ? 1 : -1;
             transform.localScale = scale;
             StartCoroutine(thrown(player));
         }
@@ -84,10 +82,10 @@ public class Paper : Item {
         {          
             //plane
             paperState = 3;
+            drop(player);
             player.GetComponent<Player>().dropItem();
-            transform.parent = player.transform.parent;
             Vector3 scale = transform.localScale;
-            scale.x = (player.GetComponent<Player>().front.GetComponent<SpriteRenderer>().flipX ^ face)?1:-1;
+            scale.x = (player.GetComponent<Player>().front.GetComponent<SpriteRenderer>().flipX ^ player.GetComponent<Player>().face)?1:-1;
             transform.localScale = scale;
             StartCoroutine(fly(player));
         }
@@ -98,63 +96,43 @@ public class Paper : Item {
     protected IEnumerator thrown(GameObject player)
     {
         Vector3 scale = transform.localScale;
-        //show image
         setAlpha(1);
+        rb.velocity = new Vector2(5f * scale.x, 6f);
+        rb.angularVelocity = scale.x;
+        yield return null;
 
-        //fly physics
-        float b = 0.2f;
-        Vector3 v = new Vector3(5f * scale.x, 6f, 0f);
-        Vector3 g = new Vector3(0, -10f, 0f);
-        Vector3 eular = transform.localEulerAngles;
-        while (!isOnFloor && front.GetComponent<SpriteRenderer>().isVisible)
-        {
-            while (isFreezed) yield return null;
-            eular.z += -scale.x*360 * Time.deltaTime;
-            transform.localEulerAngles = eular;
-            transform.position += v * Time.deltaTime;
-            v += g * Time.deltaTime;
-            v -= b * v * Time.deltaTime;
-            yield return null;
-        }
-        StartCoroutine(disappear());
     }
 
     protected IEnumerator fly(GameObject player)
     {
-        setAlpha(1);
-        //fly physics
         Vector3 scale = transform.localScale;
-        float b = 0.6f;
-        Vector3 v = new Vector3(9f * scale.x, 6f, 0f);
-        Vector3 g = new Vector3(0, -1f, 0f);
+        setAlpha(1);
+        GetComponent<Collider2D>().isTrigger = true;
+        rb.gravityScale = 0.5f;
+        rb.velocity = new Vector2(7f * scale.x, 5f);
+        
         Vector3 eular = transform.localEulerAngles;
         while (front.GetComponent<SpriteRenderer>().isVisible)
         {
             while (isFreezed) yield return null;
-            eular.z = Mathf.Atan(v.y/v.x)*180/Mathf.PI-15*scale.x;
+            eular.z = Mathf.Atan(rb.velocity.y/ rb.velocity.x)*Mathf.Rad2Deg - 15 * scale.x;
             transform.localEulerAngles = eular;
-            transform.position += v * Time.deltaTime;
-            v += g * Time.deltaTime;
-            v -= b * new Vector3(0, v.y, 0) * Time.deltaTime;
+            rb.AddForce(new Vector2(0, rb.velocity.y) * rb.mass * -1.5f);
             yield return null;
         }
         Destroy(gameObject);
+        yield break;
 
     }
 
     public int getPaperState() {
         return paperState;
     }
- 
     void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.name == "MapDesign")
         {
             mapDesign = collider.gameObject;
-        }
-        if (collider.gameObject.CompareTag("Floor"))
-        {
-            isOnFloor = true;
         }
     }
     void OnTriggerExit2D(Collider2D collider)
@@ -163,9 +141,13 @@ public class Paper : Item {
         {
             mapDesign = null;
         }
-        if (collider.gameObject.CompareTag("Floor"))
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Floor"))
         {
-            isOnFloor = false;
+            StartCoroutine(disappear());
         }
     }
 }

@@ -22,7 +22,7 @@ public class FlowerTorch : Item
 
     public override bool use(GameObject player)
     {
-        Collider2D[] hits = overlapAreaAll ();
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.5f);
         if (!face) {
             foreach (Collider2D hit in hits) {
                 if (hit.gameObject.GetComponent<Cave> ()) {

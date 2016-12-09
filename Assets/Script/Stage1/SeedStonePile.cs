@@ -10,7 +10,7 @@ public class SeedStonePile : Item
     }
 
     public override void pick(GameObject player) {
-        GameObject newSeed = (GameObject)Instantiate(seedStone);
+        GameObject newSeed = (GameObject)Instantiate(seedStone, transform.parent);
         newSeed.GetComponent<Item>().pick(player);
     }
 

@@ -33,8 +33,12 @@ public class WolfStatue : Entity {
 
     protected IEnumerator run() {
         if (isRunning) yield break;
+        GameObject trashBag = GameObject.Find("TrashBag");
+        trashBag.GetComponent<Item>().pickable = true;
         isRunning = true;
         rb.isKinematic = false;
+        GameObject moonMoonBound = GameObject.Find("StageBoundary_5b");
+        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), moonMoonBound.GetComponent<Collider2D>());
         while (front.GetComponent<SpriteRenderer>().isVisible)
         {
             while (isFreezed) yield return null;
@@ -42,22 +46,5 @@ public class WolfStatue : Entity {
             yield return null;
         }
         Destroy(gameObject);
-    }
-
-
-
-    void OnTriggerStay2D(Collider2D collider)
-    {
-        if (collider.gameObject.name == "TrashBag")
-        {
-            collider.gameObject.GetComponent<TrashBag>().pickable = false;
-        }
-    }
-    void OnTriggerExit2D(Collider2D collider)
-    {
-        if (collider.gameObject.name == "TrashBag")
-        {
-            collider.gameObject.GetComponent<TrashBag>().pickable = true;
-        }
     }
 }

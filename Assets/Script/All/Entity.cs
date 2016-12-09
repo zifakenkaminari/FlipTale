@@ -10,27 +10,24 @@ public class Entity : MonoBehaviour {
     public bool isFreezed;
     float flipTime;
     public float flipPeriod;
-
-    float alpha;
-    float flipValue;
+    protected float alpha;
+    protected float flipValue;
 
     protected Rigidbody2D rb;
-
     protected Vector3 saveVelocity;
     protected bool saveKinematic;
 
     protected virtual void Start () {
         rb = GetComponent<Rigidbody2D>();
-        alpha = 1;
-        flipValue = 0;
-
         isFlipping = false;
         isFreezed = false;
         flipTime = -10000f;
         //if is spawn by parent, set flip side to the same as its parent
-        if (transform.parent && transform.parent.gameObject.GetComponent<Entity>())
-            face = transform.parent.gameObject.GetComponent<Entity>().face;
-        else
+        if (GetComponent<FixedJoint2D>())
+            face = GetComponent<FixedJoint2D>().connectedBody.GetComponent<Entity>().face;
+        else if(transform.parent && transform.parent.GetComponent<Entity>())
+            face = transform.parent.GetComponent<Entity>().face;
+        else 
             face = true;
         setFlipValue(face?1:0);
         setAlpha(1);
@@ -128,7 +125,7 @@ public class Entity : MonoBehaviour {
         }
     }
 
-    protected void setFlipValue(float f)
+    public void setFlipValue(float f)
     {
         //flip value: front = 1, back = 0
         flipValue = f;

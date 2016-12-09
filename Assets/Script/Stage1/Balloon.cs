@@ -12,6 +12,7 @@ public class Balloon : Entity {
         StartCoroutine(fly());
 	}
 
+
     protected IEnumerator fly() { 
         float timeNow = 0;
         while (timeNow < blowPeriod)
@@ -22,21 +23,14 @@ public class Balloon : Entity {
             yield return null;
         }
         transform.localScale = new Vector3(1, 1, 1);
-
-        float b = 0.7f;
-        Vector3 v = new Vector3(2.5f, 0f, 0f);
-        Vector3 g = new Vector3(0f, 0f, 0f);
-        while (true)
-        {
-            while(isFreezed)yield return null;
-            if (face) 
-                g.y = -4;
-            else    
-                g.y = 4;
+        rb.velocity = new Vector2(2.5f, 0);
+        while(front.GetComponent<SpriteRenderer>().isVisible){
             while (isFreezed) yield return null;
-            transform.position += v * Time.deltaTime;
-            v += g * Time.deltaTime;
-            v -= b * new Vector3(0, v.y, 0) * Time.deltaTime;
+            if(face)
+                rb.gravityScale = 4f/9.8f;
+            else
+                rb.gravityScale = -4f/9.8f;
+            rb.AddForce(new Vector3(0, rb.velocity.y, 0)*-0.7f*rb.mass);
             yield return null;
         }
     }
