@@ -20,8 +20,6 @@ public class HotAirBallon : Machine {
         flying = false;
     }
 
-
-
     protected override void main()
     {
         if (GameObject.Find("Manager").GetComponent<Manager>().GM_mode == true && Input.GetKeyDown(KeyCode.Q)) {
@@ -44,11 +42,6 @@ public class HotAirBallon : Machine {
     }
 
     public void getItem(GameObject item) {
-        /*
-        Vector3 pos = item.transform.position;
-        pos.x = transform.position.x;
-        item.transform.position = pos;
-        */
         item.GetComponent<Item> ().pickable = false;
         getItems [getItemCount] = item;
         getItemCount++;
@@ -57,7 +50,6 @@ public class HotAirBallon : Machine {
             foreach(GameObject eachItem in getItems) {
                 Destroy(eachItem);
             }
-            //flipType = 0;
         }
     }
 
