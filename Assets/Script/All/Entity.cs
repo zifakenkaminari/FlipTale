@@ -27,9 +27,11 @@ public class Entity : MonoBehaviour {
         isFlipping = false;
         isFreezed = false;
         flipTime = -10000f;
-        //if is spawn by parent, set flip side to the same as its parent
-        if (transform.parent && transform.parent.gameObject.GetComponent<Entity>())
-            face = transform.parent.gameObject.GetComponent<Entity>().face;
+        //if has an Entity or Flipper parent, set flip side to the same as its parent
+        if (transform.parent && transform.parent.gameObject.GetComponent<Entity> ())
+            face = transform.parent.gameObject.GetComponent<Entity> ().face;
+        else if (transform.parent && transform.parent.gameObject.GetComponent<Flipper> ()) 
+            face = transform.parent.gameObject.GetComponent<Flipper> ().face;
         else
             face = true;
         setFlipValue(face?1:0);
