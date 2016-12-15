@@ -6,9 +6,11 @@ public class Player : Entity {
     public Sprite backNormal;
     public float walkSpeed;
     public float jumpSpeed;
-    float axisX;
-    float axisY;
-    public bool onFloor;
+    protected float axisX;
+    protected float axisY;
+    protected bool onFloor;
+    [SerializeField]
+    protected bool jumping;
     public Item itemOnHand;
     public GameObject nowStage;
 
@@ -16,8 +18,8 @@ public class Player : Entity {
     {
         base.Start();
         itemOnHand = null;
+        jumping = false;
         nowStage = GameObject.Find("Stage1_1");
-        //nowStage = GameObject.Find("Stage1_4a");
     }
 
     void Update()
@@ -67,6 +69,11 @@ public class Player : Entity {
             if (axisY > 0 && onFloor)
             {
                 move.y = jumpSpeed;
+                jumping = true;
+            }
+
+            if (!onFloor && !jumping && move.y > 0) {
+                move.y = 0;
             }
             rb.velocity = move;
 
@@ -136,6 +143,7 @@ public class Player : Entity {
         if (collision.gameObject.CompareTag("Floor"))
         {
             onFloor = true;
+            jumping = false;
         }
     }
 

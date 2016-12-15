@@ -5,29 +5,38 @@ public class TreeCut : Entity
 {
     public float fallPeriod;
     public bool isCut;
+    public Sprite[] cutProgressFront;
+    public Sprite[] cutProgressBack;
+    protected int idx;
 
     new void Start(){
         isCut = false;
+        idx = 0;
         base.Start();
     }
 
     public IEnumerator cut()
     {
         if (isCut) yield break;
-        isCut = true;
-        float timeNow = 0;
-        Vector3 eular = transform.localEulerAngles;
-        while (timeNow < fallPeriod)
-        {
-            while(isFreezed) yield return null;
-            eular.z = 90 * Mathf.Cos(timeNow / fallPeriod * Mathf.PI / 2)-90;
-            transform.localEulerAngles = eular;
-            timeNow += Time.deltaTime;
-            yield return null;
+        if (idx < cutProgressFront.Length) {
+            front.GetComponent<SpriteRenderer> ().sprite = cutProgressFront[idx];
+            back.GetComponent<SpriteRenderer> ().sprite = cutProgressBack[idx];
+            idx++;
         }
-        eular.z = -90;
-        transform.localEulerAngles = eular;
-        tag = "Floor";
+        else {
+            isCut = true;
+            GameObject treeCutTop = transform.FindChild ("TreeCutTop").gameObject;
+            GameObject treeCutBottom = transform.FindChild ("TreeCutBottom").gameObject;
+
+            treeCutTop.SetActive (true);
+            treeCutTop.transform.SetParent (transform.parent);
+
+            treeCutBottom.SetActive (true);
+            treeCutBottom.transform.SetParent (transform.parent);
+
+            treeCutTop.GetComponent<TreeCutTop> ().cutDown ();
+            Destroy (this.gameObject);
+        }
     }
 
 }
