@@ -6,13 +6,13 @@ public class Entity : MonoBehaviour {
     public GameObject front;
     public GameObject back;
     public bool face;           //not flipped at first
-    public bool isFlipping;
-    public bool isFreezed;
-    float flipTime;
+    protected bool isFlipping;
+    protected bool isFreezed;
+    protected float flipTime;
     public float flipPeriod;
 
-    float alpha;
-    float flipValue;
+    protected float alpha;
+    protected float flipValue;
 
     protected Rigidbody2D rb;
 

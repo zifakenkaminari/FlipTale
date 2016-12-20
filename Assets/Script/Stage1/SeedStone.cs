@@ -6,6 +6,7 @@ public class SeedStone : Item
     public GameObject flowerTorch;
     public float onPotOffsetY;
     public float destroyPeriod;
+    public Sprite potTorch;
 
     protected override void Start()
     {
@@ -40,10 +41,7 @@ public class SeedStone : Item
                 if (hit.gameObject.name == "Pot" && !FlowerTorch.isSpawned())
                 {
                     GameObject pot = hit.gameObject;
-                    GameObject newFlower = (GameObject)Instantiate(flowerTorch, player.transform.parent);
-                    Vector3 pos = pot.transform.position;
-                    pos.y = pot.transform.position.y + onPotOffsetY;
-                    newFlower.transform.position = pos;
+                    pot.GetComponent<Pot> ().bloom (player);
                     Destroy(gameObject);
                     return true;
                 }

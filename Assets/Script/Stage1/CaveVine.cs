@@ -2,7 +2,7 @@
 using System.Collections;
 
 
-public class Cave : Entity {
+public class CaveVine : Entity {
     public Sprite frontCaveBurned;
     public Sprite backCaveBurned;
     public void burn() {
