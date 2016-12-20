@@ -3,7 +3,9 @@ using System.Collections;
 
 public class Entity : MonoBehaviour {
     public int flipType;
+    [HideInInspector]
     public GameObject front;
+    [HideInInspector]
     public GameObject back;
     public bool face;           //not flipped at first
     protected bool isFlipping;
@@ -20,6 +22,9 @@ public class Entity : MonoBehaviour {
     protected bool saveKinematic;
 
     protected virtual void Start () {
+        front = transform.FindChild ("front").gameObject;
+        back = transform.FindChild ("back").gameObject;
+
         rb = GetComponent<Rigidbody2D>();
         alpha = 1;
         flipValue = 0;

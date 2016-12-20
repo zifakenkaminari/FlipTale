@@ -3,7 +3,9 @@ using System.Collections;
 
 public class Background : MonoBehaviour {
 
+    [HideInInspector]
 	public GameObject bgFront;
+    [HideInInspector]
 	public GameObject bgBack;
 
 	protected bool face;
@@ -13,6 +15,8 @@ public class Background : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        bgFront = transform.FindChild ("front").gameObject;
+        bgBack = transform.FindChild ("back").gameObject;
 		face = true;
 		isFlipping = false;
 	}
