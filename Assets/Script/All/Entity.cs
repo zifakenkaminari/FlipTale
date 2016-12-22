@@ -3,16 +3,18 @@ using System.Collections;
 
 public class Entity : MonoBehaviour {
     public int flipType;
+    [HideInInspector]
     public GameObject front;
+    [HideInInspector]
     public GameObject back;
     public bool face;           //not flipped at first
-    public bool isFlipping;
-    public bool isFreezed;
-    float flipTime;
+    protected bool isFlipping;
+    protected bool isFreezed;
+    protected float flipTime;
     public float flipPeriod;
 
-    float alpha;
-    float flipValue;
+    protected float alpha;
+    protected float flipValue;
 
     protected Rigidbody2D rb;
 
@@ -20,6 +22,9 @@ public class Entity : MonoBehaviour {
     protected bool saveKinematic;
 
     protected virtual void Start () {
+        front = transform.FindChild ("front").gameObject;
+        back = transform.FindChild ("back").gameObject;
+
         rb = GetComponent<Rigidbody2D>();
         alpha = 1;
         flipValue = 0;

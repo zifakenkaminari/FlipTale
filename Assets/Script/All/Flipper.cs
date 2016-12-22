@@ -10,16 +10,13 @@ public class Flipper : MonoBehaviour {
 
     public bool face;           //not flipped at first
     public bool isFlipping;
-    public float flipTime;
     public float flipPeriod;
-    public int flipId;
 
     // Use this for initialization
     void Start()
     {
         face = true;
         isFlipping = false;
-        flipTime = -10000f;
         background.GetComponent<Background>().flipPeriod = flipPeriod;
     }
 
@@ -55,4 +52,5 @@ public class Flipper : MonoBehaviour {
         face = !face;
         isFlipping = false;
     }
+        
 }

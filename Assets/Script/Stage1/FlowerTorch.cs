@@ -10,6 +10,7 @@ public class FlowerTorch : Item
         spawned = true;
         base.Start();
         state = 3;
+        setAlpha (0.0f);
     }
     public static bool isSpawned() {
         return spawned;
@@ -20,13 +21,19 @@ public class FlowerTorch : Item
         spawned = false;
     }
 
+    public override void pick (GameObject player)
+    {
+        base.pick (player);
+        GameObject.Find ("Pot").GetComponent<Pot> ().empty ();
+    }
+
     public override bool use(GameObject player)
     {
         Collider2D[] hits = overlapAreaAll ();
         if (!face) {
             foreach (Collider2D hit in hits) {
-                if (hit.gameObject.GetComponent<Cave> ()) {
-                    hit.gameObject.GetComponent<Cave> ().burn ();
+                if (hit.gameObject.GetComponent<CaveVine> ()) {
+                    hit.gameObject.GetComponent<CaveVine> ().burn ();
                     Destroy (gameObject);
                     return true;
                 }
