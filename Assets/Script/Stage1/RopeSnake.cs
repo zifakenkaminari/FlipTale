@@ -15,7 +15,7 @@ public class RopeSnake : Item
     {
         if (!face && state==1)
         {
-            GameObject player = transform.parent.gameObject;
+            GameObject player = GetComponent<FixedJoint2D>().connectedBody.gameObject;
             player.GetComponent<Player>().dropItem();
             drop(player);
         }

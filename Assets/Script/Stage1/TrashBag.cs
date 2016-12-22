@@ -6,7 +6,7 @@ public class TrashBag : Item {
 	// Use this for initialization
 	protected override void Start () {
         base.Start();
-        //pickable = false;
+        pickable = false;
 	}
 
     public override bool use (GameObject player)

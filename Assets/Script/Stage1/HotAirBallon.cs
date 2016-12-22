@@ -20,8 +20,6 @@ public class HotAirBallon : Machine {
         flying = false;
     }
 
-
-
     protected override void main()
     {
         if (GameObject.Find("Manager").GetComponent<Manager>().GM_mode == true && Input.GetKeyDown(KeyCode.Q)) {
@@ -44,28 +42,24 @@ public class HotAirBallon : Machine {
     }
 
     public void getItem(GameObject item) {
-        item.transform.parent = transform;
         item.GetComponent<Item> ().pickable = false;
         getItems [getItemCount] = item;
         getItemCount++;
         if (getItemCount == 3) {
             setAlpha(1);
             foreach(GameObject eachItem in getItems) {
-                eachItem.SetActive (false);
+                Destroy(eachItem);
             }
-            flipType = 0;
         }
     }
 
     public override void use(GameObject player)
     {
         if(getItemCount == 3 && !face) {
-            player.transform.parent = transform;
-            Vector3 tmp = player.transform.position;
-            tmp.x = transform.position.x;
-            player.transform.position = tmp;
+            player.AddComponent<FixedJoint2D>().connectedBody = rb;
             player.GetComponent<Player>().setAlpha(0);
-            Destroy(player.GetComponent<Rigidbody2D>());
+            player.GetComponent<Player>().setControlable(false);
+            player.GetComponent<Rigidbody2D>().mass = 0.001f;
 
             flying = true;
             front.GetComponent<SpriteRenderer> ().sprite = frontFlying;

@@ -3,14 +3,20 @@ using System.Collections;
 using System;
 
 public class SpikeRemover : Entity {
-
     public GameObject spikes;
+    bool isUsed;
+
+    protected override void Start()
+    {
+        base.Start();
+        isUsed = false;
+    }
 
     void OnTriggerStay2D(Collider2D collider)
     {
-        if (!isFreezed && collider.gameObject.GetComponent<Balloon>()) {
+        if (!isUsed && !isFreezed && collider.gameObject.GetComponent<Balloon>()) {
+            isUsed = true;
             Destroy(collider.gameObject);
-
             StartCoroutine(removeSpike());
         }
     }

@@ -7,7 +7,7 @@ public class Bookcase : Item {
 
     public override void pick(GameObject player) {
         if (face) {
-            GameObject newPaper = (GameObject)Instantiate (paper);
+            GameObject newPaper = (GameObject)Instantiate (paper, transform.parent);
             newPaper.GetComponent<Item> ().pick (player);
         }
     }

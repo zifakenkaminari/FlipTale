@@ -35,12 +35,14 @@ public class Item : Entity {
     {
         if (state == 1)
         {
+            /*
             if (flipType == 0)
             {
                 Vector3 scale = transform.localScale;
                 scale.x = face ? -1 : 1;
                 transform.localScale = scale;
             }
+            */
             if (face)
             {
                 setFlipValue(0);
@@ -75,18 +77,6 @@ public class Item : Entity {
 
     protected virtual void idle()
     {
-        RaycastHit2D[] hits = Physics2D.BoxCastAll((Vector2)transform.position - onFloorOffset, GetComponent<Collider2D>().bounds.size, 0f, -Vector2.up, velocity.magnitude * Time.fixedDeltaTime);
-        foreach (RaycastHit2D hit in hits)
-        {
-            if (hit.collider.gameObject.CompareTag("Floor"))
-            {
-                transform.position = hit.centroid + onFloorOffset;
-                velocity = Vector2.zero;
-                return;
-            }
-        }
-        transform.Translate(velocity * Time.fixedDeltaTime);
-        velocity += Physics2D.gravity * Time.fixedDeltaTime;
 
     }
     protected virtual void held()
@@ -102,10 +92,12 @@ public class Item : Entity {
     public virtual void pick(GameObject player)
     {
         //TODO: picked by player
-        velocity = Vector2.zero;
-        transform.SetParent(player.transform);
-        transform.localPosition = Vector3.zero;
-
+        gameObject.AddComponent<FixedJoint2D>().connectedBody = player.GetComponent<Rigidbody2D>();
+        transform.position = player.transform.position;
+        if (face != player.GetComponent<Entity>().face) {
+            face = player.GetComponent<Entity>().face;
+            setFlipValue(face ? 1 : 0); 
+        }
         setAlpha(0);
         player.GetComponent<Player>().pickItem(this);
         state = 1;
@@ -114,12 +106,16 @@ public class Item : Entity {
     public virtual void drop(GameObject player)
     {
         //TODO: droped by player
+        /*
         transform.parent = player.transform.parent;
         if (flipType == 1) {
             Vector3 scale = transform.localScale;
             scale.x = 1;
             transform.localScale = scale;
         }
+        */
+        Destroy(GetComponent<FixedJoint2D>());
+        rb.velocity = Vector2.zero;
         setAlpha(1);
         player.GetComponent<Player>().dropItem();
         state = 0;

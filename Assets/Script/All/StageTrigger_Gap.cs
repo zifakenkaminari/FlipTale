@@ -13,14 +13,14 @@ public class StageTrigger_Gap : StageTrigger {
             if (direction == 0) {                                   // horizontal
                 if (player.transform.position.x < this.transform.position.x) {
                     player.nowStage = (stage0.transform.position.x > stage1.transform.position.x) ? stage0 : stage1;
-                    Vector3 tmpPos = player.transform.position;
-                    tmpPos += new Vector3 (gap, 0, 0);
-                    player.transform.position = tmpPos;
+                    player.transform.Translate(new Vector3(gap, 0, 0), Space.World);
+                    if (player.itemOnHand)
+                        player.itemOnHand.transform.Translate(new Vector3(gap, 0, 0));
                 } else {
                     player.nowStage = (stage0.transform.position.x < stage1.transform.position.x) ? stage0 : stage1;
-                    Vector3 tmpPos = player.transform.position;
-                    tmpPos += new Vector3 (-gap, 0, 0);
-                    player.transform.position = tmpPos;
+                    player.transform.Translate(new Vector3(-gap, 0, 0), Space.World); ;
+                    if (player.itemOnHand)
+                        player.itemOnHand.transform.Translate(new Vector3(-gap, 0, 0));
                 }
             }
             else if (direction == 1) {                              // vertical

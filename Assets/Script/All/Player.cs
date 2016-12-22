@@ -13,20 +13,27 @@ public class Player : Entity {
     protected bool jumping;
     public Item itemOnHand;
     public GameObject nowStage;
+    protected bool controlable;
 
     new void Start()
     {
         base.Start();
+        controlable = true;
         itemOnHand = null;
         jumping = false;
         nowStage = GameObject.Find("Stage1_1");
+    }
+
+    public void setControlable(bool controlable)
+    {
+        this.controlable = controlable;
     }
 
     void Update()
     {
         if (!isFreezed)
         {
-            if (!rb) return;
+            if (!rb || !controlable) return;
             Vector2 move = rb.velocity;
             axisX = Input.GetAxis ("Horizontal");
             axisY = Input.GetAxis ("Vertical");
