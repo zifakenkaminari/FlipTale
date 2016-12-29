@@ -5,7 +5,6 @@ public class Item : Entity {
     public Sprite frontOnHand;
     public Sprite backOnHand;
     public bool pickable;
-    public Vector2 onFloorOffset;
     protected int state;
 
     Vector2 velocity;
