@@ -17,6 +17,9 @@ public class CameraController : MonoBehaviour {
         isChanging = false;
         setTransparent (ref endingBlank, 0);
     }
+    void Update(){
+        
+    }
     void FixedUpdate ()
     {
         Vector3 now = transform.position;

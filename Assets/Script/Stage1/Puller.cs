@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Puller : Machine {
     public GameObject totem;
+    public GameObject pullerMask;
     public Sprite frontPuller;
     public Sprite backPuller;
     public int state;
@@ -36,20 +37,33 @@ public class Puller : Machine {
 
     protected IEnumerator rotate() {
         float timeNow = 0;
-        Vector3 euler = totem.transform.localEulerAngles;
-        float angle = euler.z;
+
+        Vector3 eulerTotem = totem.transform.localEulerAngles;
+        float angleTotem = eulerTotem.z;
+
+        Vector3 eulerPullerMask = pullerMask.transform.localEulerAngles;
+        float anglePullerMask = eulerPullerMask.z;
+
         while(timeNow<rotatePeriod){
             while (isFreezed) yield return null; 
-            euler.z = angle + 90 * timeNow / rotatePeriod;
-            totem.transform.localEulerAngles = euler;
+
+            eulerTotem.z = angleTotem + 90 * timeNow / rotatePeriod;
+            totem.transform.localEulerAngles = eulerTotem;
+
+            eulerPullerMask.z = anglePullerMask - 90 * timeNow / rotatePeriod;
+            pullerMask.transform.localEulerAngles = eulerPullerMask;
+
             timeNow += Time.deltaTime;
             yield return null;
         }
-        euler.z = angle + 90;
-        totem.transform.localEulerAngles = euler;
+
+        eulerTotem.z = angleTotem + 90;
+        totem.transform.localEulerAngles = eulerTotem;
+
+        eulerPullerMask.z = anglePullerMask - 90;
+        pullerMask.transform.localEulerAngles = eulerPullerMask;
+
         isRotating = false;
-    }
-
-
+    }        
 
 }
