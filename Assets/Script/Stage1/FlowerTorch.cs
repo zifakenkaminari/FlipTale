@@ -32,8 +32,8 @@ public class FlowerTorch : Item
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.5f);
         if (!face) {
             foreach (Collider2D hit in hits) {
-                if (hit.gameObject.GetComponent<CaveVine> ()) {
-                    hit.gameObject.GetComponent<CaveVine> ().burn ();
+                if (hit.gameObject.GetComponent<CaveThorn> ()) {
+                    hit.gameObject.GetComponent<CaveThorn> ().burn ();
                     Destroy (gameObject);
                     return true;
                 }
