@@ -66,8 +66,6 @@ public class CameraController : MonoBehaviour {
             timeNow += Time.deltaTime;
             yield return null;
         }
-
-
         SceneManager.LoadScene ("Ending");
     }
 

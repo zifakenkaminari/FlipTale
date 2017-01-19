@@ -5,16 +5,19 @@ using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour {
 
+    public static Manager main;
+
     public string loadScene;
     public string menuScene;
     public GameObject GM_jump;
     public bool GM_mode;
     public GameObject[] stages;
-    private GameObject player;
+    protected Player player;
 
     // Use this for initialization
     void Start () {
-        player = GameObject.Find ("Player");
+        main = this;
+        player = GameObject.Find ("Player").GetComponent<Player>();
     }
 
     // Update is called once per frame
@@ -66,9 +69,31 @@ public class Manager : MonoBehaviour {
         GameObject jumpStage = GameObject.Find("Stage1_" + GM_jump.GetComponent<InputField>().text);
         if (jumpStage != null)
         {
-            player.GetComponent<Player>().nowStage = jumpStage;
+            player.nowStage = jumpStage;
             player.transform.parent = jumpStage.transform;
             player.transform.position = jumpStage.transform.position;
         }
+    }
+
+    public void lockMotion()
+    {
+        foreach (GameObject stage in stages) 
+        {
+            stage.GetComponent<Flipper>().lockMotion();
+        }
+    }
+
+    public void unlockMotion()
+    {
+        foreach (GameObject stage in stages) 
+        {
+            stage.GetComponent<Flipper>().unlockMotion();
+        }
+    }
+
+
+    public void setPlayerControlable(bool controlable)
+    {
+        player.setControlable(controlable);
     }
 }

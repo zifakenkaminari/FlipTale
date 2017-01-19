@@ -5,7 +5,7 @@ using System;
 
 public class Flipper : MonoBehaviour {
 
-    public GameObject[] flipables;
+    public Entity[] flipables;
     public GameObject background;
 
     public bool face;           //not flipped at first
@@ -20,34 +20,53 @@ public class Flipper : MonoBehaviour {
         background.GetComponent<Background>().flipPeriod = flipPeriod;
     }
 
+    void Update() {
+
+        flipables = GetComponentsInChildren<Entity>();
+        //int flipableSize = flipables.Length;
+        Array.Sort(flipables, (a, b) =>
+            a.transform.position.x.CompareTo(b.transform.position.x)
+        );
+    }
+
+    public void lockMotion() {
+        foreach (Entity flipable in flipables)
+        {
+            flipable.lockMotion();
+        }
+    }
+
+    public void unlockMotion()
+    {
+        foreach (Entity flipable in flipables)
+        {
+            flipable.unlockMotion();
+        }
+    }
+
     public IEnumerator flip() {
         if (isFlipping)
             yield break;
         isFlipping = true;
-        Entity[] entities = GetComponentsInChildren<Entity>();
-        int flipableSize = entities.Length;
-        flipables = new GameObject[flipableSize];
-        for (int i = 0; i < flipableSize;i++)
-        {
-            flipables[i] = entities[i].gameObject;
-        }
-        Array.Sort(flipables, delegate(GameObject a, GameObject b){
-            return a.transform.position.x.CompareTo(b.transform.position.x);
-        });
-        foreach (GameObject flipable in flipables) {
-            flipable.GetComponent<Entity>().lockMotion();
+
+        //lock
+        foreach (Entity flipable in flipables) {
+            flipable.lockMotion();
         }
         StartCoroutine(background.GetComponent<Background>().flip());
-
+        //flip one by one
+        int flipableSize = flipables.Length;
         for (int i = 0; i < flipableSize - 1; i++)
         {
-            StartCoroutine(flipables[i].GetComponent<Entity>().flip());
+            StartCoroutine(flipables[i].flip());
             yield return new WaitForSeconds(flipPeriod / flipableSize);
         }
+        //last one
         if (flipableSize > 0)
-            yield return flipables[flipableSize-1].GetComponent<Entity>().flip();
-        foreach (GameObject flipable in flipables) {
-            flipable.GetComponent<Entity>().unlockMotion();
+            yield return flipables[flipableSize-1].flip();
+        //unlock
+        foreach (Entity flipable in flipables) {
+            flipable.unlockMotion();
         }
         face = !face;
         isFlipping = false;

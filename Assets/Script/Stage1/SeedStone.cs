@@ -40,8 +40,8 @@ public class SeedStone : Item
             {
                 if (hit.gameObject.name == "Pot" && !FlowerTorch.isSpawned())
                 {
-                    GameObject pot = hit.gameObject;
-                    pot.GetComponent<Pot> ().bloom (player);
+                    Pot pot = hit.gameObject.GetComponent<Pot>();
+                    pot.StartCoroutine(pot.bloom (player));
                     Destroy(gameObject);
                     return true;
                 }
