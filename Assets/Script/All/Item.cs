@@ -92,6 +92,7 @@ public class Item : Entity {
     {
         //TODO: picked by player
         gameObject.AddComponent<FixedJoint2D>().connectedBody = player.GetComponent<Rigidbody2D>();
+        GetComponent<Collider2D>().enabled = false;
         transform.position = player.transform.position;
         if (face != player.GetComponent<Entity>().face) {
             face = player.GetComponent<Entity>().face;
@@ -114,6 +115,7 @@ public class Item : Entity {
         }
         */
         Destroy(GetComponent<FixedJoint2D>());
+        GetComponent<Collider2D>().enabled = true;
         rb.velocity = Vector2.zero;
         setAlpha(1);
         player.GetComponent<Player>().dropItem();

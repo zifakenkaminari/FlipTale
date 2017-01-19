@@ -11,7 +11,7 @@ public class Entity : MonoBehaviour {
     protected bool isFlipping;
     protected bool isFreezed;
     protected float flipTime;
-    public float flipPeriod;
+    protected float flipPeriod = 1;
     protected float alpha;
     protected float flipValue;
 
@@ -27,12 +27,12 @@ public class Entity : MonoBehaviour {
         isFlipping = false;
         isFreezed = false;
         flipTime = -10000f;
-        //if has an Entity or Flipper parent, set flip side to the same as its parent
+        //if has an Entity or Stage parent, set flip side to the same as its parent
         //if is spawn by parent, set flip side to the same as its parent
         if (transform.parent && transform.parent.gameObject.GetComponent<Entity> ())
             face = transform.parent.gameObject.GetComponent<Entity> ().face;
-        else if (transform.parent && transform.parent.gameObject.GetComponent<Flipper> ()) 
-            face = transform.parent.gameObject.GetComponent<Flipper> ().face;
+        else if (transform.parent && transform.parent.gameObject.GetComponent<Stage> ()) 
+            face = transform.parent.gameObject.GetComponent<Stage> ().face;
         else if (GetComponent<FixedJoint2D>())
             face = GetComponent<FixedJoint2D>().connectedBody.GetComponent<Entity>().face;
         else 

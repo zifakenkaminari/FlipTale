@@ -33,28 +33,82 @@ public class Player : Entity {
     {
         if (!isFreezed)
         {
-            if (!rb || !controlable) return;
+            if (!rb) return;
             Vector2 move = rb.velocity;
-            axisX = Input.GetAxis ("Horizontal");
-            axisY = Input.GetAxis ("Vertical");
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (controlable)
             {
-                Collider2D[] hits = overlapAreaAll();
-                foreach (Collider2D hit in hits)
+                axisX = Input.GetAxis("Horizontal");
+                axisY = Input.GetAxis("Vertical");
+
+                if (Input.GetKeyDown(KeyCode.UpArrow))
                 {
-                    StageEnter stageEnter = hit.gameObject.GetComponent<StageEnter>();
-                    if (stageEnter && stageEnter.canEnter[(face) ? 0 : 1])
+                    Collider2D[] hits = overlapAreaAll();
+                    foreach (Collider2D hit in hits)
                     {
-                        hit.gameObject.GetComponent<StageEnter>().enter(gameObject);
-                        axisY = 0;
-                        break;
+                        StageEnter stageEnter = hit.gameObject.GetComponent<StageEnter>();
+                        if (stageEnter && stageEnter.canEnter[(face) ? 0 : 1])
+                        {
+                            hit.gameObject.GetComponent<StageEnter>().enter(gameObject);
+                            axisY = 0;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    axisY = 0;
+                }
+                if (Input.GetKeyDown(KeyCode.X))
+                {
+                    if (itemOnHand)
+                    {
+                        itemOnHand.drop(gameObject);
+                    }
+                    else
+                    {
+                        //find item nearby
+                        Collider2D[] hits = overlapAreaAll();
+                        foreach (Collider2D hit in hits)
+                        {
+                            Item item = hit.gameObject.GetComponent<Item>();
+                            if (item != null && item.isPickable())
+                            {
+                                item.pick(gameObject);
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (Input.GetKeyDown(KeyCode.C))
+                {
+                    if (itemOnHand)
+                    {
+                        bool disappear = itemOnHand.use(gameObject);
+                        if (disappear)
+                        {
+                            dropItem();
+                        }
+                    }
+                    else
+                    {
+                        //find machine nearby
+                        Collider2D[] hits = overlapAreaAll();
+                        foreach (Collider2D hit in hits)
+                        {
+                            Machine machine = hit.gameObject.GetComponent<Machine>();
+                            if (machine != null)
+                            {
+                                machine.use(gameObject);
+                                break;
+                            }
+                        }
                     }
                 }
             }
             else {
+                axisX = 0;
                 axisY = 0;
             }
-
             if (axisX > 0)
             {
                 move.x = walkSpeed;
@@ -83,47 +137,6 @@ public class Player : Entity {
                 move.y = 0;
             }
             rb.velocity = move;
-
-            if (Input.GetKeyDown (KeyCode.X)) {
-                if (itemOnHand) 
-                {
-                    itemOnHand.drop (gameObject);
-                } 
-                else
-                {
-                    //find item nearby
-                    Collider2D[] hits = overlapAreaAll();
-                    foreach(Collider2D hit in hits){
-                        Item item = hit.gameObject.GetComponent<Item>();
-                        if (item != null && item.isPickable()) {
-                            item.pick(gameObject);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (Input.GetKeyDown (KeyCode.C)) {
-                if (itemOnHand)
-                {
-                    bool disappear = itemOnHand.use(gameObject);
-                    if (disappear)
-                    {
-                        dropItem();
-                    }
-                }
-                else {
-                    //find machine nearby
-                    Collider2D[] hits = overlapAreaAll();
-                    foreach(Collider2D hit in hits){
-                        Machine machine = hit.gameObject.GetComponent<Machine>();
-                        if (machine != null) {
-                            machine.use(gameObject);
-                            break;
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -167,6 +180,12 @@ public class Player : Entity {
         {
             onFloor = false;
         }
+    }
+
+    public virtual void teleport(Vector3 position) {
+        transform.position = position;
+        if (itemOnHand != null)
+            itemOnHand.transform.position = position;
     }
 
 }

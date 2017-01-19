@@ -4,7 +4,7 @@ using System.Collections;
 public class CaveExit : MonoBehaviour {
     public bool isOpen;
     protected float openPeriod = 2.1f;
-    protected float shiftLightX = 4.05f;
+    protected float shiftLightX = 4.07f;
     protected float shiftWallY = 3.7f;
 
 	protected void Start () {
@@ -28,7 +28,7 @@ public class CaveExit : MonoBehaviour {
             transform.position = pos;
             GetComponent<BoxCollider2D> ().offset = posWall;
             timeNow += Time.deltaTime;
-            yield return new WaitWhile(() => GetComponentInParent<Flipper>().isFlipping);
+            yield return new WaitWhile(() => GetComponentInParent<Stage>().isFlipping);
         }
         pos.x = lightX - shiftLightX;
         posWall.x = wallX + shiftLightX;

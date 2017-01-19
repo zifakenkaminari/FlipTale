@@ -13,8 +13,7 @@ public class StageEnter : MonoBehaviour {
         Player player = playerObject.GetComponent<Player>();
         player.nowStage = stageEnter;
         player.transform.parent = stageEnter.transform;
-        player.transform.position = stageEnter.transform.position + new Vector3(moveX, moveY, 0);
-        if (player.itemOnHand)
-            player.itemOnHand.transform.position = player.transform.position;
+        player.teleport(stageEnter.transform.position + new Vector3(moveX, moveY, 0));
+
     }
 }

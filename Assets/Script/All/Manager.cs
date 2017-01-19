@@ -25,7 +25,7 @@ public class Manager : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.Z)){
             foreach (GameObject stage in stages)
             {
-                if (stage.GetComponentInChildren<Flipper>().isFlipping) 
+                if (stage.GetComponentInChildren<Stage>().isFlipping) 
                     return;
             }
             flip();
@@ -60,7 +60,7 @@ public class Manager : MonoBehaviour {
 
     public void flip() {
         foreach (GameObject stage in stages) {
-            StartCoroutine(stage.GetComponentInChildren<Flipper>().flip());
+            StartCoroutine(stage.GetComponentInChildren<Stage>().flip());
         }
     }
 
@@ -71,7 +71,7 @@ public class Manager : MonoBehaviour {
         {
             player.nowStage = jumpStage;
             player.transform.parent = jumpStage.transform;
-            player.transform.position = jumpStage.transform.position;
+            player.teleport(jumpStage.transform.position);
         }
     }
 
@@ -79,7 +79,7 @@ public class Manager : MonoBehaviour {
     {
         foreach (GameObject stage in stages) 
         {
-            stage.GetComponent<Flipper>().lockMotion();
+            stage.GetComponent<Stage>().lockMotion();
         }
     }
 
@@ -87,7 +87,7 @@ public class Manager : MonoBehaviour {
     {
         foreach (GameObject stage in stages) 
         {
-            stage.GetComponent<Flipper>().unlockMotion();
+            stage.GetComponent<Stage>().unlockMotion();
         }
     }
 

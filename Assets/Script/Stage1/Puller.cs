@@ -33,6 +33,12 @@ public class Puller : Machine {
         state = 0;
         front.GetComponent<SpriteRenderer>().sprite = frontPuller;
         back.GetComponent<SpriteRenderer>().sprite = backPuller;
+        Vector2 tmpOffset = GetComponent<BoxCollider2D>().offset;
+        Vector2 tmpSize = GetComponent<BoxCollider2D>().size;
+        tmpOffset.y = 0.3f;
+        tmpSize.y = 4.3f;
+        GetComponent<BoxCollider2D>().offset = tmpOffset;
+        GetComponent<BoxCollider2D>().size = tmpSize;
     }
 
     protected IEnumerator rotate() {

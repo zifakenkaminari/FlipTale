@@ -30,13 +30,17 @@ public class CameraController : MonoBehaviour {
         float viewUp = player.nowStage.GetComponent<Stage>().viewUp;
         float viewDown = player.nowStage.GetComponent<Stage>().viewDown;
 
+        
         pos.x = Mathf.Clamp(pos.x, center.x - viewRight, center.x + viewLeft);
         pos.y = Mathf.Clamp(pos.y, center.y - viewDown, center.y + viewUp);
-
+        /*
         now.x = Mathf.Lerp(now.x, pos.x, 0.1f);
         now.y = Mathf.Lerp(now.y, pos.y, 0.1f);
+        */
+        now.x = pos.x;
+        now.y = pos.y;
         transform.position = now;
-
+        
         if (isChanging)
         {
             if (Time.time - startTime < changePeriod)
@@ -51,6 +55,7 @@ public class CameraController : MonoBehaviour {
             }
         }
     }
+
     public void end()
     {
         startTime = Time.time;
