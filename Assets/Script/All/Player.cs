@@ -160,10 +160,13 @@ public class Player : Entity {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Floor"))
-        {
+        if (collision.gameObject.CompareTag ("Floor")) {   
             onFloor = true;
             jumping = false;
+        }
+        else if (collision.gameObject.CompareTag ("Plane")) {
+            onFloor = true;
+            collision.gameObject.tag = "Floor";
         }
     }
 
