@@ -10,7 +10,6 @@ public class Paper : Item {
     public Sprite paperCrumpled;
     public Sprite paperPlane;
     public float destroyPeriod;
-    protected GameObject mapDesign;
     protected int paperState; //0: normal, 1: crumpled, 2: plane
 
     protected new void Start()
@@ -46,25 +45,30 @@ public class Paper : Item {
     {
         if (paperState == 0) {          
             //normal
-            if (mapDesign == null || mapDesign.GetComponent<Entity>().face)
-            {
-                //become crumpled
-                paperState = 1;         
-                front.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
-                back.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
-                frontOnHand = frontPaperCrumpled;
-                backOnHand = backPaperCrupmpled;
-            }
-            else
-            {
-                //become plane
-                paperState = 2;     
-                front.GetComponent<SpriteRenderer> ().sprite = paperPlane;
-                back.GetComponent<SpriteRenderer> ().sprite = paperPlane;
-                frontOnHand = frontPapaerPlane;
-                backOnHand = backPaperPlane;
-            }
-            player.GetComponent<Player>().pickItem(this);
+			if(!face){
+				Collider2D[] hits = overlapAreaAll();
+				foreach (Collider2D hit in hits) {
+					if (hit.gameObject.name == "MapDesign")
+					{
+						//become plane
+						paperState = 2;     
+						front.GetComponent<SpriteRenderer> ().sprite = paperPlane;
+						back.GetComponent<SpriteRenderer> ().sprite = paperPlane;
+						frontOnHand = frontPapaerPlane;
+						backOnHand = backPaperPlane;
+						player.GetComponent<Player>().pickItem(this);
+						base.use (player);
+						return false;
+					}
+				}
+			}
+			//become crumpled
+			paperState = 1;         
+			front.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
+			back.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
+			frontOnHand = frontPaperCrumpled;
+			backOnHand = backPaperCrupmpled;
+			player.GetComponent<Player>().pickItem(this);
             base.use (player);
         }
         else if (paperState == 1)
@@ -127,20 +131,6 @@ public class Paper : Item {
 
     public int getPaperState() {
         return paperState;
-    }
-    void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (collider.gameObject.name == "MapDesign")
-        {
-            mapDesign = collider.gameObject;
-        }
-    }
-    void OnTriggerExit2D(Collider2D collider)
-    {
-        if (mapDesign && collider.gameObject == mapDesign)
-        {
-            mapDesign = null;
-        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
