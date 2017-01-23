@@ -63,6 +63,17 @@ public class CameraController : MonoBehaviour {
         toChange = false;
     }
 
+	public IEnumerator changeMaskColor(Color colorBefore, Color colorAfter, float period){
+		float time = 0;
+		while(time<period){
+			endingBlank.GetComponent<SpriteRenderer> ().color = Color.Lerp (colorBefore, colorAfter, time/period);
+			time += Time.deltaTime;
+			yield return null;
+		}
+		endingBlank.GetComponent<SpriteRenderer> ().color = colorAfter;
+
+	}
+
     protected IEnumerator fadeOut(){
         float p = 2;
         float timeNow = 0;

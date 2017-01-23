@@ -48,9 +48,9 @@ public class Player : Entity {
                         StageEnter stageEnter = hit.gameObject.GetComponent<StageEnter>();
                         if (stageEnter && stageEnter.canEnter[(face) ? 0 : 1])
                         {
-                            hit.gameObject.GetComponent<StageEnter>().enter(gameObject);
+							hit.gameObject.GetComponent<StageEnter>().enter(gameObject);
                             axisY = 0;
-                            break;
+							return;
                         }
                     }
                 }

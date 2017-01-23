@@ -27,11 +27,7 @@ public class Stage : MonoBehaviour {
 
     void Update() {
 
-        flipables = GetComponentsInChildren<Entity>();
-        //int flipableSize = flipables.Length;
-        Array.Sort(flipables, (a, b) =>
-            a.transform.position.x.CompareTo(b.transform.position.x)
-        );
+
     }
 
     public void lockMotion() {
@@ -54,13 +50,18 @@ public class Stage : MonoBehaviour {
             yield break;
         isFlipping = true;
 
+		flipables = GetComponentsInChildren<Entity>();
+		int flipableSize = flipables.Length;
+		Array.Sort(flipables, (a, b) =>
+			a.transform.position.x.CompareTo(b.transform.position.x)
+		);
+
         //lock
         foreach (Entity flipable in flipables) {
             flipable.lockMotion();
         }
         StartCoroutine(background.GetComponent<Background>().flip());
         //flip one by one
-        int flipableSize = flipables.Length;
         for (int i = 0; i < flipableSize - 1; i++)
         {
             StartCoroutine(flipables[i].flip());
