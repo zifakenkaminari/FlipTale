@@ -14,8 +14,10 @@ public class StageTrigger : MonoBehaviour {
     }
 
     //change stage
-    public void OnTriggerExit2D(Collider2D collider)
-    {
+    public virtual void OnTriggerExit2D(Collider2D collider)
+
+	{
+		Debug.Log("YEEEEEEEEEEE");
         Player player = collider.GetComponent<Player>();
         if (player)
         {
@@ -44,43 +46,24 @@ public class StageTrigger : MonoBehaviour {
             }
             if (player.nowStage != nxtStage)
             {
-                StartCoroutine(switchScene(player, nxtStage));
+				StartCoroutine(switchScene(player, nxtStage, Vector3.zero));
             }
         }
         
     }
 
-    public IEnumerator switchScene(Player player, GameObject nxtStage)
+	public IEnumerator switchScene(Player player, GameObject nxtStage, Vector3 move)
     {
         player.lockMotion();
-
-        Color maskColor = Camera.main.GetComponent<CameraController>().endingBlank.GetComponent<SpriteRenderer>().color;
-        float time = 0;
-        float TIME = 0.2f;
-        maskColor = Color.black;
-        while(time<TIME){
-            maskColor.a = time / TIME;
-            Camera.main.GetComponent<CameraController>().endingBlank.GetComponent<SpriteRenderer>().color = maskColor;
-            time += Time.deltaTime;
-            yield return null;
-        }
-        maskColor.a = 1;
-        Camera.main.GetComponent<CameraController>().endingBlank.GetComponent<SpriteRenderer>().color = maskColor;
-
+		Color transparnt = new Color(0f, 0f, 0f, 0f);
+		Color blackout = new Color(0f, 0f, 0f, 1f);
+		yield return StartCoroutine(Camera.main.GetComponent<CameraController> ().changeMaskColor (transparnt, blackout, 0.20f));
 
         player.nowStage = nxtStage;
-        player.transform.parent = player.nowStage.transform;
-        
-        time = 0;
-        while (time < TIME)
-        {
-            maskColor.a = 1 - time / TIME;
-            Camera.main.GetComponent<CameraController>().endingBlank.GetComponent<SpriteRenderer>().color = maskColor;
-            time += Time.deltaTime;
-            yield return null;
-        } maskColor.a = 0;
-        Camera.main.GetComponent<CameraController>().endingBlank.GetComponent<SpriteRenderer>().color = maskColor;
-       
+		player.transform.parent = player.nowStage.transform;
+		player.teleport(player.transform.position + move);
+
+		yield return StartCoroutine(Camera.main.GetComponent<CameraController> ().changeMaskColor (blackout, transparnt, 0.20f));
 
         player.unlockMotion();
     }
