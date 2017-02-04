@@ -14,6 +14,7 @@ public class LakeIce : Entity {
 
     public override IEnumerator flip ()
     {
+		yield return new WaitForSeconds (flipPeriod);
         if (face) {
             BoxCollider2D[] colliders = GetComponents<BoxCollider2D> ();
             foreach (BoxCollider2D collider in colliders) {
@@ -27,6 +28,5 @@ public class LakeIce : Entity {
             }
         }
         face = !face;
-        yield return null;
     }
 }

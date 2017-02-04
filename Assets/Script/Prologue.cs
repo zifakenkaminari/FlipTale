@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Prologue : MonoBehaviour {
 
@@ -11,10 +12,15 @@ public class Prologue : MonoBehaviour {
     protected bool isChanging;
     protected bool toChange;
 	// Use this for initialization
+
+	protected Image[] texts;
+
 	void Start () {
-        for (int i = 0; i < transform.childCount; i++) {
-            transform.GetChild (i).gameObject.SetActive(false);
-        }
+		texts = GetComponentsInChildren<Image> ();
+		foreach (Image text in texts) {
+			text.gameObject.SetActive(false);
+		}
+
         idx = 0;
         countChangeBackground = 6;
         isChanging = false;
@@ -23,7 +29,7 @@ public class Prologue : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (!isChanging && Input.GetKeyDown (KeyCode.Z)) {
-            if (idx < transform.childCount)
+			if (idx < texts.Length)
             {
                 if (toChange) {
                     startTime = Time.time;
@@ -31,7 +37,7 @@ public class Prologue : MonoBehaviour {
                     toChange = false;
                 }
                 else { 
-                    transform.GetChild(idx).gameObject.SetActive(true);
+					texts[idx].gameObject.SetActive(true);
                     idx++;
                     if (idx == countChangeBackground) {
                         toChange = true;

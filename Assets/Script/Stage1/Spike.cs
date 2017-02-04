@@ -9,7 +9,7 @@ public class Spike : Entity {
     }
     public IEnumerator disappear()
     {
-        float destroyPeriod = 1f;
+        float destroyPeriod = 0.2f;
         float timeNow = 0;
         while (timeNow < destroyPeriod)
         {

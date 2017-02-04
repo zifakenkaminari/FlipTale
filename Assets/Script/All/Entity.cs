@@ -102,7 +102,7 @@ public class Entity : MonoBehaviour {
         isFreezed = false;
     }
 
-    protected void setTransparent(ref GameObject bg, float a) {
+    protected virtual void setTransparent(ref GameObject bg, float a) {
         Color tmpColor = bg.GetComponent<SpriteRenderer> ().color;
         tmpColor.a = a;
         bg.GetComponent<SpriteRenderer> ().color = tmpColor;

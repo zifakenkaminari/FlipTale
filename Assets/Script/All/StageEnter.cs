@@ -15,6 +15,7 @@ public class StageEnter : MonoBehaviour {
 
 	public IEnumerator switchScene(Player player, GameObject nxtStage, Vector3 move)
 	{
+		Manager.main.setFlippable(false);
 		player.lockMotion();
 		Color transparnt = new Color(0f, 0f, 0f, 0f);
 		Color blackout = new Color(0f, 0f, 0f, 1f);
@@ -27,5 +28,6 @@ public class StageEnter : MonoBehaviour {
 		yield return StartCoroutine(Camera.main.GetComponent<CameraController> ().changeMaskColor (blackout, transparnt, 0.20f));
 
 		player.unlockMotion();
+		Manager.main.setFlippable(true);
 	}
 }

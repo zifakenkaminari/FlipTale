@@ -13,16 +13,18 @@ public class Manager : MonoBehaviour {
     public bool GM_mode;
     public GameObject[] stages;
     protected Player player;
+	protected bool flippable;
 
     // Use this for initialization
     void Start () {
         main = this;
         player = GameObject.Find ("Player").GetComponent<Player>();
+		flippable = true;
     }
 
     // Update is called once per frame
     void Update () {
-        if(Input.GetKeyDown(KeyCode.Z)){
+		if(Input.GetKeyDown(KeyCode.Z) && flippable){
             foreach (GameObject stage in stages)
             {
                 if (stage.GetComponentInChildren<Stage>().isFlipping) 
@@ -96,4 +98,11 @@ public class Manager : MonoBehaviour {
     {
         player.setControlable(controlable);
     }
+
+	public void setFlippable(bool flippable){
+		this.flippable = flippable;
+	}
+	public bool isFlippable(){
+		return flippable;
+	}
 }

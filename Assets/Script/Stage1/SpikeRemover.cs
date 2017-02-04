@@ -22,6 +22,9 @@ public class SpikeRemover : Entity {
     }
 
     protected IEnumerator removeSpike() {
+		Manager.main.setFlippable(false);
+		Manager.main.setPlayerControlable(false);
+
         Spike[] allSpike = spikes.GetComponentsInChildren<Spike>();
         Array.Sort(allSpike, delegate (Spike a, Spike b) {
             return a.transform.position.x.CompareTo(b.transform.position.x);
@@ -29,8 +32,11 @@ public class SpikeRemover : Entity {
         foreach (Spike spike in allSpike)
         {
             StartCoroutine(spike.disappear());
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
         }
+
+		Manager.main.setPlayerControlable(true);
+		Manager.main.setFlippable(true);
 
     }
 

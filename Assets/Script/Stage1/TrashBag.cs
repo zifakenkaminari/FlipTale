@@ -13,7 +13,7 @@ public class TrashBag : Item {
     {
         Collider2D[] hits = overlapAreaAll ();
         foreach (Collider2D hit in hits) {
-			if (hit.gameObject.name == "HotAirBalloonBuilder" && !face) {
+			if (hit.gameObject.name == "HotAirBalloonBuilder") {
                 drop (player);
 				hit.GetComponent<HotAirBalloonBuilder> ().getItem (this);
                 return true;
