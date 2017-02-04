@@ -27,9 +27,9 @@ public class WaterFireGun : Item {
                 player.GetComponent<Player>().pickItem(this);
                 isFull = true;
             }
-            if (hit.gameObject.name == "HotAirBallon" && !face && isFull) {
+			if (hit.gameObject.name == "HotAirBalloonBuilder" && !face && isFull) {
                 drop (player);
-                hit.GetComponent<HotAirBallon> ().getItem (gameObject);
+				hit.GetComponent<HotAirBalloonBuilder> ().getItem (this);
                 return true;
             }
         }

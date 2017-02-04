@@ -7,9 +7,9 @@ public class Basket : Item {
     {
         Collider2D[] hits = overlapAreaAll ();
         foreach (Collider2D hit in hits) {
-            if (hit.gameObject.name == "HotAirBallon") {
+			if (hit.gameObject.name == "HotAirBalloonBuilder") {
                 drop (player);
-                hit.GetComponent<HotAirBallon> ().getItem (gameObject);
+				hit.GetComponent<HotAirBalloonBuilder> ().getItem (this);
                 return true;
             }
         }

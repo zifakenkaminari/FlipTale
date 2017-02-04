@@ -168,5 +168,10 @@ public class Entity : MonoBehaviour {
         return Physics2D.OverlapAreaAll(topLeft, botRight);
     }
 
+	public void setSprite(Sprite frontSprite, Sprite backSprite){
+		front.GetComponent<SpriteRenderer> ().sprite = frontSprite;
+		back.GetComponent<SpriteRenderer> ().sprite = backSprite;
+	}
+
 }
 
