@@ -33,12 +33,14 @@ public class WolfStatue : Entity {
 
     protected IEnumerator run() {
         if (isRunning) yield break;
+		front.GetComponent<SpriteRenderer> ().flipX = true;
+		back.GetComponent<SpriteRenderer> ().flipX = true;
         GameObject trashBag = GameObject.Find("TrashBag");
         trashBag.GetComponent<Item>().pickable = true;
         isRunning = true;
         rb.isKinematic = false;
-        GameObject moonMoonBound = GameObject.Find("StageBoundary_5b");
-        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), moonMoonBound.GetComponent<Collider2D>());
+		Collider2D moonMoonBound = GameObject.Find("StageBoundary_5b").GetComponent<Collider2D>();
+        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), moonMoonBound);
         while (front.GetComponent<SpriteRenderer>().isVisible)
         {
             while (isFreezed) yield return null;
