@@ -22,6 +22,7 @@ public class CameraController : MonoBehaviour {
     }
     void FixedUpdate ()
     {
+	/*	
         Vector3 now = transform.position;
         Vector3 pos = player.transform.position;
         Vector3 center = player.nowStage.transform.position;
@@ -31,16 +32,17 @@ public class CameraController : MonoBehaviour {
         float viewDown = player.nowStage.GetComponent<Stage>().viewDown;
 
         
-        pos.x = Mathf.Clamp(pos.x, center.x - viewRight, center.x + viewLeft);
+        pos.x = Mathf.Clamp(pos.x, center.x - viewLeft, center.x + viewRight);
         pos.y = Mathf.Clamp(pos.y, center.y - viewDown, center.y + viewUp);
-        /*
-        now.x = Mathf.Lerp(now.x, pos.x, 0.1f);
-        now.y = Mathf.Lerp(now.y, pos.y, 0.1f);
-        */
+        
+		//Lerp
+        //now.x = Mathf.Lerp(now.x, pos.x, 0.1f);
+        //now.y = Mathf.Lerp(now.y, pos.y, 0.1f);
+        //Follow with player
         now.x = pos.x;
         now.y = pos.y;
         transform.position = now;
-        
+        */
         if (isChanging)
         {
             if (Time.time - startTime < changePeriod)
@@ -55,6 +57,23 @@ public class CameraController : MonoBehaviour {
             }
         }
     }
+	void LateUpdate(){
+		Vector3 now = transform.position;
+		Vector3 pos = player.transform.position;
+		Vector3 center = player.nowStage.transform.position;
+		float viewLeft = player.nowStage.GetComponent<Stage>().viewLeft;
+		float viewRight = player.nowStage.GetComponent<Stage>().viewRight;
+		float viewUp = player.nowStage.GetComponent<Stage>().viewUp;
+		float viewDown = player.nowStage.GetComponent<Stage>().viewDown;
+
+
+		pos.x = Mathf.Clamp(pos.x, center.x - viewLeft, center.x + viewRight);
+		pos.y = Mathf.Clamp(pos.y, center.y - viewDown, center.y + viewUp);
+		now.x = pos.x;
+		now.y = pos.y;
+
+		transform.position = now;
+	}
 
     public void end()
     {

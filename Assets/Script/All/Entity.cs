@@ -58,7 +58,7 @@ public class Entity : MonoBehaviour {
         if(face){
             while (Time.time - flipTime < flipPeriod)
             {
-                setFlipValue(1 - (Time.time - flipTime) / flipPeriod);
+                setFlipValue(1f - (Time.time - flipTime) / flipPeriod);
                 yield return null;
             }
             setFlipValue(0);
@@ -127,7 +127,7 @@ public class Entity : MonoBehaviour {
         else if (flipType == 1)
         {
             float frontAlpha = flipValue * alpha;
-            float backAlpha = alpha * (1 - flipValue) / (1 - alpha * flipValue);
+			float backAlpha = (alpha==1f)?1f:alpha * (1f - flipValue) / (1f - alpha * flipValue);
             setTransparent(ref front, frontAlpha);
             setTransparent(ref back, backAlpha);
         }
@@ -154,7 +154,7 @@ public class Entity : MonoBehaviour {
         else if (flipType == 1)
         {
             float frontAlpha = f * alpha;
-            float backAlpha = alpha * (1 - f) / (1 - alpha * f);
+			float backAlpha = (alpha==1f)?1f:alpha * (1f - f) / (1f - alpha * f);
             setTransparent(ref front, frontAlpha);
             setTransparent(ref back, backAlpha);
         }
