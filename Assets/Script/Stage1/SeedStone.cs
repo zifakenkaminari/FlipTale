@@ -23,10 +23,9 @@ public class SeedStone : Item
     public IEnumerator disappear() {
         float timeNow = 0;
         while(timeNow < destroyPeriod){
-            while (isFreezed) yield return null;
             setAlpha(1-timeNow / destroyPeriod);
-            timeNow += Time.deltaTime;
-            yield return null;
+			timeNow += Time.deltaTime;
+			yield return new WaitWhile(() => isFreezed);
         }
         Destroy(gameObject);
     }

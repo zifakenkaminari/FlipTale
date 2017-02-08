@@ -10,6 +10,8 @@ public class HotAirBalloonBuilder : MonoBehaviour {
 	protected Sprite[] workStationFrontSprites;
 	[SerializeField]
 	protected Sprite[] workStationBackSprites;
+	[SerializeField]
+	protected Sprite[] workStationOriginSprites;
 	//3 items
 	protected int itemCount;
 
@@ -22,8 +24,7 @@ public class HotAirBalloonBuilder : MonoBehaviour {
 
 	void Update(){
 		if (Input.GetKeyDown (KeyCode.Q) && Manager.main.GM_mode) {
-
-			hotAirBalloon.gameObject.SetActive(true);
+			StartCoroutine(buildHotAirBalloon ());
 		}
 	}
 
@@ -40,9 +41,32 @@ public class HotAirBalloonBuilder : MonoBehaviour {
 		itemCount++;
 		if (itemCount == 3) {
 			//spawn HotAirBalloon
-			hotAirBalloon.gameObject.SetActive(true);
+			StartCoroutine(buildHotAirBalloon());
 		}
 	}
 
+	protected IEnumerator buildHotAirBalloon(){
+
+		Player player = GameObject.Find ("Player").GetComponent<Player> ();
+
+		Manager.main.setFlippable(false);
+		Manager.main.setPlayerControlable(false);
+
+		yield return new WaitForSeconds (1.5f);
+		yield return Camera.main.GetComponent<CameraController>().changeMaskColor(new Color(0, 0, 0, 0), Color.black, 1.5f);
+		yield return new WaitForSeconds (1f);
+		hotAirBalloon.gameObject.SetActive(true);
+		Vector3 pos = player.transform.position;
+		pos.x = hotAirBalloon.transform.position.x + 2f;
+		player.transform.position = pos;
+
+		workStaionComponents [0].setSprite (workStationOriginSprites[0], workStationOriginSprites[0]);
+		workStaionComponents [1].setSprite (workStationOriginSprites[1], workStationOriginSprites[1]);
+		workStaionComponents [2].setSprite (workStationOriginSprites[2], workStationOriginSprites[2]);
+		yield return Camera.main.GetComponent<CameraController>().changeMaskColor(Color.black, new Color(0, 0, 0, 0), 1.5f);
+
+		Manager.main.setPlayerControlable(true);
+		Manager.main.setFlippable(true);
+	}
 		
 }

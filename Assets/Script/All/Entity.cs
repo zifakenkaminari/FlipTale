@@ -14,6 +14,7 @@ public class Entity : MonoBehaviour {
     protected float flipPeriod = 1;
     protected float alpha;
     protected float flipValue;
+	[SerializeField]	protected bool flipWithBackground;
 
     protected Rigidbody2D rb;
     protected Vector3 saveVelocity;
@@ -31,8 +32,8 @@ public class Entity : MonoBehaviour {
         //if is spawn by parent, set flip side to the same as its parent
         if (transform.parent && transform.parent.gameObject.GetComponent<Entity> ())
             face = transform.parent.gameObject.GetComponent<Entity> ().face;
-        else if (transform.parent && transform.parent.gameObject.GetComponent<Stage> ()) 
-            face = transform.parent.gameObject.GetComponent<Stage> ().face;
+		else if (GetComponentInParent<Stage>()) 
+			face = GetComponentInParent<Stage>().face;
         else if (GetComponent<FixedJoint2D>())
             face = GetComponent<FixedJoint2D>().connectedBody.GetComponent<Entity>().face;
         else 
@@ -42,11 +43,17 @@ public class Entity : MonoBehaviour {
 
     }
 
+
     protected void FixedUpdate () {
         if (!isFreezed) { 
             main();
         }
     }
+
+
+	public bool isFlipWithBackground(){
+		return flipWithBackground;
+	}
 
     public virtual IEnumerator flip()
     {
@@ -127,8 +134,8 @@ public class Entity : MonoBehaviour {
         else if (flipType == 1)
         {
             float frontAlpha = flipValue * alpha;
-			float backAlpha = (alpha==1f)?1f:alpha * (1f - flipValue) / (1f - alpha * flipValue);
-            setTransparent(ref front, frontAlpha);
+			float backAlpha = float.Equals(alpha*flipValue, 1f)?1f:alpha * (1f - flipValue) / (1f - alpha * flipValue);
+			setTransparent(ref front, frontAlpha);
             setTransparent(ref back, backAlpha);
         }
     }
@@ -154,7 +161,7 @@ public class Entity : MonoBehaviour {
         else if (flipType == 1)
         {
             float frontAlpha = f * alpha;
-			float backAlpha = (alpha==1f)?1f:alpha * (1f - f) / (1f - alpha * f);
+			float backAlpha = float.Equals(alpha*flipValue, 1f)?1f:alpha * (1f - f) / (1f - alpha * f);
             setTransparent(ref front, frontAlpha);
             setTransparent(ref back, backAlpha);
         }

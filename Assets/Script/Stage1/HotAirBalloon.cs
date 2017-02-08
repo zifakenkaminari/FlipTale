@@ -24,14 +24,14 @@ public class HotAirBalloon : Machine {
     {
         if(flying) {
             if (!face) {
-                rb.AddForce(new Vector2(0, upForce * rb.mass));
+				rb.AddForce(new Vector2(0, upForce * rb.mass));
             }
             else {
                 rb.AddForce(new Vector2(0, -downForce * rb.mass));
             }
             if (!back.GetComponent<SpriteRenderer>().isVisible) {
                 flying = false;
-                Camera.main.GetComponent<CameraController>().end();
+				StartCoroutine(Camera.main.GetComponent<CameraController>().end());
             }
         }
     }

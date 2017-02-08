@@ -33,10 +33,9 @@ public class Paper : Item {
     public IEnumerator disappear() {
         float timeNow = 0;
         while(timeNow < destroyPeriod){
-            while (isFreezed) yield return null;
             setAlpha(1 - timeNow / destroyPeriod);
-            timeNow += Time.deltaTime;
-            yield return null;
+			timeNow += Time.deltaTime;
+			yield return new WaitWhile(() => isFreezed);
         }
         Destroy(gameObject);
     }
@@ -118,11 +117,10 @@ public class Paper : Item {
         Vector3 eular = transform.localEulerAngles;
         while (front.GetComponent<SpriteRenderer>().isVisible)
         {
-            while (isFreezed) yield return null;
             eular.z = Mathf.Atan(rb.velocity.y/ rb.velocity.x)*Mathf.Rad2Deg - 15 * scale.x;
             transform.localEulerAngles = eular;
-            rb.AddForce(new Vector2(0, rb.velocity.y) * rb.mass * -1.5f);
-            yield return null;
+			rb.AddForce(new Vector2(0, rb.velocity.y) * rb.mass * -1.5f);
+			yield return new WaitWhile(() => isFreezed);
         }
         Destroy(gameObject);
         yield break;

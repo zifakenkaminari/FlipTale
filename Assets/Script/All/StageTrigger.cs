@@ -17,7 +17,6 @@ public class StageTrigger : MonoBehaviour {
     public virtual void OnTriggerExit2D(Collider2D collider)
 
 	{
-		Debug.Log("YEEEEEEEEEEE");
         Player player = collider.GetComponent<Player>();
         if (player)
         {

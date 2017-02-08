@@ -18,7 +18,6 @@ public class Player : Entity {
     new void Start()
     {
         base.Start();
-        controlable = true;
         itemOnHand = null;
         jumping = false;
         nowStage = GameObject.Find("Stage1_1");

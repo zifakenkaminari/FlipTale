@@ -51,7 +51,6 @@ public class Puller : Machine {
         float anglePullerMask = eulerPullerMask.z;
 
         while(timeNow<rotatePeriod){
-            while (isFreezed) yield return null; 
 
             eulerTotem.z = angleTotem + 90 * timeNow / rotatePeriod;
             totem.transform.localEulerAngles = eulerTotem;
@@ -59,8 +58,8 @@ public class Puller : Machine {
             eulerPullerMask.z = anglePullerMask - 90 * timeNow / rotatePeriod;
             pullerMask.transform.localEulerAngles = eulerPullerMask;
 
-            timeNow += Time.deltaTime;
-            yield return null;
+			timeNow += Time.deltaTime;
+			yield return new WaitWhile(() => isFreezed);
         }
 
         eulerTotem.z = angleTotem + 90;

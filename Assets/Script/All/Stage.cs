@@ -6,7 +6,7 @@ using System;
 public class Stage : MonoBehaviour {
 
     public Entity[] flipables;
-    public GameObject background;
+	public Background[] backgrounds;
 
     public bool face;           //not flipped at first
     public bool isFlipping;
@@ -22,12 +22,10 @@ public class Stage : MonoBehaviour {
     {
         face = true;
         isFlipping = false;
-        background.GetComponent<Background>().flipPeriod = flipPeriod;
-    }
-
-    void Update() {
-
-
+		backgrounds = GetComponentsInChildren<Background> ();
+		foreach (Background bg in backgrounds) {
+			bg.flipPeriod = flipPeriod;
+		}
     }
 
     public void lockMotion() {
@@ -46,30 +44,41 @@ public class Stage : MonoBehaviour {
     }
 
     public IEnumerator flip() {
-        if (isFlipping)
-            yield break;
-        isFlipping = true;
+		if (isFlipping)
+			yield break;
+		isFlipping = true;
 
-		flipables = GetComponentsInChildren<Entity>();
+		float startTime = Time.time;
+
+		flipables = GetComponentsInChildren<Entity> ();
 		int flipableSize = flipables.Length;
-		Array.Sort(flipables, (a, b) =>
-			a.transform.position.x.CompareTo(b.transform.position.x)
+		Array.Sort (flipables, (a, b) =>
+			a.transform.position.x.CompareTo (b.transform.position.x)
 		);
 
-        //lock
-        foreach (Entity flipable in flipables) {
-            flipable.lockMotion();
-        }
-        StartCoroutine(background.GetComponent<Background>().flip());
-        //flip one by one
-        for (int i = 0; i < flipableSize - 1; i++)
-        {
-            StartCoroutine(flipables[i].flip());
-            yield return new WaitForSeconds(flipPeriod / flipableSize);
-        }
+		//lock
+		foreach (Entity flipable in flipables) {
+			flipable.lockMotion ();
+		}
+		foreach (Background bg in backgrounds) {
+			StartCoroutine (bg.flip ());
+		}
+		foreach (Entity entity in flipables) {
+			if (entity.isFlipWithBackground ()) {
+				StartCoroutine (entity.flip ());
+			}
+		}
+		//flip one by one
+		for (int i = 0; i < flipableSize - 1; i++) {
+			if (!flipables [i].isFlipWithBackground ()){
+				StartCoroutine (flipables [i].flip ());
+			}
+			yield return new WaitForSeconds (flipPeriod / flipableSize);
+		}
         //last one
         if (flipableSize > 0)
             yield return flipables[flipableSize-1].flip();
+		yield return new WaitUntil (() => Time.time > startTime + flipPeriod);
         //unlock
         foreach (Entity flipable in flipables) {
             flipable.unlockMotion();

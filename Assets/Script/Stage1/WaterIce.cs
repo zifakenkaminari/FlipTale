@@ -4,6 +4,7 @@ using System.Collections;
 public class WaterIce : Entity {
 	[SerializeField]	protected float speed;
 	[SerializeField]	protected float amp;
+	[SerializeField]	protected float tideSpeed;
 	protected float slowStart;
 	protected float initY;
 	protected float time;
@@ -20,7 +21,7 @@ public class WaterIce : Entity {
 			front.GetComponent<Renderer> ().material.mainTextureOffset = offset;
 			back.GetComponent<Renderer> ().material.mainTextureOffset = offset;
 			Vector3 pos = transform.position;
-			pos.y = initY - amp*(0.5f + 0.5f * Mathf.Cos (time));
+			pos.y = initY - amp*(0.5f + 0.5f * Mathf.Cos (time/tideSpeed*Mathf.PI));
 			transform.position = pos;
 			time += Time.deltaTime;
 		}

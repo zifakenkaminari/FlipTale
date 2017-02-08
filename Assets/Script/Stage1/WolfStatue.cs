@@ -13,7 +13,7 @@ public class WolfStatue : Entity {
     {
         if (!isRunning)
         {
-            Vector2 a = (Vector2)transform.position + new Vector2(5, 7.23f);
+            Vector2 a = (Vector2)transform.position + new Vector2(0, 7.23f);
             Vector2 b = (Vector2)transform.position + new Vector2(10, 0);
             Collider2D[] hits = Physics2D.OverlapAreaAll(a, b);
             foreach (Collider2D hit in hits)
@@ -43,9 +43,8 @@ public class WolfStatue : Entity {
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), moonMoonBound);
         while (front.GetComponent<SpriteRenderer>().isVisible)
         {
-            while (isFreezed) yield return null;
-            rb.velocity += new Vector2(9, 0) * Time.deltaTime;
-            yield return null;
+			rb.velocity += new Vector2(9, 0) * Time.deltaTime;
+			yield return new WaitWhile(() => isFreezed);
         }
         Destroy(gameObject);
     }

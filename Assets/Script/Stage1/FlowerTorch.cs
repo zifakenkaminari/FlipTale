@@ -7,10 +7,11 @@ public class FlowerTorch : Item
 
     protected override void Start()
     {
-        spawned = true;
-        base.Start();
+		base.Start();
+		spawned = true;
         state = 3;
         setAlpha (0.0f);
+		Debug.Log ("alpha?");
     }
     public static bool isSpawned() {
         return spawned;
