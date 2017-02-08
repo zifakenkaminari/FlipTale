@@ -16,8 +16,7 @@ public class WaterIce : Entity {
 
 	protected override void main() { 
 		if (face) {
-			Vector2 offset = front.GetComponent<Renderer> ().material.mainTextureOffset;
-			offset.x = Mathf.Repeat (offset.x + Time.deltaTime * speed, 1f); 
+			Vector2 offset = new Vector2(Mathf.Repeat (time * speed, 1f), 0f);
 			front.GetComponent<Renderer> ().material.mainTextureOffset = offset;
 			back.GetComponent<Renderer> ().material.mainTextureOffset = offset;
 			Vector3 pos = transform.position;
