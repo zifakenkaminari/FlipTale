@@ -73,7 +73,7 @@ public class Paper : Item {
         else if (paperState == 1)
         {
             //throw paper crumpled
-            paperState = 3;
+            paperState = 4;
             drop(player);
             player.GetComponent<Player>().dropItem();
             Vector3 scale = transform.localScale;

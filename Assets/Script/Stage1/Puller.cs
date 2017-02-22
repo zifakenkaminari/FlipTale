@@ -55,7 +55,7 @@ public class Puller : Machine {
             eulerTotem.z = angleTotem + 90 * timeNow / rotatePeriod;
             totem.transform.localEulerAngles = eulerTotem;
 
-            eulerPullerMask.z = anglePullerMask - 90 * timeNow / rotatePeriod;
+            eulerPullerMask.z = anglePullerMask + 90 * timeNow / rotatePeriod;
             pullerMask.transform.localEulerAngles = eulerPullerMask;
 
 			timeNow += Time.deltaTime;
@@ -65,7 +65,7 @@ public class Puller : Machine {
         eulerTotem.z = angleTotem + 90;
         totem.transform.localEulerAngles = eulerTotem;
 
-        eulerPullerMask.z = anglePullerMask - 90;
+        eulerPullerMask.z = anglePullerMask + 90;
         pullerMask.transform.localEulerAngles = eulerPullerMask;
 
         isRotating = false;

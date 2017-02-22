@@ -28,7 +28,8 @@ public class Stage : MonoBehaviour {
 		}
     }
 
-    public void lockMotion() {
+	public void lockMotion() {
+		flipables = GetComponentsInChildren<Entity> ();
         foreach (Entity flipable in flipables)
         {
             flipable.lockMotion();
@@ -36,7 +37,8 @@ public class Stage : MonoBehaviour {
     }
 
     public void unlockMotion()
-    {
+	{
+		flipables = GetComponentsInChildren<Entity> ();
         foreach (Entity flipable in flipables)
         {
             flipable.unlockMotion();
@@ -76,7 +78,7 @@ public class Stage : MonoBehaviour {
 			yield return new WaitForSeconds (flipPeriod / flipableSize);
 		}
         //last one
-        if (flipableSize > 0)
+		if (flipableSize > 0 && !flipables [flipableSize - 1].isFlipWithBackground ())
             yield return flipables[flipableSize-1].flip();
 		yield return new WaitUntil (() => Time.time > startTime + flipPeriod);
         //unlock
