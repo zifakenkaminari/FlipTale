@@ -136,6 +136,15 @@ public class Player : Entity {
                 move.y = 0;
             }
             rb.velocity = move;
+
+            if (move.x != 0) {
+                front.GetComponent<Animator> ().SetBool("walking", true);
+                back.GetComponent<Animator> ().SetBool("walking", true);
+            }
+            else {
+                front.GetComponent<Animator> ().SetBool("walking", false);
+                back.GetComponent<Animator> ().SetBool("walking", false);
+            }
         }
     }
 
