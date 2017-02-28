@@ -5,7 +5,7 @@ public class BalloonBlower : Machine {
     public GameObject balloon;
 	public GameObject top;
 
-	protected virtual void Start(){
+    protected override void Start(){
 		base.Start ();
 		usable = true;
 	}
