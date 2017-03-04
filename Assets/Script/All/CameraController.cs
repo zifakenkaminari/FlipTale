@@ -45,8 +45,6 @@ public class CameraController : MonoBehaviour {
         */
     }
 	void LateUpdate(){
-		float threshold = 1f;
-
 		Vector3 now = transform.position;
 		Vector3 pos = player.transform.position;
 		Vector3 center = player.nowStage.transform.position;
