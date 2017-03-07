@@ -53,26 +53,26 @@ public class Paper : Item {
 						paperState = 2;     
 						front.GetComponent<SpriteRenderer> ().sprite = paperPlane;
 						back.GetComponent<SpriteRenderer> ().sprite = paperPlane;
-						frontOnHand = frontPapaerPlane;
-						backOnHand = backPaperPlane;
+                        name = "PaperPlane";
 						player.GetComponent<Player>().pickItem(this);
 						base.use (player);
+
 						return false;
 					}
 				}
 			}
-			//become crumpled
-			paperState = 1;         
+			//become trash
+			paperState = 1;
 			front.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
 			back.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
-			frontOnHand = frontPaperCrumpled;
-			backOnHand = backPaperCrupmpled;
+            name = "PaperTrash";
 			player.GetComponent<Player>().pickItem(this);
             base.use (player);
+
         }
         else if (paperState == 1)
         {
-            //throw paper crumpled
+            //throw paper trash
             paperState = 4;
             drop(player);
             player.GetComponent<Player>().dropItem();

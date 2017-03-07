@@ -101,9 +101,6 @@ public class Item : Entity {
         setAlpha(0);
         player.GetComponent<Player>().pickItem(this);
         state = 1;
-
-        player.GetComponent<Player> ().front.GetComponent<Animator> ().Play (name + "_idle");
-        player.GetComponent<Player> ().back.GetComponent<Animator> ().Play (name + "_idle");
     }
 
     public virtual void drop(GameObject player)
@@ -123,9 +120,6 @@ public class Item : Entity {
         setAlpha(1);
         player.GetComponent<Player>().dropItem();
         state = 0;
-
-        player.GetComponent<Player> ().front.GetComponent<Animator> ().Play ("empty_idle");
-        player.GetComponent<Player> ().back.GetComponent<Animator> ().Play ("empty_idle");
     }
 
     public virtual bool use(GameObject player)
@@ -134,5 +128,10 @@ public class Item : Entity {
         pickable = false;
         state = 2;
         return false;
+    }
+
+    public virtual void destroy(GameObject player) {
+        drop (player);
+        Destroy (gameObject);
     }
 }

@@ -35,7 +35,7 @@ public class FlowerTorch : Item
             foreach (Collider2D hit in hits) {
                 if (hit.gameObject.GetComponent<CaveThorn> ()) {
                     hit.gameObject.GetComponent<CaveThorn> ().burn ();
-                    Destroy (gameObject);
+                    destroy (player);
                     return true;
                 }
             }
@@ -47,7 +47,7 @@ public class FlowerTorch : Item
                     tomb.front.GetComponent<SpriteRenderer> ().sprite = tomb.frontWithFlower;
                     tomb.back.GetComponent<SpriteRenderer> ().sprite = tomb.backWithFlower;
                     tomb.hasFlower = true;
-                    Destroy (gameObject);
+                    destroy (player);
                     return true;
                 }
             }

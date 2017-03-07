@@ -41,7 +41,7 @@ public class SeedStone : Item
                 {
                     Pot pot = hit.gameObject.GetComponent<Pot>();
                     pot.StartCoroutine(pot.bloom (player));
-                    Destroy(gameObject);
+                    destroy (player);
                     return true;
                 }
             }

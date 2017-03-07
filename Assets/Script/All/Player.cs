@@ -141,14 +141,20 @@ public class Player : Entity {
     public void dropItem()
     {
         itemOnHand = null;
-        front.GetComponent<SpriteRenderer>().sprite = frontNormal;
-        back.GetComponent<SpriteRenderer>().sprite = backNormal;
+
+        front.GetComponent<Animator> ().Play ("empty_idle");
+        back.GetComponent<Animator> ().Play ("empty_idle");
     }
 
     public void pickItem(Item item) {
         itemOnHand = item;
-        front.GetComponent<SpriteRenderer>().sprite = item.frontOnHand;
-        back.GetComponent<SpriteRenderer>().sprite = item.backOnHand;
+
+        string tmpName = item.name;
+        if (tmpName.IndexOf ("(Clone)") != -1) {
+            tmpName = tmpName.Substring (0, tmpName.IndexOf ("(Clone)"));
+        }
+        front.GetComponent<Animator> ().Play (tmpName + "_idle");
+        back.GetComponent<Animator> ().Play (tmpName + "_idle");
     }
 
     protected override void main()
