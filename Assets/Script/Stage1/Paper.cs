@@ -11,12 +11,22 @@ public class Paper : Item {
     public Sprite paperPlane;
     public float destroyPeriod;
     protected int paperState; //0: normal, 1: crumpled, 2: plane
+	protected bool used; 
 
     protected new void Start()
     {
         base.Start();
         paperState = 0; // normal
+		used = false;
     }
+
+	public bool isUsed(){
+		return used;
+	}
+
+	public void setUsed(bool used){
+		this.used = used;
+	}
 
     public void magic() {
         paperState = 2;

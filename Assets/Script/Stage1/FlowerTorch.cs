@@ -34,7 +34,8 @@ public class FlowerTorch : Item
         if (!face) {
             foreach (Collider2D hit in hits) {
                 if (hit.gameObject.GetComponent<CaveThorn> ()) {
-                    hit.gameObject.GetComponent<CaveThorn> ().burn ();
+					CaveThorn caveThorn = hit.gameObject.GetComponent<CaveThorn> ();
+					caveThorn.StartCoroutine(caveThorn.burn());
                     Destroy (gameObject);
                     return true;
                 }

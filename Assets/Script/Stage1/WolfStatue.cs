@@ -2,42 +2,68 @@
 using System.Collections;
 
 public class WolfStatue : Entity {
-    bool isRunning;
+	bool isRunning;
+	bool isLooking;
 
     protected override void Start() {
         base.Start();
-        isRunning = false;
+		isRunning = false;
+		isLooking = false;
     }
 
     protected override void main()
     {
-        if (!isRunning)
+		if (!face)
+			return;
+		if (!isRunning && !isLooking)
         {
-            Vector2 a = (Vector2)transform.position + new Vector2(0, 7.23f);
-            Vector2 b = (Vector2)transform.position + new Vector2(10, 0);
+            Vector2 a = (Vector2)transform.position + new Vector2(-2, 10f);
+            Vector2 b = (Vector2)transform.position + new Vector2(2, 0);
             Collider2D[] hits = Physics2D.OverlapAreaAll(a, b);
             foreach (Collider2D hit in hits)
-            {
-                if (hit.gameObject.GetComponent<Paper>())
+			{
+				Paper paper = hit.gameObject.GetComponent<Paper> ();
+				if (paper != null)
                 {
-                    if (hit.gameObject.GetComponent<Paper>().getPaperState() == 3 && face)
-                    {
-                        StartCoroutine(run());
-                    }
+					if (paper.isUsed ())
+						continue;
+					int state = paper.getPaperState();
+                    if (state == 4 && !isLooking)
+					{
+						isLooking = true;
+						paper.setUsed (true);
+                        StartCoroutine(look());
+					}
+					if (state == 3 && !isRunning)
+					{
+						isRunning = true;
+						paper.setUsed (true);
+						StartCoroutine(run());
+					}
                     break;
                 }
             }
         }
 
     }
+	protected IEnumerator look() {
+		front.GetComponent<Animator> ().SetBool ("seeCrumble", true);
+		yield return new WaitUntil (()=>
+			front.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f &&
+			front.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Base Layer.dog_look")
+
+		);
+		front.GetComponent<Animator> ().SetBool ("seeCrumble", false);
+		isLooking = false;
+	}
 
     protected IEnumerator run() {
-        if (isRunning) yield break;
+		yield return new WaitForSeconds (0.2f);
 		front.GetComponent<SpriteRenderer> ().flipX = true;
 		back.GetComponent<SpriteRenderer> ().flipX = true;
+		front.GetComponent<Animator> ().SetBool ("seePlane", true);
         GameObject trashBag = GameObject.Find("TrashBag");
         trashBag.GetComponent<Item>().pickable = true;
-        isRunning = true;
         rb.isKinematic = false;
 		Collider2D moonMoonBound = GameObject.Find("StageBoundary_5b").GetComponent<Collider2D>();
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), moonMoonBound);
