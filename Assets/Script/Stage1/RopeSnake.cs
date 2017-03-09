@@ -31,7 +31,8 @@ public class RopeSnake : Item
                 if (hit.gameObject.GetComponent<Puller>())
                 {
                     hit.gameObject.GetComponent<Puller>().pulled();
-                    Destroy(gameObject);
+                    player.GetComponent<Player> ().dropItem ();
+                    Destroy (gameObject);
                     return true;
                 }
             }
