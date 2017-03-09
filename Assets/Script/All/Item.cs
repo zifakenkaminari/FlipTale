@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class Item : Entity {
-    public Sprite frontOnHand;
-    public Sprite backOnHand;
     public bool pickable;
     protected int state;
 
@@ -129,9 +127,5 @@ public class Item : Entity {
         state = 2;
         return false;
     }
-
-    public virtual void destroy(GameObject player) {
-        drop (player);
-        Destroy (gameObject);
-    }
+        
 }

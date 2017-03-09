@@ -11,7 +11,6 @@ public class FlowerTorch : Item
 		spawned = true;
         state = 3;
         setAlpha (0.0f);
-		Debug.Log ("alpha?");
     }
     public static bool isSpawned() {
         return spawned;
@@ -35,7 +34,8 @@ public class FlowerTorch : Item
             foreach (Collider2D hit in hits) {
                 if (hit.gameObject.GetComponent<CaveThorn> ()) {
                     hit.gameObject.GetComponent<CaveThorn> ().burn ();
-                    destroy (player);
+                    player.GetComponent<Player> ().dropItem ();
+                    Destroy (gameObject);
                     return true;
                 }
             }
@@ -47,7 +47,8 @@ public class FlowerTorch : Item
                     tomb.front.GetComponent<SpriteRenderer> ().sprite = tomb.frontWithFlower;
                     tomb.back.GetComponent<SpriteRenderer> ().sprite = tomb.backWithFlower;
                     tomb.hasFlower = true;
-                    destroy (player);
+                    player.GetComponent<Player> ().dropItem ();
+                    Destroy (gameObject);
                     return true;
                 }
             }

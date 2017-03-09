@@ -3,10 +3,6 @@ using System.Collections;
 
 public class Paper : Item {
 
-    public Sprite frontPaperCrumpled;
-    public Sprite backPaperCrupmpled;
-    public Sprite frontPapaerPlane;
-    public Sprite backPaperPlane;
     public Sprite paperCrumpled;
     public Sprite paperPlane;
     public float destroyPeriod;
