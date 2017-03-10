@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class Paper : Item {
-
+	[SerializeField] protected AudioSource makeCrumbleSound;
+	[SerializeField] protected AudioSource makePlaneSound;
     public Sprite paperCrumpled;
     public Sprite paperPlane;
     public float destroyPeriod;
@@ -58,6 +59,7 @@ public class Paper : Item {
 					{
 						//become plane
 						paperState = 2;     
+						makePlaneSound.Play ();
 						front.GetComponent<SpriteRenderer> ().sprite = paperPlane;
 						back.GetComponent<SpriteRenderer> ().sprite = paperPlane;
                         name = "PaperPlane";
@@ -70,6 +72,7 @@ public class Paper : Item {
 			}
 			//become trash
 			paperState = 1;
+			makeCrumbleSound.Play ();
 			front.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
 			back.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
             name = "PaperTrash";

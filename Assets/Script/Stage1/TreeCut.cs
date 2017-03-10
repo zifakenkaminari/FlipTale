@@ -3,39 +3,42 @@ using System.Collections;
 
 public class TreeCut : Entity
 {
+	[SerializeField] protected GameObject treeCutTop;
+	[SerializeField] protected GameObject treeCutBottom;
+	[SerializeField] protected AudioSource treeCuttingSound;
+	[SerializeField] protected AudioSource treeFallingSound; 
     public float fallPeriod;
     public bool isCut;
     public Sprite[] cutProgressFront;
     public Sprite[] cutProgressBack;
     protected int idx;
 
-    new void Start(){
-        isCut = false;
-        idx = 0;
-        base.Start();
+	protected override void Start(){
+		base.Start();
+		treeCutTop.GetComponent<Entity> ().setAlpha(0);
+		treeCutBottom.GetComponent<Entity> ().setAlpha(0);
+		isCut = false;
+		idx = 0;
     }
 
     public IEnumerator cut()
     {
         if (isCut) yield break;
-        if (idx < cutProgressFront.Length) {
-            front.GetComponent<SpriteRenderer> ().sprite = cutProgressFront[idx];
-            back.GetComponent<SpriteRenderer> ().sprite = cutProgressBack[idx];
+		if (idx < cutProgressFront.Length) {
+			treeCuttingSound.Play ();
+			setSprite (cutProgressFront [idx], cutProgressBack [idx]);
             idx++;
         }
-        else {
+		else {
+			
             isCut = true;
-            GameObject treeCutTop = transform.FindChild ("TreeCutTop").gameObject;
-            GameObject treeCutBottom = transform.FindChild ("TreeCutBottom").gameObject;
 
-            treeCutTop.SetActive (true);
-            treeCutTop.transform.SetParent (transform.parent);
-
-            treeCutBottom.SetActive (true);
-            treeCutBottom.transform.SetParent (transform.parent);
-
-            treeCutTop.GetComponent<TreeCutTop> ().cutDown ();
-            Destroy (this.gameObject);
+			treeFallingSound.Play ();
+			treeCutTop.GetComponent<Entity> ().setAlpha(1);
+			treeCutBottom.GetComponent<Entity> ().setAlpha(1);
+			treeCutTop.GetComponent<TreeCutTop> ().cutDown ();
+			setAlpha(0);
+			GetComponent<Collider2D> ().enabled = false;
         }
     }
 

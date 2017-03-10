@@ -3,7 +3,9 @@ using System.Collections;
 
 public class StageEnter : MonoBehaviour {
 
+
     public GameObject stageEnter;
+	public AudioSource sound;
     public float moveX;
     public float moveY;
     [HideInInspector]
@@ -15,6 +17,8 @@ public class StageEnter : MonoBehaviour {
 
 	public IEnumerator switchScene(Player player, GameObject nxtStage, Vector3 move)
 	{
+		if (sound != null)
+			sound.Play ();
 		Manager.main.setFlippable(false);
 		player.lockMotion();
 		Color transparnt = new Color(0f, 0f, 0f, 0f);

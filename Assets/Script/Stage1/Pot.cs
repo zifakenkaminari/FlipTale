@@ -18,6 +18,7 @@ public class Pot : Entity {
         newFlower.transform.position = transform.position;
         front.GetComponent<Animator> ().SetBool ("Bloom", true);
         back.GetComponent<SpriteRenderer> ().sprite = potTorch;
+		GetComponent<AudioSource> ().Play ();
         Manager.main.setPlayerControlable(false);
         yield return new WaitForSeconds(1.5f);
         Manager.main.setPlayerControlable(true);

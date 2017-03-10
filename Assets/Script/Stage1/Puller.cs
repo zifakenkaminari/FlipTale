@@ -44,6 +44,8 @@ public class Puller : Machine {
     protected IEnumerator rotate() {
         float timeNow = 0;
 
+		GetComponent<AudioSource> ().Play ();
+
         Vector3 eulerTotem = totem.transform.localEulerAngles;
         float angleTotem = eulerTotem.z;
 

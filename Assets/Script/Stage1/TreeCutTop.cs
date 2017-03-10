@@ -5,6 +5,12 @@ public class TreeCutTop : Entity {
 
     public float fallPeriod;
 
+	protected override void Start ()
+	{
+		base.Start ();
+		setAlpha (0);
+	}
+
     public void cutDown() {
         StartCoroutine (down ());
     }

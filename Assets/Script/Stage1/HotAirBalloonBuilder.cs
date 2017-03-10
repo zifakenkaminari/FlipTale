@@ -29,9 +29,10 @@ public class HotAirBalloonBuilder : MonoBehaviour {
 	}
 
 	public void getItem(Item item) {
+		GetComponent<AudioSource> ().Play ();
 		if (item.name == "TrashBag") {
 			workStaionComponents [0].setSprite (workStationFrontSprites[0], workStationBackSprites[0]);
-		} else if(item.name == "WaterFireGun"){
+		} else if(item.name == "WaterFireGunFull"){
 			workStaionComponents [1].setSprite (workStationFrontSprites[1], workStationBackSprites[1]);
 		}
 		else if(item.name == "Basket"){
