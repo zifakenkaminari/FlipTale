@@ -10,7 +10,8 @@ public class Player : Entity {
     protected float axisY;
     protected bool onFloor;
     [SerializeField]
-    protected bool jumping;
+	protected bool jumping;
+	protected bool readyToJump;
     public Item itemOnHand;
     public GameObject nowStage;
     protected bool controlable;
@@ -23,6 +24,7 @@ public class Player : Entity {
         base.Start();
         itemOnHand = null;
         jumping = false;
+		readyToJump = false;
         animSpeedFront = front.GetComponent<Animator> ().speed;
         animSpeedBack = back.GetComponent<Animator> ().speed;
         nowStage = GameObject.Find("Stage1_1");
@@ -110,6 +112,11 @@ public class Player : Entity {
                 move.x = 0;
             }
 
+			if (readyToJump) {
+				controlable = true;
+				readyToJump = false;
+				move.y = jumpSpeed;
+			}
 
             if (!onFloor && !jumping && move.y > 0) {
                 move.y = 0;
@@ -164,10 +171,7 @@ public class Player : Entity {
 	protected virtual IEnumerator jump(){
 		controlable = false;
 		yield return new WaitForSeconds (0.3f);
-		Vector2 move = rb.velocity;
-		move.y = jumpSpeed;
-		rb.velocity = move;
-		controlable = true;
+		readyToJump = true;
 	}
 
     void OnCollisionEnter2D(Collision2D collision)
