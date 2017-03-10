@@ -5,8 +5,6 @@ public class WaterFireGun : Item {
 
     public Sprite frontFull;
     public Sprite backFull;
-    public Sprite frontFullOnHand;
-    public Sprite backFullOnHand;
     protected bool isFull;
 
     protected override void Start ()
@@ -22,8 +20,7 @@ public class WaterFireGun : Item {
             if (hit.gameObject.name == "LakeIce" && face) {
                 front.GetComponent<SpriteRenderer> ().sprite = frontFull;
                 back.GetComponent<SpriteRenderer> ().sprite = backFull;
-                frontOnHand = frontFullOnHand;
-                backOnHand = backFullOnHand;
+                name = "WaterFireGunFull";
                 player.GetComponent<Player>().pickItem(this);
                 isFull = true;
             }

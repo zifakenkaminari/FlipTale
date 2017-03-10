@@ -11,7 +11,6 @@ public class FlowerTorch : Item
 		spawned = true;
         state = 3;
         setAlpha (0.0f);
-		Debug.Log ("alpha?");
     }
     public static bool isSpawned() {
         return spawned;
@@ -36,6 +35,7 @@ public class FlowerTorch : Item
                 if (hit.gameObject.GetComponent<CaveThorn> ()) {
 					CaveThorn caveThorn = hit.gameObject.GetComponent<CaveThorn> ();
 					caveThorn.StartCoroutine(caveThorn.burn());
+                    player.GetComponent<Player> ().dropItem ();
                     Destroy (gameObject);
                     return true;
                 }
@@ -48,6 +48,7 @@ public class FlowerTorch : Item
                     tomb.front.GetComponent<SpriteRenderer> ().sprite = tomb.frontWithFlower;
                     tomb.back.GetComponent<SpriteRenderer> ().sprite = tomb.backWithFlower;
                     tomb.hasFlower = true;
+                    player.GetComponent<Player> ().dropItem ();
                     Destroy (gameObject);
                     return true;
                 }
