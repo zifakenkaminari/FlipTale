@@ -88,7 +88,7 @@ public class Entity : MonoBehaviour {
         //TODO: add main
     }
 
-    public void lockMotion()
+    public virtual void lockMotion()
     {
         if (rb)
         {
@@ -99,7 +99,7 @@ public class Entity : MonoBehaviour {
         }
         isFreezed = true;
     }
-    public void unlockMotion()
+    public virtual void unlockMotion()
     {
         if (rb)
         {

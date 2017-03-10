@@ -123,8 +123,10 @@ public class Paper : Item {
         Vector3 eular = transform.localEulerAngles;
         while (front.GetComponent<SpriteRenderer>().isVisible)
         {
-            eular.z = Mathf.Atan(rb.velocity.y/ rb.velocity.x)*Mathf.Rad2Deg - 15 * scale.x;
-            transform.localEulerAngles = eular;
+			if (!float.Equals (rb.velocity.x, 0f)) {
+				eular.z = Mathf.Atan(rb.velocity.y/ rb.velocity.x)*Mathf.Rad2Deg - 15 * scale.x;
+				transform.localEulerAngles = eular;
+			}
 			rb.AddForce(new Vector2(0, rb.velocity.y) * rb.mass * -1.5f);
 			yield return new WaitWhile(() => isFreezed);
         }
