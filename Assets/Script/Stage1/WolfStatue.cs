@@ -74,8 +74,8 @@ public class WolfStatue : Entity {
 
     protected IEnumerator run() {
 		yield return new WaitForSeconds (0.2f);
-		//front.GetComponent<SpriteRenderer> ().flipX = true;
-		//back.GetComponent<SpriteRenderer> ().flipX = true;
+		front.GetComponent<SpriteRenderer> ().flipX = true;
+		back.GetComponent<SpriteRenderer> ().flipX = true;
 		front.GetComponent<Animator> ().SetBool ("seePlane", true);
 		back.GetComponent<Animator> ().SetBool ("seePlane", true);
         GameObject trashBag = GameObject.Find("TrashBag");

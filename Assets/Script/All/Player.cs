@@ -39,6 +39,7 @@ public class Player : Entity {
             if (!rb)
                 return;
             Vector2 move = rb.velocity;
+
             if (controlable) {
                 axisX = Input.GetAxis ("Horizontal");
                 axisY = Input.GetAxis ("Vertical");
@@ -49,13 +50,17 @@ public class Player : Entity {
                         StageEnter stageEnter = hit.gameObject.GetComponent<StageEnter> ();
                         if (stageEnter && stageEnter.canEnter [(face) ? 0 : 1]) {
                             hit.gameObject.GetComponent<StageEnter> ().enter (gameObject);
-                            axisY = 0;
                             return;
                         }
-                    }
-                } else {
-                    axisY = 0;
+					}
+					if (onFloor && !jumping) {
+						jumping = true;
+						front.GetComponent<Animator> ().SetBool ("jumping", true);
+						back.GetComponent<Animator> ().SetBool ("jumping", true);
+						StartCoroutine (jump ());
+					}
                 }
+
                 if (Input.GetKeyDown (KeyCode.X)) {
                     if (itemOnHand) {
                         itemOnHand.drop (gameObject);
@@ -91,8 +96,6 @@ public class Player : Entity {
                 }
             } else {
                 axisX = 0;
-                axisY = 0;
-
             }
             if (axisX > 0) {
                 move.x = walkSpeed;
@@ -107,10 +110,6 @@ public class Player : Entity {
                 move.x = 0;
             }
 
-            if (axisY > 0 && onFloor) {
-                move.y = jumpSpeed;
-                jumping = true;
-            }
 
             if (!onFloor && !jumping && move.y > 0) {
                 move.y = 0;
@@ -162,14 +161,27 @@ public class Player : Entity {
         
     }
 
+	protected virtual IEnumerator jump(){
+		controlable = false;
+		yield return new WaitForSeconds (0.3f);
+		Vector2 move = rb.velocity;
+		move.y = jumpSpeed;
+		rb.velocity = move;
+		controlable = true;
+	}
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag ("Floor")) {   
             onFloor = true;
-            jumping = false;
+			jumping = false;
+			front.GetComponent<Animator> ().SetBool ("jumping", false);
+			back.GetComponent<Animator> ().SetBool ("jumping", false);
         }
         else if (collision.gameObject.CompareTag ("Plane")) {
-            onFloor = true;
+			onFloor = true;
+			front.GetComponent<Animator> ().SetBool ("jumping", false);
+			back.GetComponent<Animator> ().SetBool ("jumping", false);
             collision.gameObject.tag = "Floor";
         }
     }
