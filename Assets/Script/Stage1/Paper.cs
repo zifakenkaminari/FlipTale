@@ -30,6 +30,7 @@ public class Paper : Item {
         back.GetComponent<SpriteRenderer> ().sprite = paperPlane;
     }
 
+
     public override void drop(GameObject player)
     {
         base.drop(player);
