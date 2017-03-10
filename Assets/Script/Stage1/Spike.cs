@@ -5,7 +5,7 @@ public class Spike : Entity {
 	
     void OnTriggerStay2D(Collider2D collider) {
         if (!isFreezed && collider.gameObject.GetComponent<Balloon>()) {
-            Destroy(collider.gameObject);
+			collider.gameObject.GetComponent<Balloon>().explode ();
         }
     }
 

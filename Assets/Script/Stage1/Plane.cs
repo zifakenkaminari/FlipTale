@@ -11,7 +11,8 @@ public class Plane : MonoBehaviour {
     }
     void OnTriggerExit2D(Collider2D collider)
 	{
-        Physics2D.IgnoreCollision(collider, floor, false);
+		Physics2D.IgnoreCollision(collider, floor, false);
+		tag = "Floor";
     }
 
 

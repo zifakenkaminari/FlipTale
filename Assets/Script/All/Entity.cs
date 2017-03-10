@@ -140,7 +140,7 @@ public class Entity : MonoBehaviour {
         }
     }
 
-    public void setFlipValue(float f)
+    public virtual void setFlipValue(float f)
     {
         //flip value: front = 1, back = 0
         flipValue = f;

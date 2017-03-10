@@ -29,7 +29,6 @@ public class HotAirBalloonBuilder : MonoBehaviour {
 	}
 
 	public void getItem(Item item) {
-		GetComponent<AudioSource> ().Play ();
 		if (item.name == "TrashBag") {
 			workStaionComponents [0].setSprite (workStationFrontSprites[0], workStationBackSprites[0]);
 		} else if(item.name == "WaterFireGunFull"){
@@ -55,8 +54,9 @@ public class HotAirBalloonBuilder : MonoBehaviour {
 
 		yield return new WaitForSeconds (1.5f);
 		yield return Camera.main.GetComponent<CameraController>().changeMaskColor(new Color(0, 0, 0, 0), Color.black, 1.5f);
-		yield return new WaitForSeconds (1f);
+		GetComponent<AudioSource> ().Play ();
 		hotAirBalloon.gameObject.SetActive(true);
+		yield return new WaitForSeconds (6f);
 		Vector3 pos = player.transform.position;
 		pos.x = hotAirBalloon.transform.position.x + 2f;
 		player.transform.position = pos;
