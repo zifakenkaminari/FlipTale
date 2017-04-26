@@ -37,6 +37,9 @@ public class TreeCut : Entity
 			treeCutTop.GetComponent<Entity> ().setAlpha(1);
 			treeCutBottom.GetComponent<Entity> ().setAlpha(1);
 			treeCutTop.GetComponent<TreeCutTop> ().cutDown ();
+            treeCutTop.tag = "Floor";
+            treeCutBottom.tag = "Floor";
+
 			setAlpha(0);
 			GetComponent<Collider2D> ().enabled = false;
         }

@@ -8,21 +8,21 @@ public class Paper : Item {
     public Sprite paperPlane;
     public float destroyPeriod;
     protected int paperState; //0: normal, 1: crumpled, 2: plane
-	protected bool used; 
+	protected bool usedFlag; 
 
     protected new void Start()
     {
         base.Start();
         paperState = 0; // normal
-		used = false;
+        usedFlag = false;
     }
 
 	public bool isUsed(){
-		return used;
+        return usedFlag;
 	}
 
 	public void setUsed(bool used){
-		this.used = used;
+        this.usedFlag = used;
 	}
 
     public void magic() {
