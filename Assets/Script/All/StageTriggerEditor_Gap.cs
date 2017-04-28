@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -8,3 +9,4 @@ using UnityEngine.SceneManagement;
 public class StageTriggerEditor_Gap : StageTriggerEditor {
 
 }
+#endif

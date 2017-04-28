@@ -2,44 +2,48 @@
 using System.Collections;
 
 public class Paper : Item {
-
-    public Sprite frontPaperCrumpled;
-    public Sprite backPaperCrupmpled;
-    public Sprite frontPapaerPlane;
-    public Sprite backPaperPlane;
+	[SerializeField] protected AudioSource makeCrumbleSound;
+	[SerializeField] protected AudioSource makePlaneSound;
     public Sprite paperCrumpled;
     public Sprite paperPlane;
     public float destroyPeriod;
-    protected GameObject mapDesign;
     protected int paperState; //0: normal, 1: crumpled, 2: plane
-    protected bool isOnFloor;
+	protected bool usedFlag; 
 
     protected new void Start()
     {
         base.Start();
-        isOnFloor = false;
         paperState = 0; // normal
+        usedFlag = false;
     }
+
+	public bool isUsed(){
+        return usedFlag;
+	}
+
+	public void setUsed(bool used){
+        this.usedFlag = used;
+	}
+
     public void magic() {
         paperState = 2;
         front.GetComponent<SpriteRenderer> ().sprite = paperPlane;
         back.GetComponent<SpriteRenderer> ().sprite = paperPlane;
     }
 
+
     public override void drop(GameObject player)
     {
         base.drop(player);
         pickable = false;
-        StartCoroutine(disappear());
     }
 
     public IEnumerator disappear() {
         float timeNow = 0;
         while(timeNow < destroyPeriod){
-            while (isFreezed) yield return null;
             setAlpha(1 - timeNow / destroyPeriod);
-            timeNow += Time.deltaTime;
-            yield return null;
+			timeNow += Time.deltaTime;
+			yield return new WaitWhile(() => isFreezed);
         }
         Destroy(gameObject);
     }
@@ -48,35 +52,42 @@ public class Paper : Item {
     {
         if (paperState == 0) {          
             //normal
-            if (mapDesign == null || mapDesign.GetComponent<Entity>().face)
-            {
-                //become crumpled
-                paperState = 1;         
-                front.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
-                back.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
-                frontOnHand = frontPaperCrumpled;
-                backOnHand = backPaperCrupmpled;
-            }
-            else
-            {
-                //become plane
-                paperState = 2;     
-                front.GetComponent<SpriteRenderer> ().sprite = paperPlane;
-                back.GetComponent<SpriteRenderer> ().sprite = paperPlane;
-                frontOnHand = frontPapaerPlane;
-                backOnHand = backPaperPlane;
-            }
-            player.GetComponent<Player>().pickItem(this);
+			if(!face){
+				Collider2D[] hits = overlapAreaAll();
+				foreach (Collider2D hit in hits) {
+					if (hit.gameObject.name == "MapDesign")
+					{
+						//become plane
+						paperState = 2;     
+						makePlaneSound.Play ();
+						front.GetComponent<SpriteRenderer> ().sprite = paperPlane;
+						back.GetComponent<SpriteRenderer> ().sprite = paperPlane;
+                        name = "PaperPlane";
+						player.GetComponent<Player>().pickItem(this);
+						base.use (player);
+
+						return false;
+					}
+				}
+			}
+			//become trash
+			paperState = 1;
+			makeCrumbleSound.Play ();
+			front.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
+			back.GetComponent<SpriteRenderer> ().sprite = paperCrumpled;
+            name = "PaperTrash";
+			player.GetComponent<Player>().pickItem(this);
             base.use (player);
+
         }
         else if (paperState == 1)
         {
-            //throw paper crumpled
-            paperState = 3;
+            //throw paper trash
+            paperState = 4;
+            drop(player);
             player.GetComponent<Player>().dropItem();
-            transform.parent = player.transform.parent;
             Vector3 scale = transform.localScale;
-            scale.x = (player.GetComponent<Player>().front.GetComponent<SpriteRenderer>().flipX ^ face) ? 1 : -1;
+            scale.x = (player.GetComponent<Player>().front.GetComponent<SpriteRenderer>().flipX ^ player.GetComponent<Player>().face) ? 1 : -1;
             transform.localScale = scale;
             StartCoroutine(thrown(player));
         }
@@ -84,10 +95,10 @@ public class Paper : Item {
         {          
             //plane
             paperState = 3;
+            drop(player);
             player.GetComponent<Player>().dropItem();
-            transform.parent = player.transform.parent;
             Vector3 scale = transform.localScale;
-            scale.x = (player.GetComponent<Player>().front.GetComponent<SpriteRenderer>().flipX ^ face)?1:-1;
+            scale.x = (player.GetComponent<Player>().front.GetComponent<SpriteRenderer>().flipX ^ player.GetComponent<Player>().face)?1:-1;
             transform.localScale = scale;
             StartCoroutine(fly(player));
         }
@@ -98,74 +109,45 @@ public class Paper : Item {
     protected IEnumerator thrown(GameObject player)
     {
         Vector3 scale = transform.localScale;
-        //show image
         setAlpha(1);
+        rb.velocity = new Vector2(5f * scale.x, 6f);
+        rb.angularVelocity = scale.x;
+        yield return null;
 
-        //fly physics
-        float b = 0.2f;
-        Vector3 v = new Vector3(5f * scale.x, 6f, 0f);
-        Vector3 g = new Vector3(0, -10f, 0f);
-        Vector3 eular = transform.localEulerAngles;
-        while (!isOnFloor && front.GetComponent<SpriteRenderer>().isVisible)
-        {
-            while (isFreezed) yield return null;
-            eular.z += -scale.x*360 * Time.deltaTime;
-            transform.localEulerAngles = eular;
-            transform.position += v * Time.deltaTime;
-            v += g * Time.deltaTime;
-            v -= b * v * Time.deltaTime;
-            yield return null;
-        }
-        StartCoroutine(disappear());
     }
 
     protected IEnumerator fly(GameObject player)
     {
-        setAlpha(1);
-        //fly physics
         Vector3 scale = transform.localScale;
-        float b = 0.6f;
-        Vector3 v = new Vector3(9f * scale.x, 6f, 0f);
-        Vector3 g = new Vector3(0, -1f, 0f);
+        setAlpha(1);
+        GetComponent<Collider2D>().isTrigger = true;
+        rb.gravityScale = 0.5f;
+        rb.velocity = new Vector2(7f * scale.x, 5f);
+        
         Vector3 eular = transform.localEulerAngles;
         while (front.GetComponent<SpriteRenderer>().isVisible)
         {
-            while (isFreezed) yield return null;
-            eular.z = Mathf.Atan(v.y/v.x)*180/Mathf.PI-15*scale.x;
-            transform.localEulerAngles = eular;
-            transform.position += v * Time.deltaTime;
-            v += g * Time.deltaTime;
-            v -= b * new Vector3(0, v.y, 0) * Time.deltaTime;
-            yield return null;
+			if (!float.Equals (rb.velocity.x, 0f)) {
+				eular.z = Mathf.Atan(rb.velocity.y/ rb.velocity.x)*Mathf.Rad2Deg - 15 * scale.x;
+				transform.localEulerAngles = eular;
+			}
+			rb.AddForce(new Vector2(0, rb.velocity.y) * rb.mass * -1.5f);
+			yield return new WaitWhile(() => isFreezed);
         }
         Destroy(gameObject);
+        yield break;
 
     }
 
     public int getPaperState() {
         return paperState;
     }
- 
-    void OnTriggerEnter2D(Collider2D collider)
+
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collider.gameObject.name == "MapDesign")
+        if (collision.gameObject.CompareTag("Floor"))
         {
-            mapDesign = collider.gameObject;
-        }
-        if (collider.gameObject.CompareTag("Floor"))
-        {
-            isOnFloor = true;
-        }
-    }
-    void OnTriggerExit2D(Collider2D collider)
-    {
-        if (mapDesign && collider.gameObject == mapDesign)
-        {
-            mapDesign = null;
-        }
-        if (collider.gameObject.CompareTag("Floor"))
-        {
-            isOnFloor = false;
+            StartCoroutine(disappear());
         }
     }
 }

@@ -9,6 +9,7 @@ public class StoneButton : Machine
     public override void use(GameObject player)
     {
         if (puller.state == 3 && !caveExit.isOpen) {
+			GetComponent<AudioSource> ().Play ();
             StartCoroutine(caveExit.open());
         }
     }

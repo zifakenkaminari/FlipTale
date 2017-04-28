@@ -6,6 +6,7 @@ public class SeedStone : Item
     public GameObject flowerTorch;
     public float onPotOffsetY;
     public float destroyPeriod;
+    public Sprite potTorch;
 
     protected override void Start()
     {
@@ -22,10 +23,9 @@ public class SeedStone : Item
     public IEnumerator disappear() {
         float timeNow = 0;
         while(timeNow < destroyPeriod){
-            while (isFreezed) yield return null;
             setAlpha(1-timeNow / destroyPeriod);
-            timeNow += Time.deltaTime;
-            yield return null;
+			timeNow += Time.deltaTime;
+			yield return new WaitWhile(() => isFreezed);
         }
         Destroy(gameObject);
     }
@@ -39,12 +39,10 @@ public class SeedStone : Item
             {
                 if (hit.gameObject.name == "Pot" && !FlowerTorch.isSpawned())
                 {
-                    GameObject pot = hit.gameObject;
-                    GameObject newFlower = (GameObject)Instantiate(flowerTorch, player.transform.parent);
-                    Vector3 pos = pot.transform.position;
-                    pos.y = pot.transform.position.y + onPotOffsetY;
-                    newFlower.transform.position = pos;
-                    Destroy(gameObject);
+                    Pot pot = hit.gameObject.GetComponent<Pot>();
+                    pot.StartCoroutine(pot.bloom (player));
+                    player.GetComponent<Player> ().dropItem ();
+                    Destroy (gameObject);
                     return true;
                 }
             }

@@ -3,45 +3,57 @@ using System.Collections;
 
 public class Entity : MonoBehaviour {
     public int flipType;
+    [HideInInspector]
     public GameObject front;
+    [HideInInspector]
     public GameObject back;
     public bool face;           //not flipped at first
-    public bool isFlipping;
-    public bool isFreezed;
-    float flipTime;
-    public float flipPeriod;
-
-    float alpha;
-    float flipValue;
+    protected bool isFlipping;
+    protected bool isFreezed;
+    protected float flipTime;
+    protected float flipPeriod = 1;
+    protected float alpha;
+    protected float flipValue;
+	[SerializeField]	protected bool flipWithBackground;
 
     protected Rigidbody2D rb;
-
     protected Vector3 saveVelocity;
     protected bool saveKinematic;
 
     protected virtual void Start () {
-        rb = GetComponent<Rigidbody2D>();
-        alpha = 1;
-        flipValue = 0;
+        front = transform.FindChild ("front").gameObject;
+        back = transform.FindChild ("back").gameObject;
 
+        rb = GetComponent<Rigidbody2D>();
         isFlipping = false;
         isFreezed = false;
         flipTime = -10000f;
+        //if has an Entity or Stage parent, set flip side to the same as its parent
         //if is spawn by parent, set flip side to the same as its parent
-        if (transform.parent && transform.parent.gameObject.GetComponent<Entity>())
-            face = transform.parent.gameObject.GetComponent<Entity>().face;
-        else
+        if (transform.parent && transform.parent.gameObject.GetComponent<Entity> ())
+            face = transform.parent.gameObject.GetComponent<Entity> ().face;
+		else if (GetComponentInParent<Stage>()) 
+			face = GetComponentInParent<Stage>().face;
+        else if (GetComponent<FixedJoint2D>())
+            face = GetComponent<FixedJoint2D>().connectedBody.GetComponent<Entity>().face;
+        else 
             face = true;
         setFlipValue(face?1:0);
         setAlpha(1);
 
     }
 
+
     protected void FixedUpdate () {
         if (!isFreezed) { 
             main();
         }
     }
+
+
+	public bool isFlipWithBackground(){
+		return flipWithBackground;
+	}
 
     public virtual IEnumerator flip()
     {
@@ -53,7 +65,7 @@ public class Entity : MonoBehaviour {
         if(face){
             while (Time.time - flipTime < flipPeriod)
             {
-                setFlipValue(1 - (Time.time - flipTime) / flipPeriod);
+                setFlipValue(1f - (Time.time - flipTime) / flipPeriod);
                 yield return null;
             }
             setFlipValue(0);
@@ -76,7 +88,7 @@ public class Entity : MonoBehaviour {
         //TODO: add main
     }
 
-    public void lockMotion()
+    public virtual void lockMotion()
     {
         if (rb)
         {
@@ -87,7 +99,7 @@ public class Entity : MonoBehaviour {
         }
         isFreezed = true;
     }
-    public void unlockMotion()
+    public virtual void unlockMotion()
     {
         if (rb)
         {
@@ -97,7 +109,7 @@ public class Entity : MonoBehaviour {
         isFreezed = false;
     }
 
-    protected void setTransparent(ref GameObject bg, float a) {
+    protected virtual void setTransparent(ref GameObject bg, float a) {
         Color tmpColor = bg.GetComponent<SpriteRenderer> ().color;
         tmpColor.a = a;
         bg.GetComponent<SpriteRenderer> ().color = tmpColor;
@@ -122,13 +134,13 @@ public class Entity : MonoBehaviour {
         else if (flipType == 1)
         {
             float frontAlpha = flipValue * alpha;
-            float backAlpha = alpha * (1 - flipValue) / (1 - alpha * flipValue);
-            setTransparent(ref front, frontAlpha);
+			float backAlpha = float.Equals(alpha*flipValue, 1f)?1f:alpha * (1f - flipValue) / (1f - alpha * flipValue);
+			setTransparent(ref front, frontAlpha);
             setTransparent(ref back, backAlpha);
         }
     }
 
-    protected void setFlipValue(float f)
+    public virtual void setFlipValue(float f)
     {
         //flip value: front = 1, back = 0
         flipValue = f;
@@ -149,7 +161,7 @@ public class Entity : MonoBehaviour {
         else if (flipType == 1)
         {
             float frontAlpha = f * alpha;
-            float backAlpha = alpha * (1 - f) / (1 - alpha * f);
+			float backAlpha = float.Equals(alpha*flipValue, 1f)?1f:alpha * (1f - f) / (1f - alpha * f);
             setTransparent(ref front, frontAlpha);
             setTransparent(ref back, backAlpha);
         }
@@ -162,6 +174,11 @@ public class Entity : MonoBehaviour {
         Vector2 botRight = (Vector2)transform.position + collider.offset + new Vector2(collider.size.x / 2, collider.size.y / 2);
         return Physics2D.OverlapAreaAll(topLeft, botRight);
     }
+
+	public void setSprite(Sprite frontSprite, Sprite backSprite){
+		front.GetComponent<SpriteRenderer> ().sprite = frontSprite;
+		back.GetComponent<SpriteRenderer> ().sprite = backSprite;
+	}
 
 }
 

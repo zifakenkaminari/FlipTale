@@ -39,6 +39,6 @@ public class Cloud : Entity {
                 }
             }
         }
-        return base.flip();
+        yield return base.flip();
     }
 }

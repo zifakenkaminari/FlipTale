@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -21,3 +22,4 @@ public class StageEnterEditor : Editor {
     }
 
 }
+#endif

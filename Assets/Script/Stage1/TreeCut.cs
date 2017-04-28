@@ -3,31 +3,46 @@ using System.Collections;
 
 public class TreeCut : Entity
 {
+	[SerializeField] protected GameObject treeCutTop;
+	[SerializeField] protected GameObject treeCutBottom;
+	[SerializeField] protected AudioSource treeCuttingSound;
+	[SerializeField] protected AudioSource treeFallingSound; 
     public float fallPeriod;
     public bool isCut;
+    public Sprite[] cutProgressFront;
+    public Sprite[] cutProgressBack;
+    protected int idx;
 
-    new void Start(){
-        isCut = false;
-        base.Start();
+	protected override void Start(){
+		base.Start();
+		treeCutTop.GetComponent<Entity> ().setAlpha(0);
+		treeCutBottom.GetComponent<Entity> ().setAlpha(0);
+		isCut = false;
+		idx = 0;
     }
 
     public IEnumerator cut()
     {
         if (isCut) yield break;
-        isCut = true;
-        float timeNow = 0;
-        Vector3 eular = transform.localEulerAngles;
-        while (timeNow < fallPeriod)
-        {
-            while(isFreezed) yield return null;
-            eular.z = 90 * Mathf.Cos(timeNow / fallPeriod * Mathf.PI / 2)-90;
-            transform.localEulerAngles = eular;
-            timeNow += Time.deltaTime;
-            yield return null;
+		if (idx < cutProgressFront.Length) {
+			treeCuttingSound.Play ();
+			setSprite (cutProgressFront [idx], cutProgressBack [idx]);
+            idx++;
         }
-        eular.z = -90;
-        transform.localEulerAngles = eular;
-        tag = "Floor";
+		else {
+			
+            isCut = true;
+
+			treeFallingSound.Play ();
+			treeCutTop.GetComponent<Entity> ().setAlpha(1);
+			treeCutBottom.GetComponent<Entity> ().setAlpha(1);
+			treeCutTop.GetComponent<TreeCutTop> ().cutDown ();
+            treeCutTop.tag = "Floor";
+            treeCutBottom.tag = "Floor";
+
+			setAlpha(0);
+			GetComponent<Collider2D> ().enabled = false;
+        }
     }
 
 }
