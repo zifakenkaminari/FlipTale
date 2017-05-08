@@ -175,34 +175,35 @@ public class Player : Entity {
 	}
 
     void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag ("Floor")) {   
-            onFloor = true;
-			jumping = false;
-			front.GetComponent<Animator> ().SetBool ("jumping", false);
-			back.GetComponent<Animator> ().SetBool ("jumping", false);
-        }
-        else if (collision.gameObject.CompareTag ("Plane")) {
-			onFloor = true;
-			front.GetComponent<Animator> ().SetBool ("jumping", false);
-			back.GetComponent<Animator> ().SetBool ("jumping", false);
-            collision.gameObject.tag = "Floor";
-        }
+	{
+		//when a collision occur, detect whether the player is touching the top of another collider
+		//if so, it means the player is standing on some plane
+		if (collision.gameObject.CompareTag ("Floor")) {   
+			float lowestY = GetComponent<Collider2D> ().bounds.min.y;
+			foreach (ContactPoint2D contactPoint in collision.contacts) {
+				if (contactPoint.point.y <= lowestY) {
+					onFloor = true;
+					jumping = false;
+					front.GetComponent<Animator> ().SetBool ("jumping", false);
+					back.GetComponent<Animator> ().SetBool ("jumping", false);
+				}
+			}
+		}
     }
 
     void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Floor"))
-        {
-            onFloor = true;
-        }
+	{
+
     }
-    void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Floor"))
-        {
-            onFloor = false;
-        }
+
+	void OnCollisionExit2D(Collision2D collision)
+	{
+		//detect if player is touching anything in Default layer(floor and plane)
+		//if so, it means the player has leaved the floor
+		LayerMask mask = LayerMask.GetMask ("Default");
+		if (!GetComponent<Collider2D> ().IsTouchingLayers (mask)) {
+			onFloor = false;
+		}
     }
 
     public virtual void teleport(Vector3 position) {
