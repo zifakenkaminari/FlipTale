@@ -18,7 +18,10 @@ public class Manager : MonoBehaviour {
     // Use this for initialization
     void Start () {
         main = this;
-        player = GameObject.Find ("Player").GetComponent<Player>();
+		GameObject playerObj = GameObject.Find ("Player");
+		if (playerObj != null) {
+			player = playerObj.GetComponent<Player>();
+		}
 		flippable = true;
     }
 

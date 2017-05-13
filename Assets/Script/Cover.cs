@@ -12,7 +12,7 @@ public class Cover : Entity {
 				StartCoroutine(flip ());
 			}
 		}
-		if (!face) {
+		if (face) {
 			int idx = (int)(Time.time*2) % 6;
 			Sprite sprite;
 			switch (idx) {
@@ -38,10 +38,9 @@ public class Cover : Entity {
 				sprite = citySprites [0];
 				break;
 			}
-			back.GetComponent<Image> ().sprite = sprite;
+			front.GetComponent<Image> ().sprite = sprite;
 		}
 
-		//back.GetComponent<Image> ().sprite;
 	}
 
 	public override void setFlipValue(float f)
