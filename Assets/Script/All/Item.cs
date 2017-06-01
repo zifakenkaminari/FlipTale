@@ -3,18 +3,25 @@ using System.Collections;
 
 public class Item : Entity {
     public bool pickable;
-    protected int state;
+    protected int state;            // 0 -> idle, 1 -> held, 2 -> used
+    protected bool[] isUsed;       // front and back
 
     Vector2 velocity;
 
-    new protected virtual void Start()
-    {
-        base.Start();
+    protected override void Awake() {
+        base.Awake (); 
         velocity = Vector2.zero;
         if (state == 1)
         {
             setAlpha(0);
         }
+        isUsed = new bool[2];
+        isUsed [0] = isUsed [1] = false;
+    }
+    new protected virtual void Start()
+    {
+        base.Start();
+
     }
 
     public virtual bool isPickable() {
@@ -128,4 +135,15 @@ public class Item : Entity {
         return false;
     }
         
+    public string[] getNames() {
+        string[] names = new string[2];
+        names [0] = names [1] = name;
+        if (isUsed [0]) {   // used
+            names[0] += "_used";
+        }
+        if (isUsed[1]){
+            names[1] += "_used";
+        }
+        return names;
+    }
 }

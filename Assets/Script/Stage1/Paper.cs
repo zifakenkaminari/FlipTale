@@ -17,7 +17,7 @@ public class Paper : Item {
         usedFlag = false;
     }
 
-	public bool isUsed(){
+	public bool hasUsed(){
         return usedFlag;
 	}
 

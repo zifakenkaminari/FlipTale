@@ -155,12 +155,16 @@ public class Player : Entity {
     public void pickItem(Item item) {
         itemOnHand = item;
 
-        string tmpName = item.name;
-        if (tmpName.IndexOf ("(Clone)") != -1) {
-            tmpName = tmpName.Substring (0, tmpName.IndexOf ("(Clone)"));
+        string[] names = item.getNames();
+        for (int i = 0; i < names.Length; i++) {
+            string tmpName = names [i];
+            if (tmpName.IndexOf ("(Clone)") != -1) {
+                tmpName = tmpName.Substring (0, tmpName.IndexOf ("(Clone)"));
+            }
+            names [i] = tmpName;
         }
-        front.GetComponent<Animator> ().Play (tmpName + "_idle");
-        back.GetComponent<Animator> ().Play (tmpName + "_idle");
+        front.GetComponent<Animator> ().Play (names[0] + "_idle");
+        back.GetComponent<Animator> ().Play (names[1] + "_idle");
     }
 
     protected override void main()

@@ -38,7 +38,7 @@ public class WolfStatue : Entity {
 				Paper paper = hit.gameObject.GetComponent<Paper> ();
 				if (paper != null)
                 {
-					if (paper.isUsed ())
+					if (paper.hasUsed ())
 						continue;
 					int state = paper.getPaperState();
                     if (state == 4 && !isLooking)

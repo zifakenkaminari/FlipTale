@@ -21,13 +21,14 @@ public class TreeCut : Entity
 		idx = 0;
     }
 
-    public IEnumerator cut()
+    public bool cut()
     {
-        if (isCut) yield break;
+        if (isCut) return false;
 		if (idx < cutProgressFront.Length) {
 			treeCuttingSound.Play ();
 			setSprite (cutProgressFront [idx], cutProgressBack [idx]);
             idx++;
+            return false;
         }
 		else {
 			
@@ -42,6 +43,8 @@ public class TreeCut : Entity
 
 			setAlpha(0);
 			GetComponent<Collider2D> ().enabled = false;
+
+            return true;
         }
     }
 

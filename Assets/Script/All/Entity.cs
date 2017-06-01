@@ -20,7 +20,7 @@ public class Entity : MonoBehaviour {
     protected Vector3 saveVelocity;
     protected bool saveKinematic;
 
-    protected virtual void Start () {
+    protected virtual void Awake() {
         front = transform.FindChild ("front").gameObject;
         back = transform.FindChild ("back").gameObject;
 
@@ -32,14 +32,16 @@ public class Entity : MonoBehaviour {
         //if is spawn by parent, set flip side to the same as its parent
         if (transform.parent && transform.parent.gameObject.GetComponent<Entity> ())
             face = transform.parent.gameObject.GetComponent<Entity> ().face;
-		else if (GetComponentInParent<Stage>()) 
-			face = GetComponentInParent<Stage>().face;
+        else if (GetComponentInParent<Stage>()) 
+            face = GetComponentInParent<Stage>().face;
         else if (GetComponent<FixedJoint2D>())
             face = GetComponent<FixedJoint2D>().connectedBody.GetComponent<Entity>().face;
         else 
             face = true;
         setFlipValue(face?1:0);
         setAlpha(1);
+    }
+    protected virtual void Start () {
 
     }
 

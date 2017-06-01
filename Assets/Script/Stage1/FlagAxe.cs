@@ -3,6 +3,8 @@ using System.Collections;
 
 public class FlagAxe : Item {
 
+    public Sprite FlagAxeUsed;
+
     public override bool use(GameObject player)
     {
         if (!face)
@@ -14,7 +16,11 @@ public class FlagAxe : Item {
                 {
                     if (hit.gameObject.GetComponent<TreeCut>().isCut) 
                         return false;
-                    StartCoroutine(hit.gameObject.GetComponent<TreeCut>().cut());
+                    if (hit.gameObject.GetComponent<TreeCut> ().cut ()) {
+                        back.GetComponent<SpriteRenderer> ().sprite = FlagAxeUsed;
+                        isUsed [1] = true;
+                        player.GetComponent<Player>().back.GetComponent<Animator> ().Play (name + "_used_idle");
+                    }
                     return false;
                 }
             }
