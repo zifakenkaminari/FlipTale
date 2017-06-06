@@ -120,7 +120,6 @@ public class Paper : Item {
     {
         Vector3 scale = transform.localScale;
         setAlpha(1);
-        GetComponent<Collider2D>().isTrigger = true;
         rb.gravityScale = 0.5f;
         rb.velocity = new Vector2(7f * scale.x, 5f);
         
@@ -145,7 +144,7 @@ public class Paper : Item {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Floor"))
+        if (!collision.gameObject.CompareTag("Player"))
         {
             StartCoroutine(disappear());
         }
