@@ -4,7 +4,8 @@ using System;
 
 public class SpikeRemover : MonoBehaviour{
 	[SerializeField]	protected Sprite pressed;
-    public GameObject spikes;
+	[SerializeField]	protected GameObject spikes;
+	[SerializeField]	protected GameObject boundary;
     bool isUsed;
 
 
@@ -27,6 +28,7 @@ public class SpikeRemover : MonoBehaviour{
 		Manager.main.setFlippable(false);
 		Manager.main.setPlayerControlable(false);
 
+		Destroy (boundary);
         Spike[] allSpike = spikes.GetComponentsInChildren<Spike>();
         Array.Sort(allSpike, delegate (Spike a, Spike b) {
             return a.transform.position.x.CompareTo(b.transform.position.x);
