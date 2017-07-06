@@ -9,12 +9,14 @@ public class Paper : Item {
     public float destroyPeriod;
     protected int paperState; //0: normal, 1: crumpled, 2: plane
 	protected bool usedFlag; 
+    protected bool isDisappearing;
 
     protected new void Start()
     {
         base.Start();
         paperState = 0; // normal
         usedFlag = false;
+        isDisappearing = false;
     }
 
 	public bool hasUsed(){
@@ -100,6 +102,7 @@ public class Paper : Item {
             Vector3 scale = transform.localScale;
             scale.x = (player.GetComponent<Player>().front.GetComponent<SpriteRenderer>().flipX ^ player.GetComponent<Player>().face)?1:-1;
             transform.localScale = scale;
+            GetComponent<BoxCollider2D> ().enabled = false;
             StartCoroutine(fly(player));
         }
         return false;
@@ -126,6 +129,9 @@ public class Paper : Item {
         Vector3 eular = transform.localEulerAngles;
         while (front.GetComponent<SpriteRenderer>().isVisible)
         {
+            if (isDisappearing) {
+                yield break;
+            }
 			if (!float.Equals (rb.velocity.x, 0f)) {
 				eular.z = Mathf.Atan(rb.velocity.y/ rb.velocity.x)*Mathf.Rad2Deg - 15 * scale.x;
 				transform.localEulerAngles = eular;
@@ -144,8 +150,10 @@ public class Paper : Item {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!collision.gameObject.CompareTag("Player"))
+        if (!collision.gameObject.CompareTag("Player") && !isDisappearing)
         {
+            isDisappearing = true;
+            gameObject.GetComponent<Rigidbody2D> ().velocity.Set(0, 0);
             StartCoroutine(disappear());
         }
     }
