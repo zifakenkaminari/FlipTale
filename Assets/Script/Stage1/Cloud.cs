@@ -22,7 +22,7 @@ public class Cloud : Entity {
 	{
 		//flip value: front = 1, back = 0
 		flipValue = f;
-		alpha = 0.75f + (1f-f)*0.25f;
+		alpha = 1f - 0.25f*f;
 		float frontAlpha = f * alpha;
 		float backAlpha = float.Equals(alpha*flipValue, 1f)?1f:alpha * (1f - f) / (1f - alpha * f);
 		setTransparent(ref front, frontAlpha);

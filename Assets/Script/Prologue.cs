@@ -31,6 +31,8 @@ public class Prologue : MonoBehaviour {
     protected float startTime;
     protected bool isChanging;
     protected bool toChange;
+	[SerializeField]	protected Image mask;
+	[SerializeField]	protected RectTransform loading;
 	// Use this for initialization
 
 	protected Image[] texts;
@@ -119,11 +121,24 @@ public class Prologue : MonoBehaviour {
     protected IEnumerator fadeOut(){
         float p = 2;
         float timeNow = 0;
+		Color color1 = new Color (1f, 1f, 1f, 0f);
+		Color color2 = new Color (1f, 1f, 1f, 1f);
         while(timeNow<p){
             Camera.main.GetComponent<AudioSource> ().volume = 1-timeNow / p;
+			mask.color = Color.Lerp (color1, color2, timeNow/p);
             timeNow += Time.deltaTime;
             yield return null;
         }
+		Camera.main.GetComponent<AudioSource> ().volume = 0f;
+		mask.color = color2;
+		//loading
+		timeNow = 0;
+		float flip = 0.75f;
+		while(timeNow<flip){
+			loading.localScale = new Vector3 (Mathf.Sin(2*Mathf.PI/flip/4*timeNow), 1f, 1f);
+			timeNow += Time.deltaTime;
+			yield return null;
+		}
 
 
         SceneManager.LoadScene ("Stage1");
