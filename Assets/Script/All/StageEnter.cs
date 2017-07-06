@@ -23,13 +23,13 @@ public class StageEnter : MonoBehaviour {
 		player.lockMotion();
 		Color transparnt = new Color(0f, 0f, 0f, 0f);
 		Color blackout = new Color(0f, 0f, 0f, 1f);
-		yield return StartCoroutine(Camera.main.GetComponent<CameraController> ().changeMaskColor (transparnt, blackout, 0.20f));
+		yield return StartCoroutine(Mask.main.changeMaskColor (transparnt, blackout, 0.20f));
 
 		player.nowStage = stageEnter;
 		player.transform.parent = stageEnter.transform;
 		player.teleport(stageEnter.transform.position + move);
 
-		yield return StartCoroutine(Camera.main.GetComponent<CameraController> ().changeMaskColor (blackout, transparnt, 0.20f));
+		yield return StartCoroutine(Mask.main.changeMaskColor (blackout, transparnt, 0.20f));
 
 		player.unlockMotion();
 		Manager.main.setFlippable(true);

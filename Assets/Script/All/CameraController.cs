@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour {
     public float changePeriod;
     protected float startTime;
     protected bool isChanging;
-	[SerializeField] protected GameObject mask;
+	[SerializeField] protected Mask mask;
 
     void Start()
     {
@@ -45,28 +45,30 @@ public class CameraController : MonoBehaviour {
         */
     }
 	void LateUpdate(){
-		Vector3 now = transform.position;
-		Vector3 pos = player.transform.position;
-		Vector3 center = player.nowStage.transform.position;
-		float viewLeft = player.nowStage.GetComponent<Stage>().viewLeft;
-		float viewRight = player.nowStage.GetComponent<Stage>().viewRight;
-		float viewUp = player.nowStage.GetComponent<Stage>().viewUp;
-		float viewDown = player.nowStage.GetComponent<Stage>().viewDown;
+		if (player != null) {
+			Vector3 now = transform.position;
+			Vector3 pos = player.transform.position;
+			Vector3 center = player.nowStage.transform.position;
+			float viewLeft = player.nowStage.GetComponent<Stage> ().viewLeft;
+			float viewRight = player.nowStage.GetComponent<Stage> ().viewRight;
+			float viewUp = player.nowStage.GetComponent<Stage> ().viewUp;
+			float viewDown = player.nowStage.GetComponent<Stage> ().viewDown;
 
 
-		pos.x = Mathf.Clamp(pos.x, center.x - viewLeft, center.x + viewRight);
-		pos.y = Mathf.Clamp(pos.y, center.y - viewDown, center.y + viewUp);
-		now.x = pos.x;
-		now.y = pos.y;
+			pos.x = Mathf.Clamp (pos.x, center.x - viewLeft, center.x + viewRight);
+			pos.y = Mathf.Clamp (pos.y, center.y - viewDown, center.y + viewUp);
+			now.x = pos.x;
+			now.y = pos.y;
 
-		transform.position = now;
+			transform.position = now;
+		}
 	}
 
 	public IEnumerator begin()
 	{
 		Manager.main.setFlippable (false);
 		Manager.main.setPlayerControlable (false);
-		StartCoroutine(changeMaskColor (Color.white, new Color(1f, 1f, 1f, 0f), changePeriod));
+		StartCoroutine(mask.changeMaskColor (Color.white, new Color(1f, 1f, 1f, 0f), changePeriod));
 		yield return StartCoroutine (fadeIn (changePeriod));
 		player.unlockMotion();
 		Manager.main.setPlayerControlable (true);
@@ -77,34 +79,11 @@ public class CameraController : MonoBehaviour {
 	{
 		Manager.main.setFlippable (false);
 		player.lockMotion();
-		StartCoroutine(changeMaskColor (new Color(1f, 1f, 1f, 0f), Color.white, changePeriod));
+		StartCoroutine(Mask.main.changeMaskColor (new Color(1f, 1f, 1f, 0f), Color.white, changePeriod));
 		yield return StartCoroutine (fadeOut (changePeriod));
 		yield return new WaitForSeconds(1.5f);
 		SceneManager.LoadScene ("Ending");
     }
-
-	public IEnumerator changeMaskColor(Color colorBefore, Color colorAfter, float period){
-		float time = 0;
-		while(time<period){
-			mask.GetComponent<SpriteRenderer> ().color = Color.Lerp (colorBefore, colorAfter, time/period);
-			time += Time.deltaTime;
-			yield return null;
-		}
-		mask.GetComponent<SpriteRenderer> ().color = colorAfter;
-
-	}
-
-	public IEnumerator changeMaskColor(Color colorAfter, float period){
-		float time = 0;
-		Color colorBefore = mask.GetComponent<SpriteRenderer> ().color;
-		while(time<period){
-			mask.GetComponent<SpriteRenderer> ().color = Color.Lerp (colorBefore, colorAfter, time/period);
-			time += Time.deltaTime;
-			yield return null;
-		}
-		mask.GetComponent<SpriteRenderer> ().color = colorAfter;
-
-	}
 
 	protected IEnumerator fadeIn(float changePeriod){
 		float timeNow = 0;

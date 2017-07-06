@@ -53,7 +53,7 @@ public class HotAirBalloonBuilder : MonoBehaviour {
 		Manager.main.setPlayerControlable(false);
 
 		yield return new WaitForSeconds (1.5f);
-		yield return Camera.main.GetComponent<CameraController>().changeMaskColor(new Color(0, 0, 0, 0), Color.black, 1.5f);
+		yield return Mask.main.changeMaskColor(new Color(0, 0, 0, 0), Color.black, 1.5f);
 		GetComponent<AudioSource> ().Play ();
 		hotAirBalloon.gameObject.SetActive(true);
 		yield return new WaitForSeconds (6f);
@@ -64,7 +64,7 @@ public class HotAirBalloonBuilder : MonoBehaviour {
 		workStaionComponents [0].setSprite (workStationOriginSprites[0], workStationOriginSprites[0]);
 		workStaionComponents [1].setSprite (workStationOriginSprites[1], workStationOriginSprites[1]);
 		workStaionComponents [2].setSprite (workStationOriginSprites[2], workStationOriginSprites[2]);
-		yield return Camera.main.GetComponent<CameraController>().changeMaskColor(Color.black, new Color(0, 0, 0, 0), 1.5f);
+		yield return Mask.main.changeMaskColor(Color.black, new Color(0, 0, 0, 0), 1.5f);
 
 		Manager.main.setPlayerControlable(true);
 		Manager.main.setFlippable(true);
