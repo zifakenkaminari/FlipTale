@@ -118,7 +118,7 @@ public class Entity : MonoBehaviour {
         return;
     }
 
-    public void setAlpha(float alpha) {
+    public virtual void setAlpha(float alpha) {
         this.alpha = alpha;
         if (flipType == 0)
         {
